@@ -45,7 +45,7 @@ endmacro()
 
 include(CTest)
 
-clone_or_pull(API ssh://git@github.com/StratifyLabs/API.git main)
+clone_or_pull(API ssh://git@github.com/StratifyLabs/API.git master)
 add_subdirectory(${BASE_DIRECTORY}/API API)
 include(${BASE_DIRECTORY}/API/libraries/API.cmake)
 

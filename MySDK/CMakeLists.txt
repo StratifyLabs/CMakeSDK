@@ -14,6 +14,7 @@ project(MySDK CXX C ASM)
 
 
 ExternalProject_Add(API GIT_REPOSITORY https://github.com/StratifyLabs/API.git)
+ExternalProject_Add(API GIT_REPOSITORY https://github.com/StratifyLabs/StratifyOS.git)
 ExternalProject_Add(JsonAPI GIT_REPOSITORY https://github.com/StratifyLabs/JsonAPI.git GIT_TAG main DEPENDS API)
 ExternalProject_Add(InetAPI GIT_REPOSITORY https://github.com/StratifyLabs/InetAPI.git GIT_TAG main DEPENDS API)
 ExternalProject_Add(CryptoAPI GIT_REPOSITORY https://github.com/StratifyLabs/CryptoAPI.git GIT_TAG main DEPENDS InetAPI)
@@ -23,6 +24,6 @@ ExternalProject_Add(SwdAPI GIT_REPOSITORY https://github.com/StratifyLabs/SwdAPI
 if(SOS_IS_LINK)
 	ExternalProject_Add(UsbAPI GIT_REPOSITORY https://github.com/StratifyLabs/UsbAPI.git GIT_TAG developmentv4 DEPENDS API)
 endif()
-ExternalProject_Add(SosAPI GIT_REPOSITORY https://github.com/StratifyLabs/SosAPI.git GIT_TAG main DEPENDS API)
+ExternalProject_Add(SosAPI GIT_REPOSITORY https://github.com/StratifyLabs/SosAPI.git GIT_TAG main DEPENDS CryptoAPI UsbAPI API StratifyOS)
 ExternalProject_Add(HalAPI GIT_REPOSITORY https://github.com/StratifyLabs/HalAPI.git GIT_TAG main DEPENDS SosAPI)
 ExternalProject_Add(UxAPI GIT_REPOSITORY https://github.com/StratifyLabs/UxAPI.git GIT_TAG main DEPENDS	SosAPI)

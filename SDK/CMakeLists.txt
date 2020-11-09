@@ -15,34 +15,56 @@ project(SDK)
 
 set(IS_SDK TRUE CACHE INTERNAL "Build SDK projects")
 
+set(BASE_DIRECTORY ${CMAKE_SOURCE_DIR}/../..)
 
-macro(sdk_add_subdirectory NAME)
-	add_subdirectory(../${NAME} ${NAME})
+message(STATUS "Base directory ${BASE_DIRECTORY}")
+
+function(clone_or_pull REPOSITORY BRANCH)
+	if(NOT EXISTS ${BASE_DIRECTORY}/${NAME})
+		message(STATUS "Need to clone manually for the first call to cmake")
+		execute_process(
+			COMMAND git clone --branch ${BRANCH} ${REPOSITORY}
+			WORKING_DIRECTORY ${BASE_DIRECTORY}
+			)
+	else()
+		execute_process(
+			COMMAND git pull
+			WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
+			)
+	endif()
+endfunction()
+
+
+macro(sdk_add_subdirectory NAME BRANCH)
+	clone_or_pull(ssh://git@github.com/StratifyLabs/${NAME}.git ${BRANCH})
+	add_subdirectory(${BASE_DIRECTORY}/${NAME} ${NAME})
 	#	include(${CMAKE_CURRENT_SOURCE_DIR}/../${NAME}/library/${NAME}.cmake)
 endmacro()
 
 include(CTest)
-add_subdirectory(../API API)
-include(${CMAKE_CURRENT_SOURCE_DIR}/../API/libraries/API.cmake)
 
-sdk_add_subdirectory(StratifyOS)
+clone_or_pull(ssh://git@github.com/StratifyLabs/API.git main)
+add_subdirectory(${BASE_DIRECTORY}/API API)
+include(${BASE_DIRECTORY}/API/libraries/API.cmake)
 
-sdk_add_subdirectory(InetAPI)
-sdk_add_subdirectory(CryptoAPI)
-sdk_add_subdirectory(JsonAPI)
-sdk_add_subdirectory(ChartAPI)
-sdk_add_subdirectory(ReportAPI)
-sdk_add_subdirectory(CloudAPI)
-sdk_add_subdirectory(SwdAPI)
+sdk_add_subdirectory(StratifyOS developmentv4)
+
+sdk_add_subdirectory(InetAPI main)
+sdk_add_subdirectory(CryptoAPI main)
+sdk_add_subdirectory(JsonAPI main)
+sdk_add_subdirectory(ChartAPI developmentv4)
+sdk_add_subdirectory(ReportAPI developmentv4)
+sdk_add_subdirectory(CloudAPI developmentv4)
+sdk_add_subdirectory(SwdAPI master)
 if(SOS_IS_LINK)
-	sdk_add_subdirectory(ServiceAPI)
-	sdk_add_subdirectory(UsbAPI)
+	sdk_add_subdirectory(ServiceAPI developmentv4)
+	sdk_add_subdirectory(UsbAPI developmentv4)
 endif()
-sdk_add_subdirectory(SosAPI)
-sdk_add_subdirectory(HalAPI)
-sdk_add_subdirectory(UxAPI)
+sdk_add_subdirectory(SosAPI main)
+sdk_add_subdirectory(HalAPI main)
+sdk_add_subdirectory(UxAPI main)
 if(SOS_IS_ARM)
-	sdk_add_subdirectory(ToolboxAPI)
+	sdk_add_subdirectory(ToolboxAPI developmentv4)
 endif()
 
 

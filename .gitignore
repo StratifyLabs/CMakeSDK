@@ -1,3 +1,5 @@
 
 .DS_Store
 cmake_arm/
+MySDK/cmake_link/
+MySDK/cmake_arm/

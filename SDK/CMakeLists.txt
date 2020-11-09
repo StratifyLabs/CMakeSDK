@@ -21,7 +21,7 @@ message(STATUS "Base directory ${BASE_DIRECTORY}")
 
 function(clone_or_pull NAME REPOSITORY BRANCH)
 	message(STATUS "Checking existence of ${BASE_DIRECTORY}/${REPOSITORY}")
-	if(NOT EXISTS ${BASE_DIRECTORY}/${REPOSITORY})
+	if(NOT EXISTS ${BASE_DIRECTORY}/${NAME})
 		message(STATUS "Need to clone manually for the first call to cmake")
 		execute_process(
 			COMMAND git clone --branch ${BRANCH} ${REPOSITORY}

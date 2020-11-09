@@ -1,4 +1,6 @@
 
+message(STATUS "Checking Binary dir ${CMAKE_BINARY_DIR}")
+
 if( CMAKE_BINARY_DIR MATCHES ".*_link" )
 	set(SOS_TOOLCHAIN_BUILD_CONFIG link CACHE INTERNAL "sos build config is link")
 elseif( CMAKE_BINARY_DIR MATCHES ".*_arm" )

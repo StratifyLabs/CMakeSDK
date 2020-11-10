@@ -6,3 +6,5 @@ MySDK/cmake_link/
 MySDK/cmake_arm/
 build/
 SDK/build_*
+*.user
+SDK/tmp/

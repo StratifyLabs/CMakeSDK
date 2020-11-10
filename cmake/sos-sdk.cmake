@@ -82,8 +82,6 @@ endfunction()
 
 function(sos_sdk_add_test NAME OPTION CONFIG)
 
-	string(COMPARE EQUAL ${CONFIG} release IS_RELEASE)
-
 	if(OPTION)
 		set(EXEC_NAME ${NAME}_${OPTION})
 		set(DIR_NAME build_${OPTION})
@@ -92,12 +90,7 @@ function(sos_sdk_add_test NAME OPTION CONFIG)
 		set(DIR_NAME build)
 	endif()
 
-
-	if(IS_RELEASE)
-		set(EXEC_NAME ${EXEC_NAME})
-	else()
-		set(EXEC_NAME ${EXEC_NAME}_${CONFIG})
-	endif()
+	set(EXEC_NAME ${EXEC_NAME}_${CONFIG})
 
 	message(STATUS "SOS SDK Add test ${NAME}_${CONFIG}")
 	add_test(NAME ${NAME}_${CONFIG}

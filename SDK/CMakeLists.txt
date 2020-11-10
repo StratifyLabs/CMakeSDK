@@ -20,7 +20,7 @@ set(BASE_DIRECTORY ${CMAKE_SOURCE_DIR}/../..)
 message(STATUS "Base directory ${BASE_DIRECTORY}")
 
 function(clone_or_pull NAME REPOSITORY BRANCH)
-	message(STATUS "Checking existence of ${BASE_DIRECTORY}/${REPOSITORY}")
+	message(STATUS "Checking existence of ${BASE_DIRECTORY}/${NAME}")
 	if(NOT EXISTS ${BASE_DIRECTORY}/${NAME})
 		message(STATUS "Need to clone manually for the first call to cmake")
 		execute_process(
@@ -28,7 +28,7 @@ function(clone_or_pull NAME REPOSITORY BRANCH)
 			WORKING_DIRECTORY ${BASE_DIRECTORY}
 			)
 	else()
-		message(STATUS "Using git pull for ${BASE_DIRECTORY}/${REPOSITORY}")
+		message(STATUS "Using git pull for ${BASE_DIRECTORY}/${NAME}")
 		execute_process(
 			COMMAND git pull
 			WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}

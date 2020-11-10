@@ -1,7 +1,7 @@
 #ifndef MCU_API_H
 #define MCU_API_H
 
-#include <mcu/types>
+#include <mcu/types.h>
 
 typedef struct {
   const char *name;

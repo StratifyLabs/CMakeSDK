@@ -1,35 +1,10 @@
 
-# the name of the target operating system
+set(TOOLCHAIN_DIR ${SOS_SDK_PATH}/Tools/gcc)
 
-message(STATUS "Set GCC toolchain to i686-w64-mingw32")
-if(TOOLCHAIN_HOST)
-    message(STATUS "Toolchain host " ${TOOLCHAIN_HOST})
-else()
-    set(TOOLCHAIN_HOST i686-w64-mingw32 CACHE INTERNAL "" FORCE)
-endif()
-if(TOOLCHAIN_DIR)
-    message(STATUS "Toolchain directory " ${TOOLCHAIN_DIR})
-else()
-    set(TOOLCHAIN_DIR C:/StratifyLabs-SDK/Tools/mingw530_32)
-endif()
-set(TOOLCHAIN_EXEC_SUFFIX .exe)
+message(STATUS "Use GCC toolchain install dir: " ${TOOLCHAIN_DIR})
+set(CMAKE_INSTALL_PREFIX ${TOOLCHAIN_DIR} CACHE INTERNAL "CLANG INSTALL PREFIX")
+include_directories(SYSTEM ${TOOLCHAIN_DIR}/include)
 
-set(SOS_SDK_LIB_DIR ${SOS_TOOLCHAIN_CMAKE_PATH}/../../lib)
-
-
-set(SDK_DIR C:/StratifyLabs-SDK/Tools/gcc)
-
-include(${CMAKE_CURRENT_LIST_DIR}/sos-gcc-toolchain.cmake)
-
-set(TOOLCHAIN_C_FLAGS "-D__win32 -mno-ms-bitfields -D__processor_${CMAKE_HOST_SYSTEM_PROCESSOR}" CACHE INTERNAL "MINGW C FLAGS")
-set(TOOLCHAIN_CXX_FLAGS "${TOOLCHAIN_C_FLAGS} -std=c++14" CACHE INTERNAL "MINGW CXX FLAGS")
-
-set(CMAKE_INSTALL_PREFIX ${SDK_DIR})
-include_directories(SYSTEM ${SDK_DIR}/include)
-
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-
-set(CMAKE_C_FLAGS ${TOOLCHAIN_C_FLAGS} CACHE INTERNAL "MINGW C FLAGS")
-set(CMAKE_CXX_FLAGS ${TOOLCHAIN_CXX_FLAGS} CACHE INTERNAL "MINGW CXX FLAGS")
+set(SOS_SDK_IS_WINDOWS TRUE CACHE INTERNAL "WINDOWS BUILD")
+set(CMAKE_C_FLAGS "-D__win32 -mno-ms-bitfields -D__processor_${CMAKE_HOST_SYSTEM_PROCESSOR}" CACHE INTERNAL "MINGW C FLAGS")
+set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS}" CACHE INTERNAL "CLANG CXX FLAGS")

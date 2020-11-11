@@ -37,7 +37,7 @@
 #define FINTU "%u"
 #endif
 
-//#include "sos/ioctl.h"
+#include "ioctl.h"
 
 typedef uint8_t u8;
 typedef int8_t s8;

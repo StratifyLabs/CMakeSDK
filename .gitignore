@@ -8,3 +8,4 @@ build/
 SDK/build_*
 *.user
 SDK/tmp/
+SDK/cmake_qt_link/

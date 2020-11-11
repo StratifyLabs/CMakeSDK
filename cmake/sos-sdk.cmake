@@ -92,7 +92,7 @@ function(sos_sdk_add_test NAME OPTION CONFIG)
 
 	set(EXEC_NAME ${EXEC_NAME}_${CONFIG})
 
-	message(STATUS "SOS SDK Add test ${NAME}_${CONFIG}")
+	message(STATUS "SOS SDK - Add test ${NAME}_${CONFIG}")
 	add_test(NAME ${NAME}_${CONFIG}
 		COMMAND "../${DIR_NAME}_${CONFIG}_link/${EXEC_NAME}_link.elf" --api
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tmp

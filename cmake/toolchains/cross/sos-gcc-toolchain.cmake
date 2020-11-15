@@ -1,6 +1,12 @@
+# Configures a gcc-based toolchain for cross-compiling StratifyOS components
+# Public Domain
 
+include(sos-base)
 
-set(TOOLCHAIN_DIR ${SOS_SDK_PATH}/Tools/gcc)
+# TODO: Remove this
+if(NOT TOOLCHAIN_DIR)
+	set(TOOLCHAIN_DIR ${SOS_SDK_PATH}/Tools/gcc)
+endif()
 set(TOOLCHAIN_HOST arm-none-eabi)
 
 message(STATUS "GCC Toolchain is: " ${TOOLCHAIN_DIR}/${TOOLCHAIN_HOST})
@@ -8,7 +14,10 @@ set(TOOLCHAIN_BIN_DIR "${TOOLCHAIN_DIR}/bin" CACHE INTERNAL "GCC TOOLCHAIN BINAR
 set(TOOLCHAIN_INC_DIR "${TOOLCHAIN_DIR}/${TOOLCHAIN_HOST}/include" CACHE INTERNAL "GCC TOOLCHAIN INCLUDE DIR")
 set(TOOLCHAIN_LIB_DIR "${TOOLCHAIN_DIR}/${TOOLCHAIN_HOST}/lib" CACHE INTERNAL "GCC TOOLCHAIN LIBRARY DIR")
 
+# Test compiles will use static libraries, so we won't need to define linker flags
+# and scripts for linking to succeed
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+
 if(TOOLCHAIN_HOST)
 	set(TOOLCHAIN_HOST_PREFIX ${TOOLCHAIN_HOST}- CACHE INTERNAL "GCC ARM TOOLCHAIN PREFIX")
 else()

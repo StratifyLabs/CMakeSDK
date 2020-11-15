@@ -32,7 +32,7 @@ function(sos_sdk_app OPTION_LIST RAM_SIZE)
 
 		target_compile_definitions(${TARGET_NAME}
 			PUBLIC
-			__${SOS_SDK_TMP_CONFIG}
+			___${SOS_SDK_TMP_CONFIG}
 			__${SOS_SDK_TMP_OPTION}
 			__${ARCH}
 			MCU_SOS_GIT_HASH=${SOS_GIT_HASH}

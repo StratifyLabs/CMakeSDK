@@ -150,7 +150,13 @@ function(sos_sdk_library OPTION_LIST)
 
 	get_target_property(TARGET_BINARY_DIR ${SOS_SDK_TMP_TARGET} BINARY_DIR)
 
-	install(TARGETS ${SOS_SDK_TMP_TARGET} EXPORT ${SOS_SDK_TMP_TARGET} DESTINATION lib)
-	install(EXPORT ${SOS_SDK_TMP_TARGET} DESTINATION cmake/targets)
+	install(
+		TARGETS ${SOS_SDK_TMP_TARGET}
+		EXPORT ${SOS_SDK_TMP_TARGET}
+		DESTINATION lib
+		OPTIONAL)
+	install(
+		EXPORT ${SOS_SDK_TMP_TARGET}
+		DESTINATION cmake/targets)
 
 endfunction()

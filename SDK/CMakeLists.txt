@@ -6,14 +6,12 @@ endif()
 
 set(CMAKE_MODULE_PATH ${SOS_SDK_PATH}/Tools/gcc/cmake)
 set(CMAKE_TOOLCHAIN_FILE ${SOS_SDK_PATH}/Tools/gcc/cmake/sos-toolchain.cmake)
-
-message("MODULE PATHS: ${CMAKE_MODULE_PATH}")
-
 include(sos-sdk)
 
 project(SDK)
 
 set(IS_SDK TRUE CACHE INTERNAL "Build SDK projects")
+option(IS_PULL "Pull SDK projects" ON)
 
 set(BASE_DIRECTORY ${CMAKE_SOURCE_DIR}/../..)
 
@@ -28,11 +26,13 @@ function(clone_or_pull NAME REPOSITORY BRANCH)
 			WORKING_DIRECTORY ${BASE_DIRECTORY}
 			)
 	else()
-		message(STATUS "Using git pull for ${BASE_DIRECTORY}/${NAME}")
-		execute_process(
-			COMMAND git pull
-			WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
-			)
+		if(IS_PULL)
+			message(STATUS "Using git pull for ${BASE_DIRECTORY}/${NAME}")
+			execute_process(
+				COMMAND git pull
+				WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
+				)
+		endif()
 	endif()
 endfunction()
 

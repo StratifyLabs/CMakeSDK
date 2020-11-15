@@ -5,7 +5,7 @@ function(sos_sdk_bsp_target OUTPUT BASE_NAME OPTION CONFIG ARCH)
 	set(${OUTPUT}_TARGET ${SOS_SDK_TMP_INSTALL}.elf PARENT_SCOPE)
 endfunction()
 
-function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS)
+function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS MCU_LIBRARY LIBRARIES)
 
 	list(GET OPTION_LIST 0 BASE_NAME)
 	list(GET OPTION_LIST 1 OPTION)
@@ -29,7 +29,7 @@ function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS)
 	target_compile_definitions(${TARGET_NAME}
 		PUBLIC
 		__StratifyOS__
-		__${SOS_SDK_TMP_CONFIG}
+		___${SOS_SDK_TMP_CONFIG}
 		__${SOS_SDK_TMP_OPTION}
 		__${ARCH}
 		__HARDWARE_ID=${HARDWARE_ID}
@@ -45,6 +45,24 @@ function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS)
 		PUBLIC
 		-mthumb -ffunction-sections -fdata-sections
 		${SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS}
+		)
+
+	foreach(LIBRARY ${LIBRARIES})
+		target_link_libraries(${TARGET_NAME}
+			PRIVATE
+			${LIBRARY}_${CONFIG}_${ARCH}
+		)
+	endforeach()
+
+	target_link_libraries(${TARGET_NAME}
+		PRIVATE
+		StratifyOS_sys_${CONFIG}_${ARCH}
+		${MCU_LIBRARY}_${CONFIG}_${ARCH}
+		m
+		c
+		StratifyOS_sys_${CONFIG}_${ARCH}
+		${MCU_LIBRARY}_${CONFIG}_${ARCH}
+		gcc-hard
 		)
 
 	get_target_property(EXIST_LINK_FLAGS ${TARGET_NAME} LINK_FLAGS)

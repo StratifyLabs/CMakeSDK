@@ -1,6 +1,8 @@
 
 message(STATUS "Checking Binary dir ${CMAKE_BINARY_DIR}")
 
+# TODO: Potentially harvest cpu from this directory or allow for another method of setting CPU (i.e. -DCPU=STM32F446)
+
 if( CMAKE_BINARY_DIR MATCHES ".*_link" )
 	set(SOS_TOOLCHAIN_BUILD_CONFIG link CACHE INTERNAL "sos build config is link")
 elseif( CMAKE_BINARY_DIR MATCHES ".*_arm" )
@@ -13,11 +15,11 @@ string(COMPARE EQUAL ${SOS_TOOLCHAIN_BUILD_CONFIG} arm IS_ARM)
 message(STATUS "Toolchain SDK PATH: ${SOS_SDK_PATH} ARM:${IS_ARM}")
 
 if(IS_ARM)
-	include(${CMAKE_CURRENT_LIST_DIR}/toolchains/sos-gcc-toolchain.cmake)
+	if(USE_CLANG)
+		include(${CMAKE_CURRENT_LIST_DIR}/toolchains/sos-clang-toolchain.cmake)
+	else()
+		include(${CMAKE_CURRENT_LIST_DIR}/toolchains/sos-gcc-toolchain.cmake)
+	endif()
 else()
 	include(${CMAKE_CURRENT_LIST_DIR}/toolchains/link-toolchain.cmake)
 endif()
-
-
-
-

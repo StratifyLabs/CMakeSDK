@@ -5,7 +5,7 @@ function(sos_sdk_bsp_target OUTPUT BASE_NAME OPTION CONFIG ARCH)
 	set(${OUTPUT}_TARGET ${SOS_SDK_TMP_INSTALL}.elf PARENT_SCOPE)
 endfunction()
 
-function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS MCU_LIBRARY LIBRARIES)
+function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS LIBRARIES)
 
 	list(GET OPTION_LIST 0 BASE_NAME)
 	list(GET OPTION_LIST 1 OPTION)
@@ -54,17 +54,6 @@ function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS MCU_LIBRARY LIBRARIES
 		)
 	endforeach()
 
-	target_link_libraries(${TARGET_NAME}
-		PRIVATE
-		StratifyOS_sys_${CONFIG}_${ARCH}
-		${MCU_LIBRARY}_${CONFIG}_${ARCH}
-		m
-		c
-		StratifyOS_sys_${CONFIG}_${ARCH}
-		${MCU_LIBRARY}_${CONFIG}_${ARCH}
-		gcc-hard
-		)
-
 	get_target_property(EXIST_LINK_FLAGS ${TARGET_NAME} LINK_FLAGS)
 
 	set(UPDATED_LINK_FLAGS
@@ -86,8 +75,8 @@ function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS MCU_LIBRARY LIBRARIES
 		)
 
 	add_custom_target(bin_${TARGET_NAME} DEPENDS ${TARGET_NAME} COMMAND ${CMAKE_OBJCOPY} -j .boot_hdr -j .text -j .data -O binary ${BINARY_OUTPUT_DIR}/${TARGET_NAME} ${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_NO_CONFIG}.bin)
-	add_custom_target(asm_${TARGET_NAME} DEPENDS bin_${TARGET_NAME} COMMAND ${CMAKE_OBJDUMP} -S -j .boot_hdr -j .tcim -j .text -j .priv_code -j .data -j .bss -j .sysmem -d ${BINARY_OUTPUT_DIR}/${TARGET_NAME} > ${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_INSTALL}.lst)
-	add_custom_target(size_${TARGET_NAME} DEPENDS asm_${TARGET_NAME} COMMAND ${CMAKE_SIZE} ${BINARY_OUTPUT_DIR}/${TARGET_NAME})
-	add_custom_target(all_${TARGET_NAME} ALL DEPENDS size_${TARGET_NAME})
+	add_custom_target(asm_${TARGET_NAME} DEPENDS ${TARGET_NAME} COMMAND ${CMAKE_OBJDUMP} -S -j .boot_hdr -j .tcim -j .text -j .priv_code -j .data -j .bss -j .sysmem -d ${BINARY_OUTPUT_DIR}/${TARGET_NAME} > ${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_INSTALL}.lst)
+	add_custom_target(size_${TARGET_NAME} DEPENDS ${TARGET_NAME} COMMAND ${CMAKE_SIZE} ${BINARY_OUTPUT_DIR}/${TARGET_NAME})
+	add_custom_target(all_${TARGET_NAME} ALL DEPENDS bin_${TARGET_NAME})
 
 endfunction()

@@ -18,5 +18,6 @@ else()
 endif()
 
 install(DIRECTORY cmake/ DESTINATION ${CMAKE_DEST})
+install(DIRECTORY include/ DESTINATION include)
 
 

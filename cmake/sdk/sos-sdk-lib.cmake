@@ -48,11 +48,10 @@ function(sos_sdk_library_add_arch_targets OPTION_LIST ARCH DEPENDENCIES)
 
 	else()
 
-		set(ARCH_LIST v7em v7em_f4sh v7em_f5sh v7em_f5dh)
 
-		sos_sdk_library_target(BUILD_V7M ${BASE_NAME} "${OPTION}" "${CONFIG}" v7m)
+		sos_sdk_library_target(BUILD_ARCH ${BASE_NAME} "${OPTION}" "${CONFIG}" ${SOS_ARCH})
 
-		foreach (ARCH ${ARCH_LIST})
+		foreach (ARCH ${SOS_ARCH_LIST})
 			sos_sdk_internal_is_arch_enabled(${ARCH})
 			if(ARCH_ENABLED)
 				set(TARGET_NAME ${BASE_NAME})
@@ -66,7 +65,7 @@ function(sos_sdk_library_add_arch_targets OPTION_LIST ARCH DEPENDENCIES)
 				add_library(${BUILD_TARGET} STATIC)
 
 				sos_sdk_copy_target(
-					${BUILD_V7M_TARGET}
+					${BUILD_ARCH_TARGET}
 					${BUILD_TARGET}
 					)
 
@@ -79,19 +78,20 @@ function(sos_sdk_library_add_arch_targets OPTION_LIST ARCH DEPENDENCIES)
 						PUBLIC
 						${DEPENDENCY}_${CONFIG}_${ARCH}
 						)
-
+					message(STATUS "${BUILD_TARGET} -> ${DEPENDENCY}_${CONFIG}_${SOS_ARCH}")
 				endforeach()
 
 
 			endif()
 		endforeach(ARCH)
-		sos_sdk_library("${BUILD_V7M_OPTIONS}")
+		sos_sdk_library("${BUILD_ARCH_OPTIONS}")
 
 		foreach(DEPENDENCY ${DEPENDENCIES})
-			target_link_libraries(${BUILD_V7M_TARGET}
+			target_link_libraries(${BUILD_ARCH_TARGET}
 				PUBLIC
-				${DEPENDENCY}_${CONFIG}_v7m
+				${DEPENDENCY}_${CONFIG}_${SOS_ARCH}
 				)
+			message(STATUS "${BUILD_ARCH_TARGET} -> ${DEPENDENCY}_${CONFIG}_${SOS_ARCH}")
 		endforeach()
 	endif()
 endfunction()

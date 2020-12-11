@@ -16,7 +16,7 @@ function(sos_sdk_app OPTION_LIST RAM_SIZE)
 
 	set(TARGET_NAME ${SOS_SDK_TMP_INSTALL}_${ARCH}.elf)
 
-	set(BINARY_OUTPUT_DIR ${CMAKE_SOURCE_DIR}/build_${SOS_SDK_TMP_NO_NAME}_${ARCH})
+	set(BINARY_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build_${SOS_SDK_TMP_NO_NAME}_${ARCH})
 
 	set_target_properties(${TARGET_NAME}
 		PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR})
@@ -79,9 +79,9 @@ function(sos_sdk_app OPTION_LIST RAM_SIZE)
 			-L${SOS_SDK_PATH}/Tools/gcc/lib/gcc/arm-none-eabi/${CMAKE_CXX_COMPILER_VERSION}/${SOS_ARM_ARCH_BUILD_INSTALL_DIR}/${SOS_ARM_ARCH_BUILD_FLOAT_DIR}
 			-Wl,--print-memory-usage,-Map,${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_INSTALL}.map,--gc-sections,--defsym=_app_ram_size=${RAM_SIZE}
 			-Tldscripts/app.ld
-			-u crt
 			-nostartfiles
 			-nostdlib
+			-u crt
 			${EXIST_LINK_FLAGS}
 			)
 
@@ -103,7 +103,6 @@ function(sos_sdk_app OPTION_LIST RAM_SIZE)
 endfunction()
 
 function(sos_sdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
-	set(ARCH_LIST v7em v7em_f4sh v7em_f5sh v7em_f5dh)
 
 	list(GET OPTION_LIST 0 BASE_NAME)
 	list(GET OPTION_LIST 1 OPTION)
@@ -130,9 +129,9 @@ function(sos_sdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 
 	else()
 
-		sos_sdk_app_target(BUILD_V7M ${BASE_NAME} "${OPTION}" "${CONFIG}" v7m)
+		sos_sdk_app_target(BUILD_ARCH ${BASE_NAME} "${OPTION}" "${CONFIG}" ${SOS_ARCH})
 
-		foreach (ARCH ${ARCH_LIST})
+		foreach (ARCH ${SOS_ARCH_LIST})
 			sos_sdk_internal_is_arch_enabled(${ARCH})
 			if(ARCH_ENABLED)
 				set(TARGET_NAME ${BASE_NAME})
@@ -144,7 +143,7 @@ function(sos_sdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 
 				add_executable(${BUILD_TARGET})
 				sos_sdk_copy_target(
-					${BUILD_V7M_TARGET}
+					${BUILD_ARCH_TARGET}
 					${BUILD_TARGET}
 					)
 
@@ -157,6 +156,7 @@ function(sos_sdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 						PRIVATE
 						${DEPENDENCY}_${CONFIG}_${ARCH}
 						)
+					message(STATUS "${BUILD_TARGET} -> ${DEPENDENCY}_${CONFIG}_${SOS_ARCH}")
 				endforeach()
 
 				target_link_libraries(${BUILD_TARGET}
@@ -165,25 +165,29 @@ function(sos_sdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 					stdc++
 					supc++
 					)
+					message(STATUS "${BUILD_TARGET} -> crt stdc++ supc++")
 
 
 			endif()
 		endforeach(ARCH)
-		sos_sdk_app("${BUILD_V7M_OPTIONS}" ${RAM_SIZE})
+		sos_sdk_app("${BUILD_ARCH_OPTIONS}" ${RAM_SIZE})
 
 		foreach(DEPENDENCY ${DEPENDENCIES})
-			target_link_libraries(${BUILD_V7M_TARGET}
+			target_link_libraries(${BUILD_ARCH_TARGET}
 				PRIVATE
-				${DEPENDENCY}_${CONFIG}_v7m
+				${DEPENDENCY}_${CONFIG}_${SOS_ARCH}
 				)
+			message(STATUS "${BUILD_ARCH_TARGET} -> ${DEPENDENCY}_${CONFIG}_${SOS_ARCH}")
+
 		endforeach()
 
-		target_link_libraries(${BUILD_V7M_TARGET}
+		target_link_libraries(${BUILD_ARCH_TARGET}
 			PRIVATE
-			StratifyOS_crt_${CONFIG}_v7m
+			StratifyOS_crt_${CONFIG}_${SOS_ARCH}
 			stdc++
 			supc++
 			)
+			message(STATUS "${BUILD_ARCH_TARGET} -> crt stdc++ supc++")
 
 	endif()
 endfunction()

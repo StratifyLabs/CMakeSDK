@@ -23,9 +23,18 @@ macro(sos_sdk_internal_startup)
 		message(STATUS "SOS SDK ARCH is link")
 	elseif( CMAKE_BINARY_DIR MATCHES ".*_arm" )
 		set(SOS_BUILD_CONFIG arm CACHE INTERNAL "sos build config is arm")
-		set(SOS_ARCH v7m)
 		set(SOS_IS_ARM TRUE CACHE INTERNAL "sos is arm")
 		set(SOS_IS_LINK FALSE CACHE INTERNAL "sos is link")
+
+		if(NOT DEFINED SOS_ARCH)
+			set(SOS_ARCH v7m CACHE INTERNAL "Primary ARM Arch")
+		endif()
+
+		if(NOT DEFINED SOS_ARCH_LIST)
+			set(SOS_ARCH_LIST v7em v7em_f4sh v7em_f5sh v7em_f5dh CACHE INTERNAL "Additional ARM architectures")
+		endif()
+
+
 		message(STATUS "SOS SDK ARCH is arm")
 	else()
 		message( FATAL_ERROR "No Configuration available build in *_link or *_arm directory")

@@ -59,7 +59,7 @@ if(NOT SOS_SDK_PATH)
 	set(SOS_SDK_PATH $ENV{SOS_SDK_PATH})
 endif()
 
-set(CMAKE_MODULE_PATH ${SOS_SDK_PATH}/Tools/gcc/cmake)
+set(CMAKE_MODULE_PATH ${SOS_SDK_PATH}/cmake)
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_MODULE_PATH}/sos-toolchain.cmake)
 
 include(sos-sdk)
@@ -194,8 +194,8 @@ target_include_directories(${BOOT_RELEASE_TARGET}
 	PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/src
 	${CMAKE_CURRENT_SOURCE_DIR}/src/atwinc1500
-	${SOS_SDK_PATH}/Tools/gcc/arm-none-eabi/include/mcu/arch/stm32/cmsis
-	${SOS_SDK_PATH}/Tools/gcc/arm-none-eabi/include
+	${SOS_SDK_PATH}/arm-none-eabi/include/mcu/arch/stm32/cmsis
+	${SOS_SDK_PATH}/arm-none-eabi/include
 	)
 
 target_compile_definitions(${BOOT_RELEASE_TARGET}

@@ -137,13 +137,13 @@ function(sos_sdk_library OPTION_LIST)
 
 		target_include_directories(${SOS_SDK_TMP_TARGET}
 			PRIVATE
-			${SOS_SDK_PATH}/Tools/gcc/arm-none-eabi/include/StratifyOS
+			${SOS_SDK_PATH}/arm-none-eabi/include/StratifyOS
 			)
 
 	else()
 		target_include_directories(${SOS_SDK_TMP_TARGET}
 			PRIVATE
-			${SOS_SDK_PATH}/Tools/gcc/include/StratifyOS
+			${SOS_SDK_PATH}/include/StratifyOS
 			)
 
 	endif()

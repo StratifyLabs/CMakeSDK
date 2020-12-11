@@ -25,9 +25,9 @@ function(sos_sdk_app OPTION_LIST RAM_SIZE)
 
 	if(ARCH STREQUAL "link")
 		if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows" )
-			set(LINKER_FLAGS "-L${SOS_SDK_PATH}/Tools/gcc/lib -static -static-libstdc++ -static-libgcc")
+			set(LINKER_FLAGS "-L${SOS_SDK_PATH}/lib -static -static-libstdc++ -static-libgcc")
 		else()
-			set(LINKER_FLAGS "-L${SOS_SDK_PATH}/Tools/gcc/lib")
+			set(LINKER_FLAGS "-L${SOS_SDK_PATH}/lib")
 		endif()
 
 		target_compile_definitions(${TARGET_NAME}
@@ -40,7 +40,7 @@ function(sos_sdk_app OPTION_LIST RAM_SIZE)
 
 		target_include_directories(${TARGET_NAME}
 			PRIVATE
-			${SOS_SDK_PATH}/Tools/gcc/include/StratifyOS
+			${SOS_SDK_PATH}/include/StratifyOS
 			)
 
 	else()
@@ -60,7 +60,7 @@ function(sos_sdk_app OPTION_LIST RAM_SIZE)
 			PUBLIC
 			${SOS_BUILD_SYSTEM_INCLUDES}
 			PRIVATE
-			${SOS_SDK_PATH}/Tools/gcc/arm-none-eabi/include/StratifyOS
+			${SOS_SDK_PATH}/arm-none-eabi/include/StratifyOS
 			)
 
 		target_compile_options(${TARGET_NAME}
@@ -75,8 +75,8 @@ function(sos_sdk_app OPTION_LIST RAM_SIZE)
 		endif()
 
 		set(UPDATED_LINK_FLAGS
-			-L${SOS_SDK_PATH}/Tools/gcc/arm-none-eabi/lib/${SOS_ARM_ARCH_BUILD_INSTALL_DIR}/${SOS_ARM_ARCH_BUILD_FLOAT_DIR}
-			-L${SOS_SDK_PATH}/Tools/gcc/lib/gcc/arm-none-eabi/${CMAKE_CXX_COMPILER_VERSION}/${SOS_ARM_ARCH_BUILD_INSTALL_DIR}/${SOS_ARM_ARCH_BUILD_FLOAT_DIR}
+			-L${SOS_SDK_PATH}/arm-none-eabi/lib/${SOS_ARM_ARCH_BUILD_INSTALL_DIR}/${SOS_ARM_ARCH_BUILD_FLOAT_DIR}
+			-L${SOS_SDK_PATH}/lib/gcc/arm-none-eabi/${CMAKE_CXX_COMPILER_VERSION}/${SOS_ARM_ARCH_BUILD_INSTALL_DIR}/${SOS_ARM_ARCH_BUILD_FLOAT_DIR}
 			-Wl,--print-memory-usage,-Map,${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_INSTALL}.map,--gc-sections,--defsym=_app_ram_size=${RAM_SIZE}
 			-Tldscripts/app.ld
 			-nostartfiles

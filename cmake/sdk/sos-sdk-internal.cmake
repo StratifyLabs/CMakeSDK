@@ -56,9 +56,9 @@ macro(sos_sdk_internal_startup)
 	endif()
 
 	list(APPEND CMAKE_MODULE_PATH
-		${SOS_SDK_PATH}/Tools/gcc/cmake/targets
-		${SOS_SDK_PATH}/Tools/gcc/arm-none-eabi/cmake
-		${SOS_SDK_PATH}/Tools/gcc/arm-none-eabi/cmake/targets
+		${SOS_SDK_PATH}/cmake/targets
+		${SOS_SDK_PATH}/arm-none-eabi/cmake
+		${SOS_SDK_PATH}/arm-none-eabi/cmake/targets
 		)
 
 	sos_sdk_internal_get_git_hash()

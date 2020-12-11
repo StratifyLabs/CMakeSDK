@@ -4,8 +4,8 @@ if(NOT SOS_SDK_PATH)
 	set(SOS_SDK_PATH $ENV{SOS_SDK_PATH})
 endif()
 
-set(CMAKE_MODULE_PATH ${SOS_SDK_PATH}/Tools/gcc/cmake)
-set(CMAKE_TOOLCHAIN_FILE ${SOS_SDK_PATH}/Tools/gcc/cmake/sos-toolchain.cmake)
+set(CMAKE_MODULE_PATH ${SOS_SDK_PATH}/cmake)
+set(CMAKE_TOOLCHAIN_FILE ${SOS_SDK_PATH}/cmake/sos-toolchain.cmake)
 include(sos-sdk)
 
 project(SDK)

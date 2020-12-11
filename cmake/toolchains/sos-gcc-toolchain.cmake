@@ -1,6 +1,6 @@
 
 
-set(TOOLCHAIN_DIR ${SOS_SDK_PATH}/Tools/gcc)
+set(TOOLCHAIN_DIR ${SOS_SDK_PATH})
 set(TOOLCHAIN_HOST arm-none-eabi)
 
 message(STATUS "GCC Toolchain is: " ${TOOLCHAIN_DIR}/${TOOLCHAIN_HOST})

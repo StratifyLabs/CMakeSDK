@@ -82,20 +82,25 @@ endfunction()
 
 function(sos_sdk_add_test NAME OPTION CONFIG)
 
-	if(OPTION)
-		set(EXEC_NAME ${NAME}_${OPTION})
-		set(DIR_NAME build_${OPTION})
-	else()
+	string(COMPARE EQUAL ${OPTION} "" OPTION_IS_EMPTY)
+
+	if(OPTION_IS_EMPTY)
 		set(EXEC_NAME ${NAME})
 		set(DIR_NAME build)
+	else()
+		set(EXEC_NAME ${NAME}_${OPTION})
+		set(DIR_NAME build_${OPTION})
 	endif()
 
 	set(EXEC_NAME ${EXEC_NAME}_${CONFIG})
+	set(TARGET_NAME ${EXEC_NAME}_link.elf)
 
-	message(STATUS "SOS SDK - Add test ${NAME}_${CONFIG}")
+	get_target_property(TARGET_BINARY_DIR ${TARGET_NAME} RUNTIME_OUTPUT_DIRECTORY)
+
+	message(STATUS "SOS SDK - Add test ${TARGET_BINARY_DIR}/${TARGET_NAME}")
+
 	add_test(NAME ${NAME}_${CONFIG}
-		COMMAND "../${DIR_NAME}_${CONFIG}_link/${EXEC_NAME}_link.elf" --api
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tmp
+		COMMAND "${TARGET_BINARY_DIR}/${TARGET_NAME}" --api
 		)
 
 	set_tests_properties(

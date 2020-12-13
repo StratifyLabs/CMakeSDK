@@ -1,7 +1,7 @@
-#ifndef MCU_API_H
-#define MCU_API_H
+#ifndef SDK_API_H
+#define SDK_API_H
 
-#include <mcu/types.h>
+#include <sdk/types.h>
 
 typedef struct {
   const char *name;
@@ -92,4 +92,4 @@ extern const crypt_hash_api_t device_sha256_hash_api;
 extern const crypt_aes_api_t device_aes_api;
 extern const crypt_random_api_t device_random_api;
 
-#endif // MCU_API_H
+#endif // SDK_API_H

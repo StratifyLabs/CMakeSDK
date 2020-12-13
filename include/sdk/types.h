@@ -15,8 +15,8 @@
  * along with Stratify OS.  If not, see <http://www.gnu.org/licenses/>. */
 
 
-#ifndef _MCU_TYPES_H_
-#define _MCU_TYPES_H_
+#ifndef _SDK_TYPES_H_
+#define _SDK_TYPES_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -280,4 +280,4 @@ typedef struct MCU_PACK {
 #endif
 
 
-#endif /* _MCU_TYPES_H_ */
+#endif /* _SDK_TYPES_H_ */

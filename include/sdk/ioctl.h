@@ -17,8 +17,8 @@
  * 
  */
 
-#ifndef SOS_IOCTL_H_
-#define SOS_IOCTL_H_
+#ifndef SDK_IOCTL_H_
+#define SDK_IOCTL_H_
 
 #define _IOCTLPARM_MASK 0x1FFF
 #define _IOCTLTYPE_MASK 0xFFFF
@@ -43,4 +43,4 @@
 #define _IOCTL_IOCTLRW(i) ((i) & _IOCTL_INOUT)
 #define _IOCTL_IOCTLW(i) ((i) & _IOCTL_IN)
 
-#endif /* SOS_IOCTL_H_ */
+#endif /* SDK_IOCTL_H_ */

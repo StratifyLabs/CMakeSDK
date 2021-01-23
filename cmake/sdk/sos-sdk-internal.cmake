@@ -15,6 +15,7 @@ function(sos_sdk_internal_get_git_hash)
 endfunction()
 
 macro(sos_sdk_internal_startup)
+	option(SOS_IS_TEST "Build Tests" OFF)
 	if( CMAKE_BINARY_DIR MATCHES ".*_link" )
 		set(SOS_BUILD_CONFIG link CACHE INTERNAL "sos build config is link")
 		set(SOS_ARCH link)

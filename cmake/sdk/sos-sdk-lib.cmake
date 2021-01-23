@@ -157,6 +157,6 @@ function(sos_sdk_library OPTION_LIST)
 		OPTIONAL)
 	install(
 		EXPORT ${SOS_SDK_TMP_TARGET}
-		DESTINATION cmake/targets)
+		DESTINATION ${SOS_SDK_PATH}/cmake/targets)
 
 endfunction()

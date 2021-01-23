@@ -19,7 +19,7 @@ function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS LIBRARIES)
 
 	set(TARGET_NAME ${SOS_SDK_TMP_INSTALL}.elf)
 
-	set(BINARY_OUTPUT_DIR ${CMAKE_SOURCE_DIR}/build_${SOS_SDK_TMP_NO_NAME})
+	set(BINARY_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build_${SOS_SDK_TMP_NO_NAME})
 
 	set_target_properties(${TARGET_NAME}
 		PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR})
@@ -59,7 +59,7 @@ function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS LIBRARIES)
 	set(UPDATED_LINK_FLAGS
 		-L${SOS_SDK_PATH}/arm-none-eabi/lib/${SOS_ARM_ARCH_BUILD_INSTALL_DIR}/${SOS_ARM_ARCH_BUILD_FLOAT_DIR}
 		-L${SOS_SDK_PATH}/lib/gcc/arm-none-eabi/${CMAKE_CXX_COMPILER_VERSION}/${SOS_ARM_ARCH_BUILD_INSTALL_DIR}/${SOS_ARM_ARCH_BUILD_FLOAT_DIR}
-		-Wl,--print-memory-usage,-Map,${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_INSTALL}.map,--gc-sections,--defsym=mcu_core_hardware_id=${HARDWARE_ID}
+		-Wl,--print-memory-usage,-Map,${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_INSTALL}.map,--gc-sections,--defsym=sos_hardware_id=${HARDWARE_ID}
 		-Ttext=${START_ADDRESS}
 		-nostdlib
 		-u mcu_core_vector_table
@@ -74,7 +74,7 @@ function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS LIBRARIES)
 		"${LINK_FLAGS}"
 		)
 
-	add_custom_target(bin_${TARGET_NAME} DEPENDS ${TARGET_NAME} COMMAND ${CMAKE_OBJCOPY} -j .boot_hdr -j .text -j .data -O binary ${BINARY_OUTPUT_DIR}/${TARGET_NAME} ${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_NO_CONFIG}.bin)
+	add_custom_target(bin_${TARGET_NAME} DEPENDS ${TARGET_NAME} COMMAND ${CMAKE_OBJCOPY} -j .boot_hdr -j .text -j .data -O binary ${BINARY_OUTPUT_DIR}/${TARGET_NAME} ${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_INSTALL}.bin)
 	add_custom_target(asm_${TARGET_NAME} DEPENDS ${TARGET_NAME} COMMAND ${CMAKE_OBJDUMP} -S -j .boot_hdr -j .tcim -j .text -j .priv_code -j .data -j .bss -j .sysmem -d ${BINARY_OUTPUT_DIR}/${TARGET_NAME} > ${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_INSTALL}.lst)
 	add_custom_target(size_${TARGET_NAME} DEPENDS ${TARGET_NAME} COMMAND ${CMAKE_SIZE} ${BINARY_OUTPUT_DIR}/${TARGET_NAME})
 	add_custom_target(all_${TARGET_NAME} ALL DEPENDS bin_${TARGET_NAME})

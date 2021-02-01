@@ -59,7 +59,7 @@ function(sos_sdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS LIBRARIES)
 	set(UPDATED_LINK_FLAGS
 		-L${SOS_SDK_PATH}/arm-none-eabi/lib/${SOS_ARM_ARCH_BUILD_INSTALL_DIR}/${SOS_ARM_ARCH_BUILD_FLOAT_DIR}
 		-L${SOS_SDK_PATH}/lib/gcc/arm-none-eabi/${CMAKE_CXX_COMPILER_VERSION}/${SOS_ARM_ARCH_BUILD_INSTALL_DIR}/${SOS_ARM_ARCH_BUILD_FLOAT_DIR}
-		-Wl,--print-memory-usage,-Map,${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_INSTALL}.map,--gc-sections,--defsym=sos_hardware_id=${HARDWARE_ID}
+		-Wl,--print-memory-usage,-Map,${BINARY_OUTPUT_DIR}/${SOS_SDK_TMP_INSTALL}.map,--gc-sections,--defsym=_sos_hardware_id=${HARDWARE_ID}
 		-Ttext=${START_ADDRESS}
 		-nostdlib
 		-u mcu_core_vector_table

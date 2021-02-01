@@ -2,8 +2,8 @@
 .DS_Store
 cmake*_arm/
 cmake*_link/
-MySDK/cmake_link/
-MySDK/cmake_arm/
+MySDK/cmake*_link/
+MySDK/cmake*_arm/
 build/
 SDK/build_*
 *.user

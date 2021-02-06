@@ -150,7 +150,6 @@ function(sos_sdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 				# this applies architecture specific options
 				sos_sdk_app("${BUILD_OPTIONS}" ${RAM_SIZE})
 
-
 				foreach(DEPENDENCY ${DEPENDENCIES})
 					target_link_libraries(${BUILD_TARGET}
 						PRIVATE
@@ -158,14 +157,6 @@ function(sos_sdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 						)
 					message(STATUS "${BUILD_TARGET} -> ${DEPENDENCY}_${CONFIG}_${SOS_ARCH}")
 				endforeach()
-
-				target_link_libraries(${BUILD_TARGET}
-					PRIVATE
-					StratifyOS_crt_${CONFIG}_${ARCH}
-					stdc++
-					supc++
-					)
-					message(STATUS "${BUILD_TARGET} -> crt stdc++ supc++")
 
 
 			endif()
@@ -181,13 +172,6 @@ function(sos_sdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 
 		endforeach()
 
-		target_link_libraries(${BUILD_ARCH_TARGET}
-			PRIVATE
-			StratifyOS_crt_${CONFIG}_${SOS_ARCH}
-			stdc++
-			supc++
-			)
-			message(STATUS "${BUILD_ARCH_TARGET} -> crt stdc++ supc++")
 
 	endif()
 endfunction()

@@ -24,11 +24,7 @@ function(sos_sdk_app OPTION_LIST RAM_SIZE)
 	file(MAKE_DIRECTORY ${BINARY_OUTPUT_DIR})
 
 	if(ARCH STREQUAL "link")
-		if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows" )
-			set(LINKER_FLAGS "-L${SOS_SDK_PATH}/lib -static -static-libstdc++ -static-libgcc")
-		else()
-			set(LINKER_FLAGS "-L${SOS_SDK_PATH}/lib")
-		endif()
+    	target_link_options(${TARGET_NAME} PRIVATE -static -static-libstdc++ -static-libgcc)
 
 		target_compile_definitions(${TARGET_NAME}
 			PUBLIC

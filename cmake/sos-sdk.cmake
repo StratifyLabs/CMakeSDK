@@ -121,7 +121,7 @@ endfunction()
 
 macro(sos_sdk_include_target TARGET CONFIG_LIST)
 	if(SOS_IS_ARM)
-		set(ARCH_LIST v7m v7em v7em_f4sh v7em_f5sh v7em_f5dh)
+		set(ARCH_LIST ${SOS_ARCH} ${SOS_ARCH_LIST})
 	else()
 		set(ARCH_LIST link)
 	endif()

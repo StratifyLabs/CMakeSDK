@@ -14,7 +14,7 @@ endfunction()
 function(sos_sdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
 	message(STATUS "Checking existence of ${BASE_DIRECTORY}/${NAME}")
 	if(NOT EXISTS ${BASE_DIRECTORY}/${NAME})
-		message(STATUS "Need to clone manually for the first call to cmake")
+		message(STATUS "Need to clone for the first call to cmake")
 		execute_process(
 			COMMAND git clone --branch ${BRANCH} ${REPOSITORY}
 			WORKING_DIRECTORY ${BASE_DIRECTORY}
@@ -28,28 +28,6 @@ function(sos_sdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
 				)
 		endif()
 	endif()
-endfunction()
-
-
-function(sos_sdk_copy_file SOURCE DESTINATION)
-	if(NOT EXISTS ${SOURCE})
-		file(READ
-			${SOURCE}
-			FILE_CONTENTS)
-		file(WRITE
-			${DESTINATION}
-			${FILE_CONTENTS}
-			)
-	endif()
-endfunction()
-
-function(sos_sdk_overwrite_file SOURCE DESTINATION)
-	file(READ
-		${SOURCE}
-		FILE_CONTENTS)
-	file(WRITE
-		${DESTINATION}
-		${FILE_CONTENTS})
 endfunction()
 
 function(sos_sdk_add_subdirectory INPUT_LIST DIRECTORY)

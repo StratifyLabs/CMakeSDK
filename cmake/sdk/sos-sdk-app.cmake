@@ -24,7 +24,9 @@ function(sos_sdk_app OPTION_LIST RAM_SIZE)
 	file(MAKE_DIRECTORY ${BINARY_OUTPUT_DIR})
 
 	if(ARCH STREQUAL "link")
-    	target_link_options(${TARGET_NAME} PRIVATE -static -static-libstdc++ -static-libgcc)
+		if(SOS_IS_WINDOWS OR SOS_IS_LINUX)
+    	target_link_options(${TARGET_NAME} PRIVATE -static-libstdc++ -static-libgcc)
+		endif()
 
 		target_compile_definitions(${TARGET_NAME}
 			PUBLIC

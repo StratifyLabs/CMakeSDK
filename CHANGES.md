@@ -1,12 +1,8 @@
-# v1.1.0
-
-## New Features
-
-- add `sos_sdk_git_clone_or_pull` to pull subprojects
+# v1.0.1
 
 ## Bug Fixes
 
-- none yet
+- Fix name for `sos_sdk_git_clone_or_pull_branch`
 
 # v1.0.0
 

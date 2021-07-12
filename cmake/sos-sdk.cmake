@@ -11,6 +11,25 @@ function(sos_sdk_pull PROJECT_PATH)
 	endif()
 endfunction()
 
+function(sos_sdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
+	message(STATUS "Checking existence of ${BASE_DIRECTORY}/${NAME}")
+	if(NOT EXISTS ${BASE_DIRECTORY}/${NAME})
+		message(STATUS "Need to clone manually for the first call to cmake")
+		execute_process(
+			COMMAND git clone --branch ${BRANCH} ${REPOSITORY}
+			WORKING_DIRECTORY ${BASE_DIRECTORY}
+			)
+	else()
+		if(IS_PULL)
+			message(STATUS "Using git pull for ${BASE_DIRECTORY}/${NAME}")
+			execute_process(
+				COMMAND git pull
+				WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
+				)
+		endif()
+	endif()
+endfunction()
+
 function(sos_sdk_add_subdirectory INPUT_LIST DIRECTORY)
 	add_subdirectory(${DIRECTORY})
 	set(INPUT_SOURCES ${${INPUT_LIST}})

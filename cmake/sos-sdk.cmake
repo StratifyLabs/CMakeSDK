@@ -30,6 +30,28 @@ function(sos_sdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
 	endif()
 endfunction()
 
+
+function(sos_sdk_copy_file SOURCE DESTINATION)
+	if(NOT EXISTS ${SOURCE})
+		file(READ
+			${SOURCE}
+			FILE_CONTENTS)
+		file(WRITE
+			${DESTINATION}
+			${FILE_CONTENTS}
+			)
+	endif()
+endfunction()
+
+function(sos_sdk_overwrite_file SOURCE DESTINATION)
+	file(READ
+		${SOURCE}
+		FILE_CONTENTS)
+	file(WRITE
+		${DESTINATION}
+		${FILE_CONTENTS})
+endfunction()
+
 function(sos_sdk_add_subdirectory INPUT_LIST DIRECTORY)
 	add_subdirectory(${DIRECTORY})
 	set(INPUT_SOURCES ${${INPUT_LIST}})

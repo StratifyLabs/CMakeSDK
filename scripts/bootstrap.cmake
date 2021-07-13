@@ -72,5 +72,8 @@ if(NOT EXISTS ${BINARY_PATH}/arm-none-eabi-gcc OR ${BOOTSTRAP_COMPILER})
 		)
 
 	file(COPY ${CMAKESDK_DIRECTORY}/scripts/profile.sh DESTINATION ${CMAKE_SOURCE_DIR})
+
+	file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake_arm)
+
 endif()
 

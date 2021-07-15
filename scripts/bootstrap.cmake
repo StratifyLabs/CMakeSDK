@@ -22,10 +22,10 @@ if(NOT EXISTS ${BINARY_PATH}/sl OR ${INSTALL_SL})
 		set(SL_ARCH sl_Darwin_x86_64)
 	endif()
 	if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows" )
-		set(SOS_IS_WINDOWS sl_windows_x86_64)
+		set(SL_ARCH sl_windows_x86_64)
 	endif()
 	if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux" )
-		set(SOS_IS_LINUS sl_linux_x86_64)
+		set(SL_ARCH sl_linux_x86_64)
 	endif()
 
 	# Grab sl and put it in the SDK
@@ -48,13 +48,35 @@ if(${NOT_LOGGED_IN})
 	return()
 endif()
 
+if(EXISTS ${BINARY_PATH}/arm-none-eabi-gcc)
+	message(STATUS "Compiler is installed at ${BINARY_PATH}")
+endif()
 
-# Check to see if sl is logged in -- abort if it is not
+if(${BOOTSTRAP_COMPILER})
+	message(STATUS "Compiler Bootstrap requested (reinstalling if needed)")
+endif()
+
 
 if(NOT EXISTS ${BINARY_PATH}/arm-none-eabi-gcc OR ${BOOTSTRAP_COMPILER})
+
+	if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin" )
+		set(COMPILER_ARCH macosx_x86_64)
+		set(COMPILER_HASH "60BB5EDFCB9CC3DB3FF409870F6D94BB4E7C084E2D2449499F044B6350641823")
+	endif()
+	if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows" )
+		set(COMPILER_ARCH windows_x86_64)
+		set(COMPILER_HASH "")
+	endif()
+	if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux" )
+		set(COMPILER_ARCH linux_x86_64)
+		set(COMPILER_HASH "")
+	endif()
+
+	set(COMPILER_LINK https://github.com/StratifyLabs/StratifyOS/releases/download/compilerv8/compiler.${COMPILER_ARCH}_sblob)
+
 	message(STATUS "Downloading and installing clean compiler to ${SDK_PATH}")
 	execute_process(
-		COMMAND ${SDK_PATH}/bin/sl cloud.install:compiler
+		COMMAND ${SDK_PATH}/bin/sl cloud.install:compiler,url=${COMPILER_LINK},hash=${COMPILER_HASH}
 		)
 
 	set(DEPENDENCIES_DIRECTORY ${SDK_DIRECTORY}/dependencies)

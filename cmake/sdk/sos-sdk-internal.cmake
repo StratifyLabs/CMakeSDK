@@ -54,6 +54,7 @@ macro(sos_sdk_internal_startup)
 	endif()
 	if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux" )
 		set(SOS_IS_LINUS TRUE CACHE INTERNAL "Linux OS")
+		set(SOS_IS_LINUX TRUE CACHE INTERNAL "Linux OS")
 	endif()
 
 	set(SOS_SDK_EXEC_SUFFIX "")

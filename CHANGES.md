@@ -2,6 +2,7 @@
 
 ## New Features
 
+- Add Windows compiler downlaod via github with SHA256
 - Add MacOS and Linux compiler download via github with SHA256 hash
 - Add `scripts/sl.cmake` to install sl and a clean compiler
 - Add `scripts/profile.sh` to set the ENV variables from a project

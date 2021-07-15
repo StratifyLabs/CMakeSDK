@@ -69,7 +69,7 @@ if(NOT EXISTS ${BINARY_PATH}/arm-none-eabi-gcc OR ${BOOTSTRAP_COMPILER})
 	endif()
 	if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux" )
 		set(COMPILER_ARCH linux_x86_64)
-		set(COMPILER_HASH "")
+		set(COMPILER_HASH "AF62F9BB76765E9B828F4F69118F10EEBA7530B0E94B5D4376D03A1CCC70EAE4")
 	endif()
 
 	set(COMPILER_LINK https://github.com/StratifyLabs/StratifyOS/releases/download/compilerv8/compiler.${COMPILER_ARCH}_sblob)

@@ -48,29 +48,66 @@ typedef struct {
   int (*start)(void *context);
   int (*update)(void *context, const unsigned char *input, u32 size);
   int (*finish)(void *context, unsigned char *output, u32 size);
+  u32 (*get_context_size)();
 } crypt_hash_api_t;
 
-typedef struct {
-  int (*init)(void **context);
-  void (*deinit)(void **context);
-} crypt_ecc_api_t;
 
-typedef struct {
-  // init
-  // parse public key
-  // encrypt using public key
-  // parse key (private)
-  // get key type
-} crypt_public_key_api_t;
+typedef enum {
+  //mbedtls only
+  CRYPT_ECC_KEY_PAIR_SECP192R1,
+  CRYPT_ECC_KEY_PAIR_SECP224R1,
+
+  //supported by tinycrypt and mbedtls
+  CRYPT_ECC_KEY_PAIR_SECP256R1,
+
+  //mbedtls only
+  CRYPT_ECC_KEY_PAIR_SECP384R1,
+  CRYPT_ECC_KEY_PAIR_SECP521R1,
+  CRYPT_ECC_KEY_PAIR_BP256R1,
+  CRYPT_ECC_KEY_PAIR_BP384R1,
+  CRYPT_ECC_KEY_PAIR_BP512R1,
+  CRYPT_ECC_KEY_PAIR_CURVE25519,
+  CRYPT_ECC_KEY_PAIR_SECP192K1,
+  CRYPT_ECC_KEY_PAIR_SECP224K1,
+  CRYPT_ECC_KEY_PAIR_SECP256K1,
+  CRYPT_ECC_KEY_PAIR_CURVE448
+} crypt_ecc_key_pair_t;
+
 
 typedef struct {
   api_t sos_api;
-  void (*init)(void **context, int padding, int hash_id);
+  int (*init)(void **context);
   void (*deinit)(void **context);
 
-  // generate a key
-  // decrypt
-} crypt_rsa_api_t;
+  int (*dh_create_key_pair)(
+    void * context, 
+    crypt_ecc_key_pair_t type, 
+    u8 * public_key, u32 * public_key_capacity);
+  //use public key from remote device, use private key from this device
+  int (*dh_calculate_shared_secret)(void *context,
+    const u8 *public_key, u32 public_key_length,
+    u8 *secret, u32 secret_length);
+
+  //EC - DSA - digital signature algorithm  
+  int (*dsa_create_key_pair)(void * context, 
+          crypt_ecc_key_pair_t type, 
+    u8 * public_key, u32 * public_key_capacity,
+    u8 * private_key, u32 * private_key_capacity);
+
+  int (*dsa_set_key_pair)(void * context, 
+    const u8 * public_key, u32 public_key_capacity,
+    const u8 * private_key, u32 private_key_capacity);
+
+  int (*dsa_sign)(void * context, const u8 * message_hash,
+	      u32 hash_size, u8 *p_signature, u32 * signature_length);
+  
+  int (*dsa_verify)(void * context, const u8 * message_hash,
+		u32 hash_size, const u8 * signature, u32 signature_length);
+
+  u32 (*get_context_size)();
+
+} crypt_ecc_api_t;
+
 
 typedef struct {
   api_t sos_api;
@@ -78,6 +115,7 @@ typedef struct {
   void (*deinit)(void **context);
   int (*seed)(void *context, const unsigned char *data, u32 data_len);
   int (*random)(void *context, unsigned char *output, u32 output_length);
+  u32 (*get_context_size)();
 } crypt_random_api_t;
 
 #if !defined __link
@@ -85,11 +123,22 @@ typedef struct {
 #define CRYPT_SHA512_API_REQUEST MCU_API_REQUEST_CODE('s', '5', '1', '2')
 #define CRYPT_RANDOM_API_REQUEST MCU_API_REQUEST_CODE('r', 'a', 'n', 'd')
 #define CRYPT_AES_API_REQUEST MCU_API_REQUEST_CODE('a', 'e', 's', '!')
+#define CRYPT_ECC_API_REQUEST MCU_API_REQUEST_CODE('e', 'c', 'c', '!')
 #endif
 
-extern const crypt_hash_api_t tinycrypt_sha256_hash_api;
-extern const crypt_hash_api_t device_sha256_hash_api;
-extern const crypt_aes_api_t device_aes_api;
-extern const crypt_random_api_t device_random_api;
+#define CRYPT_SIGNATURE_MARKER_START (0xFF00FF00)
+#define CRYPT_SIGNATURE_MARKER_NEXT (0x1FBA2B3D)
+#define CRYPT_SIGNATURE_MARKER_SIZE (0xB63A0000)
+
+typedef struct {
+  u32 start;
+  u32 next;
+  u32 size;
+} crypt_api_signature_marker_t;
+
+typedef struct MCU_PACK {
+  crypt_api_signature_marker_t marker;
+  u8 signature[64];
+} crypt_api_signature512_marker_t;
 
 #endif // SDK_API_H

@@ -2,8 +2,10 @@
 
 ## New Features
 
+- Update `sdk/api.h` with ECC crypto functions
 - Add Windows compiler downlaod via github with SHA256
 - Add MacOS and Linux compiler download via github with SHA256 hash
+- Add ECC to the crypt API
 
 ## Bug Fixes
 

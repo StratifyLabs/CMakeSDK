@@ -124,6 +124,9 @@ typedef struct {
 #define CRYPT_RANDOM_API_REQUEST MCU_API_REQUEST_CODE('r', 'a', 'n', 'd')
 #define CRYPT_AES_API_REQUEST MCU_API_REQUEST_CODE('a', 'e', 's', '!')
 #define CRYPT_ECC_API_REQUEST MCU_API_REQUEST_CODE('e', 'c', 'c', '!')
+#define CRYPT_ECC_ROOT_API_REQUEST MCU_API_REQUEST_CODE('r', 'e', 'c', 'c')
+#define CRYPT_SHA256_ROOT_API_REQUEST MCU_API_REQUEST_CODE('r', '2', '5', '6')
+#define CRYPT_AES_ROOT_API_REQUEST MCU_API_REQUEST_CODE('r', 'a', 'e', 's')
 #endif
 
 #define CRYPT_SIGNATURE_MARKER_START (0xFF00FF00)

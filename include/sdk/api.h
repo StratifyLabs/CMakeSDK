@@ -37,6 +37,7 @@ typedef struct {
                      unsigned char nonce_counter[16],
                      unsigned char stream_block[16], const unsigned char *input,
                      unsigned char *output);
+  u32 (*get_context_size)();
 
 } crypt_aes_api_t;
 

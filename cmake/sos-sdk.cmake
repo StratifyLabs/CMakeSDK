@@ -21,8 +21,13 @@ function(sos_sdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
 			)
 	else()
 		if(IS_PULL)
-			message(STATUS "Using git pull for ${BASE_DIRECTORY}/${NAME}")
+			message(STATUS "Running `git checkout ${BRANCH}` in ${BASE_DIRECTORY}/${NAME}")
 			execute_process(
+				COMMAND git checkout ${BRANCH}
+				WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
+				)
+				message(STATUS "Running `git pull` in ${BASE_DIRECTORY}/${NAME}")
+				execute_process(
 				COMMAND git pull
 				WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
 				)

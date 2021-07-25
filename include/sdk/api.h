@@ -131,15 +131,5 @@ typedef struct {
 #define CRYPT_RANDOM_ROOT_API_REQUEST MCU_API_REQUEST_CODE('r', 'r', 'a', 'n')
 #endif
 
-#define CRYPT_SIGNATURE_MARKER_START (0xFF00FF00)
-#define CRYPT_SIGNATURE_MARKER_NEXT (0x1FBA2B3D)
-#define CRYPT_SIGNATURE_MARKER_SIZE (0xB63A0000)
-
-typedef struct {
-  u32 start;
-  u32 next;
-  u32 size;
-  u8 data[64];
-} crypt_api_signature_marker_t;
 
 #endif // SDK_API_H

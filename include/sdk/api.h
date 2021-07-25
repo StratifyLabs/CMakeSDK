@@ -139,11 +139,7 @@ typedef struct {
   u32 start;
   u32 next;
   u32 size;
+  u8 data[64];
 } crypt_api_signature_marker_t;
-
-typedef struct MCU_PACK {
-  crypt_api_signature_marker_t marker;
-  u8 signature[64];
-} crypt_api_signature512_marker_t;
 
 #endif // SDK_API_H

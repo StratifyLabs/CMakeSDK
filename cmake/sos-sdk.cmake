@@ -20,7 +20,7 @@ function(sos_sdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
 			WORKING_DIRECTORY ${BASE_DIRECTORY}
 			)
 	else()
-		if(IS_PULL)
+		if(SOS_IS_PULL)
 			message(STATUS "Running `git checkout ${BRANCH}` in ${BASE_DIRECTORY}/${NAME}")
 			execute_process(
 				COMMAND git checkout ${BRANCH}
@@ -32,6 +32,13 @@ function(sos_sdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
 				WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
 				)
 		endif()
+	endif()
+	add_custom_target(sos_sdk_pull_${NAME}
+		COMMAND git pull
+		WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
+	)
+	if(SOS_SDK_PULL_TARGET)
+		add_dependencies(${SOS_SDK_PULL_TARGET} sos_sdk_pull_${NAME})
 	endif()
 endfunction()
 

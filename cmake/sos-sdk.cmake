@@ -19,23 +19,15 @@ function(sos_sdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
 			COMMAND git clone --branch ${BRANCH} ${REPOSITORY}
 			WORKING_DIRECTORY ${BASE_DIRECTORY}
 			)
-	else()
-		if(SOS_IS_PULL)
-			message(STATUS "Running `git checkout ${BRANCH}` in ${BASE_DIRECTORY}/${NAME}")
-			execute_process(
-				COMMAND git checkout ${BRANCH}
-				WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
-				)
-				message(STATUS "Running `git pull` in ${BASE_DIRECTORY}/${NAME}")
-				execute_process(
-				COMMAND git pull
-				WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
-				)
-		endif()
 	endif()
+	add_custom_target(sos_sdk_checkout_${NAME}
+		COMMAND git checkout ${BRANCH}
+		WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
+	)
 	add_custom_target(sos_sdk_pull_${NAME}
 		COMMAND git pull
 		WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
+		DEPENDS sos_sdk_checkout_${NAME}
 	)
 	if(SOS_SDK_PULL_TARGET)
 		add_dependencies(${SOS_SDK_PULL_TARGET} sos_sdk_pull_${NAME})

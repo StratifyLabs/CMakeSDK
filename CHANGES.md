@@ -9,7 +9,7 @@
 
 ## Bug Fixes
 
-- None yet
+- Better management of `git checkout <branch>` and `git pull`
 
 # v1.1.0
 

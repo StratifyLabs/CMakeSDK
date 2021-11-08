@@ -2,6 +2,7 @@
 
 ## New Features
 
+- Remove MacOs min version settings - top level must use `CMAKE_OSX_DEPLOYMENT_TARGET`
 - Update `sdk/api.h` with ECC crypto functions
 - Add Windows compiler downlaod via github with SHA256
 - Add MacOS and Linux compiler download via github with SHA256 hash

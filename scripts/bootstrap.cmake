@@ -25,7 +25,7 @@ if(NOT EXISTS ${BINARY_PATH}/sl OR ${INSTALL_SL})
 		set(SL_ARCH sl_windows_x86_64)
 	endif()
 	if( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux" )
-		set(SL_ARCH sl_linux_x86_64)
+		set(SL_ARCH sl_Linux_x86_64)
 	endif()
 
 	# Grab sl and put it in the SDK

@@ -1,3 +1,9 @@
+# v1.2.1
+
+## Bug Fixes
+
+- Use `git pull` before `git checkout` when building the pull target
+
 # v1.2.0
 
 ## New Features

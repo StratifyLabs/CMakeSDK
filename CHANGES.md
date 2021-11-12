@@ -1,3 +1,13 @@
+# v1.3.0
+
+## New Features
+
+- None yet
+
+## Bug Fixes
+
+- Use `git pull` before `git checkout` when building the pull target
+
 # v1.2.0
 
 ## New Features

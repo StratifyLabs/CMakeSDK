@@ -7,7 +7,7 @@ function(sos_sdk_pull PROJECT_PATH)
   execute_process(COMMAND ${SOS_SDK_GIT_EXEC} pull WORKING_DIRECTORY ${PROJECT_PATH} OUTPUT_VARIABLE OUTPUT RESULT_VARIABLE RESULT)
   message(STATUS "git pull " ${PROJECT_PATH} "\n" ${OUTPUT})
   if(RESULT)
-    message(FATAL_ERROR " Failed to pull " ${PROJECT_PATH})
+    message(WARNING " Failed to pull " ${PROJECT_PATH})
   endif()
 endfunction()
 

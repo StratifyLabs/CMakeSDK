@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.19)
+cmake_minimum_required (VERSION 3.18)
 
 if(NOT SDK_DIRECTORY)
 	message(FATAL_ERROR "-DSDK_DIRECTORY=<path> must be supplied before -P")

@@ -5,7 +5,7 @@ set(TOOLCHAIN_HOST aarch64-linux-gnu)
 set(TOOLCHAIN_LIB_DIR "${TOOLCHAIN_DIR}/lib" CACHE INTERNAL "GCC TOOLCHAIN LIBRARY DIR")
 set(SOS_SDK_LIB_DIR "${TOOLCHAIN_DIR}/lib")
 
-message(STATUS "Use Clang toolchain install dir: " ${TOOLCHAIN_DIR})
+message(STATUS "Use GCC toolchain install dir: " ${TOOLCHAIN_DIR})
 set(CMAKE_INSTALL_PREFIX ${TOOLCHAIN_DIR} CACHE INTERNAL "CLANG INSTALL PREFIX")
 include_directories(SYSTEM ${TOOLCHAIN_DIR}/include)
 

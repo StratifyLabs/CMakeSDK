@@ -122,7 +122,7 @@ function(sos_sdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 		endforeach()
 
 		if(SOS_SDK_IS_LINUX)
-			target_link_libraries(${BUILD_TARGET} PRIVATE pthread)
+			target_link_libraries(${BUILD_TARGET} PRIVATE pthread rt)
 		endif()
 
 	else()

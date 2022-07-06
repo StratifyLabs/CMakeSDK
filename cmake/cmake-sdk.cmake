@@ -1,5 +1,5 @@
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/sos-sdk-variables.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/sos-sdk-internal.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmake-sdk-variables.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmake-sdk-internal.cmake)
 
 cmake_sdk_internal_startup()
 

@@ -5,8 +5,8 @@ if(DEFINED ENV{SOS_SDK_PATH})
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_MODULE_PATH}/sos-toolchain.cmake)
-include(sos-sdk)
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_MODULE_PATH}/cmake-sdk-toolchain.cmake)
+include(cmake-sdk)
 
 project(CMakeSDK CXX C)
 

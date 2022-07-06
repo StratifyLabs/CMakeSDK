@@ -55,18 +55,18 @@ Every project should start with the following header:
 ```
 cmake_minimum_required (VERSION 3.12)
 
-if(NOT SOS_SDK_PATH)
-	set(SOS_SDK_PATH $ENV{SOS_SDK_PATH})
+if(NOT CMAKE_SDK_PATH)
+	set(CMAKE_SDK_PATH $ENV{CMAKE_SDK_PATH})
 endif()
 
-set(CMAKE_MODULE_PATH ${SOS_SDK_PATH}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_SDK_PATH}/cmake)
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_MODULE_PATH}/sos-toolchain.cmake)
 
 include(sos-sdk)
 project(my_project CXX C ASM)
 ```
 
-The environment variable `SOS_SDK_PATH` should point to the Stratify Labs SDK folder that contains a folder called `Tools` and an appropriate GCC cross-compiler. For native compiling, the compiler will be found whatever is available on the `$PATH`.
+The environment variable `CMAKE_SDK_PATH` should point to the Stratify Labs SDK folder that contains a folder called `Tools` and an appropriate GCC cross-compiler. For native compiling, the compiler will be found whatever is available on the `$PATH`.
 
 
 ### Libraries (Desktop or Stratify OS)
@@ -194,8 +194,8 @@ target_include_directories(${BOOT_RELEASE_TARGET}
 	PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/src
 	${CMAKE_CURRENT_SOURCE_DIR}/src/atwinc1500
-	${SOS_SDK_PATH}/arm-none-eabi/include/mcu/arch/stm32/cmsis
-	${SOS_SDK_PATH}/arm-none-eabi/include
+	${CMAKE_SDK_PATH}/arm-none-eabi/include/mcu/arch/stm32/cmsis
+	${CMAKE_SDK_PATH}/arm-none-eabi/include
 	)
 
 target_compile_definitions(${BOOT_RELEASE_TARGET}

@@ -1,16 +1,16 @@
 cmake_minimum_required (VERSION 3.18)
 
-if(NOT SDK_DIRECTORY)
-	message(FATAL_ERROR "-DSDK_DIRECTORY=<path> must be supplied before -P")
+if(NOT CMSDK_PATH)
+	message(FATAL_ERROR "-DCMSDK_PATH=<path> must be supplied before -P")
 endif()
 
 option(INSTALL_SL "Download and install SL" OFF)
 option(BOOTSTRAP_COMPILER "Install the basic compiler" OFF)
 
-
+set(SDK_DIRECTORY ${CMSDK_PATH})
 message(STATUS "SDK Directory is ${SDK_DIRECTORY}")
 
-set(SDK_PATH ${SDK_DIRECTORY}/StratifyLabs-SDK)
+set(SDK_PATH ${SDK_DIRECTORY}/local)
 set(BINARY_PATH ${SDK_PATH}/bin)
 set(ENV{CMSDK_SDK_PATH} ${SDK_PATH})
 

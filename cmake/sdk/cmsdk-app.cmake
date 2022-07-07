@@ -12,7 +12,7 @@ function(cmsdk_app OPTION_LIST RAM_SIZE)
 	list(GET OPTION_LIST 3 ARCH)
 
 	cmsdk_internal_build_target_name("${BASE_NAME}" "${OPTION}" "${CONFIG}" "${ARCH}")
-	message(STATUS "SOS SDK APP ${CMSDK_SDK_TMP_TARGET}")
+	message(STATUS "CMSDK APP ${CMSDK_SDK_TMP_TARGET}")
 
 	set(TARGET_NAME ${CMSDK_SDK_TMP_INSTALL}_${ARCH}.elf)
 
@@ -113,7 +113,7 @@ function(cmsdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 		cmsdk_app("${OPTION_LIST}" ${RAM_SIZE})
 
 		foreach(DEPENDENCY ${DEPENDENCIES})
-			message(STATUS "SOS SDK Adding dependency ${DEPENDENCY}_${CONFIG}_link to ${BUILD_TARGET}")
+			message(STATUS "CMSDK Adding dependency ${DEPENDENCY}_${CONFIG}_link to ${BUILD_TARGET}")
 
 			target_link_libraries(${BUILD_TARGET}
 				PRIVATE

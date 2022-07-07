@@ -15,7 +15,7 @@ function(cmsdk_bsp OPTION_LIST HARDWARE_ID START_ADDRESS LIBRARIES)
 	cmsdk_internal_build_target_name("${BASE_NAME}" "${OPTION}" "${CONFIG}" "${ARCH}")
 	cmsdk_internal_arm_arch(${ARCH})
 
-	message(STATUS "SOS SDK BSP ${CMSDK_SDK_TMP_TARGET}")
+	message(STATUS "CMSDK BSP ${CMSDK_SDK_TMP_TARGET}")
 
 	set(TARGET_NAME ${CMSDK_SDK_TMP_INSTALL}.elf)
 

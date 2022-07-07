@@ -35,7 +35,7 @@ function(cmsdk_library_add_arch_targets OPTION_LIST ARCH DEPENDENCIES)
 
 		foreach(DEPENDENCY ${DEPENDENCIES})
 
-			message(STATUS "SOS SDK Adding ${DEPENDENCY}_${CONFIG}_${ARCH} to ${BUILD_TARGET}")
+			message(STATUS "CMSDK Adding ${DEPENDENCY}_${CONFIG}_${ARCH} to ${BUILD_TARGET}")
 
 			target_link_libraries(${BUILD_TARGET}
 				PUBLIC
@@ -73,7 +73,7 @@ function(cmsdk_library_add_arch_targets OPTION_LIST ARCH DEPENDENCIES)
 				cmsdk_library("${BUILD_OPTIONS}")
 
 				foreach(DEPENDENCY ${DEPENDENCIES})
-					message(STATUS "SOS SDK Adding ${DEPENDENCY}_${CONFIG}_${ARCH} to ${BUILD_TARGET}")
+					message(STATUS "CMSDK Adding ${DEPENDENCY}_${CONFIG}_${ARCH} to ${BUILD_TARGET}")
 					target_link_libraries(${BUILD_TARGET}
 						PUBLIC
 						${DEPENDENCY}_${CONFIG}_${ARCH}
@@ -105,7 +105,7 @@ function(cmsdk_library OPTION_LIST)
 	cmsdk_internal_build_target_name(${BASE_NAME} "${OPTION}" "${CONFIG}" ${ARCH})
 	cmsdk_internal_arm_arch(${ARCH})
 
-	message(STATUS "SOS SDK Library ${CMSDK_SDK_TMP_TARGET}")
+	message(STATUS "CMSDK Library ${CMSDK_SDK_TMP_TARGET}")
 
 	target_compile_definitions(${CMSDK_SDK_TMP_TARGET}
 		PUBLIC

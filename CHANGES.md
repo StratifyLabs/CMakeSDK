@@ -34,7 +34,7 @@
 
 ## Bug Fixes
 
-- Fixed `SOS_IS_LINUS` bug (backwards compatible fix) (f09467eb421e3a57dfbc0c8b6ef2f2520ffd4617)
+- Fixed `CMSDK_IS_LINUS` bug (backwards compatible fix) (f09467eb421e3a57dfbc0c8b6ef2f2520ffd4617)
 
 # v1.0.0
 

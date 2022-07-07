@@ -120,7 +120,7 @@ function(cmsdk_add_test NAME OPTION CONFIG)
 
   get_target_property(TARGET_BINARY_DIR ${TARGET_NAME} RUNTIME_OUTPUT_DIRECTORY)
 
-  message(STATUS "SOS SDK - Add test ${TARGET_BINARY_DIR}/${TARGET_NAME}")
+  message(STATUS "CMSDK - Add test ${TARGET_BINARY_DIR}/${TARGET_NAME}")
 
   add_test(NAME ${NAME}_${CONFIG}
     COMMAND "${TARGET_BINARY_DIR}/${TARGET_NAME}" --api

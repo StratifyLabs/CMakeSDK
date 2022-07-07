@@ -11,7 +11,7 @@ include(cmsdk)
 project(CMakeSDK CXX C)
 
 
-if(SOS_IS_LINK)
+if(CMSDK_IS_LINK)
 	set(CMAKE_DEST cmake)
 else()
 	set(CMAKE_DEST ../cmake)

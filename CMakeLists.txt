@@ -5,8 +5,8 @@ if(DEFINED ENV{CMSDK_PATH})
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_MODULE_PATH}/cmake-sdk-toolchain.cmake)
-include(cmake-sdk)
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_MODULE_PATH}/cmsdk-toolchain.cmake)
+include(cmsdk)
 
 project(CMakeSDK CXX C)
 

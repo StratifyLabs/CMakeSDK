@@ -1,10 +1,10 @@
-function(cmake_sdk_library_target OUTPUT BASE_NAME OPTION CONFIG ARCH)
-	cmake_sdk_internal_build_target_name("${BASE_NAME}" "${OPTION}" "${CONFIG}" "${ARCH}")
+function(cmsdk_library_target OUTPUT BASE_NAME OPTION CONFIG ARCH)
+	cmsdk_internal_build_target_name("${BASE_NAME}" "${OPTION}" "${CONFIG}" "${ARCH}")
 	set(${OUTPUT}_OPTIONS "${BASE_NAME};${OPTION};${CONFIG};${ARCH}" PARENT_SCOPE)
-	set(${OUTPUT}_TARGET ${CMAKE_SDK_SDK_TMP_TARGET} PARENT_SCOPE)
+	set(${OUTPUT}_TARGET ${CMSDK_SDK_TMP_TARGET} PARENT_SCOPE)
 endfunction()
 
-function(cmake_sdk_library_add_architecture_targets OPTION_LIST ARCH DEPENDENCIES)
+function(cmsdk_library_add_architecture_targets OPTION_LIST ARCH DEPENDENCIES)
 	set(ONE_VALUE_ARGS ARCHITECTURE)
 	set(MULTI_VALUE_ARGS TARGET DEPENDENCIES)
 	cmake_parse_arguments(
@@ -15,10 +15,10 @@ function(cmake_sdk_library_add_architecture_targets OPTION_LIST ARCH DEPENDENCIE
 	message("DEPS is ${ARGS_DEPENDENCIES}")
 
 
-	#cmake_sdk_library_add_arch_targets(${TARGET} ${ARCHITECTURE} "${DEPENDENCIES}")
+	#cmsdk_library_add_arch_targets(${TARGET} ${ARCHITECTURE} "${DEPENDENCIES}")
 endfunction()
 
-function(cmake_sdk_library_add_arch_targets OPTION_LIST ARCH DEPENDENCIES)
+function(cmsdk_library_add_arch_targets OPTION_LIST ARCH DEPENDENCIES)
 
 
 	string(COMPARE EQUAL ${ARCH} link IS_LINK)
@@ -29,9 +29,9 @@ function(cmake_sdk_library_add_arch_targets OPTION_LIST ARCH DEPENDENCIES)
 
 	if(IS_LINK)
 
-		cmake_sdk_library_target(BUILD ${BASE_NAME} "${OPTION}" "${CONFIG}" link)
+		cmsdk_library_target(BUILD ${BASE_NAME} "${OPTION}" "${CONFIG}" link)
 
-		cmake_sdk_library("${OPTION_LIST}")
+		cmsdk_library("${OPTION_LIST}")
 
 		foreach(DEPENDENCY ${DEPENDENCIES})
 
@@ -49,28 +49,28 @@ function(cmake_sdk_library_add_arch_targets OPTION_LIST ARCH DEPENDENCIES)
 	else()
 
 
-		cmake_sdk_library_target(BUILD_ARCH ${BASE_NAME} "${OPTION}" "${CONFIG}" ${CMAKE_SDK_ARCH})
+		cmsdk_library_target(BUILD_ARCH ${BASE_NAME} "${OPTION}" "${CONFIG}" ${CMSDK_ARCH})
 
-		foreach (ARCH ${CMAKE_SDK_ARCH_LIST})
-			cmake_sdk_internal_is_arch_enabled(${ARCH})
+		foreach (ARCH ${CMSDK_ARCH_LIST})
+			cmsdk_internal_is_arch_enabled(${ARCH})
 			if(ARCH_ENABLED)
 				set(TARGET_NAME ${BASE_NAME})
 				if(NOT OPTION STREQUAL "")
 					set(TARGET_NAME ${TARGET_NAME}_${OPTION})
 				endif()
 
-				cmake_sdk_library_target(BUILD ${BASE_NAME} "${OPTION}" "${CONFIG}" ${ARCH})
+				cmsdk_library_target(BUILD ${BASE_NAME} "${OPTION}" "${CONFIG}" ${ARCH})
 
 
 				add_library(${BUILD_TARGET} STATIC)
 
-				cmake_sdk_copy_target(
+				cmsdk_copy_target(
 					${BUILD_ARCH_TARGET}
 					${BUILD_TARGET}
 					)
 
 				# this applies architecture specific options
-				cmake_sdk_library("${BUILD_OPTIONS}")
+				cmsdk_library("${BUILD_OPTIONS}")
 
 				foreach(DEPENDENCY ${DEPENDENCIES})
 					message(STATUS "SOS SDK Adding ${DEPENDENCY}_${CONFIG}_${ARCH} to ${BUILD_TARGET}")
@@ -78,85 +78,85 @@ function(cmake_sdk_library_add_arch_targets OPTION_LIST ARCH DEPENDENCIES)
 						PUBLIC
 						${DEPENDENCY}_${CONFIG}_${ARCH}
 						)
-					message(STATUS "${BUILD_TARGET} -> ${DEPENDENCY}_${CONFIG}_${CMAKE_SDK_ARCH}")
+					message(STATUS "${BUILD_TARGET} -> ${DEPENDENCY}_${CONFIG}_${CMSDK_ARCH}")
 				endforeach()
 
 
 			endif()
 		endforeach(ARCH)
-		cmake_sdk_library("${BUILD_ARCH_OPTIONS}")
+		cmsdk_library("${BUILD_ARCH_OPTIONS}")
 
 		foreach(DEPENDENCY ${DEPENDENCIES})
 			target_link_libraries(${BUILD_ARCH_TARGET}
 				PUBLIC
-				${DEPENDENCY}_${CONFIG}_${CMAKE_SDK_ARCH}
+				${DEPENDENCY}_${CONFIG}_${CMSDK_ARCH}
 				)
-			message(STATUS "${BUILD_ARCH_TARGET} -> ${DEPENDENCY}_${CONFIG}_${CMAKE_SDK_ARCH}")
+			message(STATUS "${BUILD_ARCH_TARGET} -> ${DEPENDENCY}_${CONFIG}_${CMSDK_ARCH}")
 		endforeach()
 	endif()
 endfunction()
 
-function(cmake_sdk_library OPTION_LIST)
+function(cmsdk_library OPTION_LIST)
 	list(GET OPTION_LIST 0 BASE_NAME)
 	list(GET OPTION_LIST 1 OPTION)
 	list(GET OPTION_LIST 2 CONFIG)
 	list(GET OPTION_LIST 3 ARCH)
 
-	cmake_sdk_internal_build_target_name(${BASE_NAME} "${OPTION}" "${CONFIG}" ${ARCH})
-	cmake_sdk_internal_arm_arch(${ARCH})
+	cmsdk_internal_build_target_name(${BASE_NAME} "${OPTION}" "${CONFIG}" ${ARCH})
+	cmsdk_internal_arm_arch(${ARCH})
 
-	message(STATUS "SOS SDK Library ${CMAKE_SDK_SDK_TMP_TARGET}")
+	message(STATUS "SOS SDK Library ${CMSDK_SDK_TMP_TARGET}")
 
-	target_compile_definitions(${CMAKE_SDK_SDK_TMP_TARGET}
+	target_compile_definitions(${CMSDK_SDK_TMP_TARGET}
 		PUBLIC
 		PRIVATE
 		__${ARCH}
-		___${CMAKE_SDK_SDK_TMP_CONFIG}
-		__${CMAKE_SDK_SDK_TMP_OPTION}
-		MCU_CMAKE_SDK_GIT_HASH=${CMAKE_SDK_GIT_HASH}
+		___${CMSDK_SDK_TMP_CONFIG}
+		__${CMSDK_SDK_TMP_OPTION}
+		MCU_CMSDK_GIT_HASH=${CMSDK_GIT_HASH}
 		)
 
-	if(CMAKE_SDK_IS_ARM)
+	if(CMSDK_IS_ARM)
 
-		cmake_sdk_internal_arm_arch(${ARCH})
+		cmsdk_internal_arm_arch(${ARCH})
 
-		target_compile_definitions(${CMAKE_SDK_SDK_TMP_TARGET}
+		target_compile_definitions(${CMSDK_SDK_TMP_TARGET}
 			PUBLIC
 			__StratifyOS__
 			)
 
-		target_compile_options(${CMAKE_SDK_SDK_TMP_TARGET}
+		target_compile_options(${CMSDK_SDK_TMP_TARGET}
 			PRIVATE
 			-mthumb -ffunction-sections -fdata-sections
-			${CMAKE_SDK_ARM_ARCH_BUILD_FLOAT_OPTIONS}
+			${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS}
 			)
 
-		set_target_properties(${CMAKE_SDK_SDK_TMP_TARGET}
+		set_target_properties(${CMSDK_SDK_TMP_TARGET}
 			PROPERTIES NO_SYSTEM_FROM_IMPORTED TRUE
 			)
 
-		target_include_directories(${CMAKE_SDK_SDK_TMP_TARGET}
+		target_include_directories(${CMSDK_SDK_TMP_TARGET}
 			PRIVATE
-			${CMAKE_SDK_SDK_PATH}/arm-none-eabi/include/StratifyOS
+			${CMSDK_SDK_PATH}/arm-none-eabi/include/StratifyOS
 			)
 
 	else()
-		target_include_directories(${CMAKE_SDK_SDK_TMP_TARGET}
+		target_include_directories(${CMSDK_SDK_TMP_TARGET}
 			PRIVATE
-			${CMAKE_SDK_SDK_PATH}/include/StratifyOS
+			${CMSDK_SDK_PATH}/include/StratifyOS
 			)
 
 	endif()
 
-	get_target_property(TARGET_BINARY_DIR ${CMAKE_SDK_SDK_TMP_TARGET} BINARY_DIR)
+	get_target_property(TARGET_BINARY_DIR ${CMSDK_SDK_TMP_TARGET} BINARY_DIR)
 
 	install(
-		TARGETS ${CMAKE_SDK_SDK_TMP_TARGET}
-		EXPORT ${CMAKE_SDK_SDK_TMP_TARGET}
+		TARGETS ${CMSDK_SDK_TMP_TARGET}
+		EXPORT ${CMSDK_SDK_TMP_TARGET}
 		DESTINATION lib
 		OPTIONAL)
 	install(
-		EXPORT ${CMAKE_SDK_SDK_TMP_TARGET}
-		DESTINATION ${CMAKE_SDK_SDK_PATH}/cmake/targets)
+		EXPORT ${CMSDK_SDK_TMP_TARGET}
+		DESTINATION ${CMSDK_SDK_PATH}/cmake/targets)
 
 endfunction()

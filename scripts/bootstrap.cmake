@@ -12,7 +12,7 @@ message(STATUS "SDK Directory is ${SDK_DIRECTORY}")
 
 set(SDK_PATH ${SDK_DIRECTORY}/local)
 set(BINARY_PATH ${SDK_PATH}/bin)
-set(ENV{CMSDK_SDK_PATH} ${SDK_PATH})
+set(ENV{CMSDK_PATH} ${SDK_PATH})
 
 if(NOT EXISTS ${BINARY_PATH}/sl OR ${INSTALL_SL})
 

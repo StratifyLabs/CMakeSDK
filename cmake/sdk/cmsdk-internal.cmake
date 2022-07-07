@@ -86,9 +86,9 @@ macro(cmsdk_internal_startup)
   endif()
 
   list(APPEND CMAKE_MODULE_PATH
-    ${CMSDK_SDK_PATH}/cmake/targets
-    ${CMSDK_SDK_PATH}/arm-none-eabi/cmake
-    ${CMSDK_SDK_PATH}/arm-none-eabi/cmake/targets
+    ${CMSDK_PATH}/cmake/targets
+    ${CMSDK_PATH}/arm-none-eabi/cmake
+    ${CMSDK_PATH}/arm-none-eabi/cmake/targets
     )
 
   cmsdk_internal_get_git_hash()

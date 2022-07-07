@@ -38,7 +38,7 @@ function(cmsdk_app OPTION_LIST RAM_SIZE)
 
 		target_include_directories(${TARGET_NAME}
 			PRIVATE
-			${CMSDK_PATH}/include/StratifyOS
+			${CMSDK_LOCAL_PATH}/include/StratifyOS
 			)
 
 	else()
@@ -58,7 +58,7 @@ function(cmsdk_app OPTION_LIST RAM_SIZE)
 			PUBLIC
 			${CMSDK_BUILD_SYSTEM_INCLUDES}
 			PRIVATE
-			${CMSDK_PATH}/arm-none-eabi/include/StratifyOS
+			${CMSDK_LOCAL_PATH}/arm-none-eabi/include/StratifyOS
 			)
 
 		target_compile_options(${TARGET_NAME}
@@ -73,8 +73,8 @@ function(cmsdk_app OPTION_LIST RAM_SIZE)
 		endif()
 
 		set(UPDATED_LINK_FLAGS
-			-L${CMSDK_PATH}/arm-none-eabi/lib/${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR}/${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR}
-			-L${CMSDK_PATH}/lib/gcc/arm-none-eabi/${CMAKE_CXX_COMPILER_VERSION}/${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR}/${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR}
+			-L${CMSDK_LOCAL_PATH}/arm-none-eabi/lib/${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR}/${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR}
+			-L${CMSDK_LOCAL_PATH}/lib/gcc/arm-none-eabi/${CMAKE_CXX_COMPILER_VERSION}/${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR}/${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR}
 			-Wl,--print-memory-usage,-Map,${BINARY_OUTPUT_DIR}/${CMSDK_SDK_TMP_INSTALL}.map,--gc-sections,--defsym=_app_ram_size=${RAM_SIZE}
 			-Tldscripts/app.ld
 			-nostartfiles

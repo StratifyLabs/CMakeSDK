@@ -1,6 +1,6 @@
 
 
-set(TOOLCHAIN_DIR ${CMSDK_PATH})
+set(TOOLCHAIN_DIR ${CMSDK_LOCAL_PATH})
 set(TOOLCHAIN_HOST arm-none-eabi)
 
 message(STATUS "GCC Toolchain is: " ${TOOLCHAIN_DIR}/${TOOLCHAIN_HOST})

@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.12)
 
-if(NOT DEFINED CMSDK_PATH)
-	message(FATAL_ERROR "CMSDK_PATH must be provided")
+if(NOT DEFINED CMSDK_LOCAL_PATH)
+	message(FATAL_ERROR "CMSDK_LOCAL_PATH must be provided")
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)

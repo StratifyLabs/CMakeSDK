@@ -137,13 +137,13 @@ function(cmsdk_library OPTION_LIST)
 
 		target_include_directories(${CMSDK_SDK_TMP_TARGET}
 			PRIVATE
-			${CMSDK_PATH}/arm-none-eabi/include/StratifyOS
+			${CMSDK_LOCAL_PATH}/arm-none-eabi/include/StratifyOS
 			)
 
 	else()
 		target_include_directories(${CMSDK_SDK_TMP_TARGET}
 			PRIVATE
-			${CMSDK_PATH}/include/StratifyOS
+			${CMSDK_LOCAL_PATH}/include/StratifyOS
 			)
 
 	endif()
@@ -157,6 +157,6 @@ function(cmsdk_library OPTION_LIST)
 		OPTIONAL)
 	install(
 		EXPORT ${CMSDK_SDK_TMP_TARGET}
-		DESTINATION ${CMSDK_PATH}/cmake/targets)
+		DESTINATION ${CMSDK_LOCAL_PATH}/cmake/targets)
 
 endfunction()

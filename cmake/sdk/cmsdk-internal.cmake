@@ -60,8 +60,8 @@ macro(cmsdk_internal_startup)
     message(FATAL_ERROR "No Configuration available build in *_link or *_arm directory")
   endif()
 
-  if(NOT CMSDK_PATH)
-    message(FATAL "Must use '-DCMSDK_PATH=<path>'")
+  if(NOT CMSDK_LOCAL_PATH)
+    message(FATAL "Must use '-DCMSDK_LOCAL_PATH=<path>'")
   endif()
 
   if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
@@ -86,9 +86,9 @@ macro(cmsdk_internal_startup)
   endif()
 
   list(APPEND CMAKE_MODULE_PATH
-    ${CMSDK_PATH}/cmake/targets
-    ${CMSDK_PATH}/arm-none-eabi/cmake
-    ${CMSDK_PATH}/arm-none-eabi/cmake/targets
+    ${CMSDK_LOCAL_PATH}/cmake/targets
+    ${CMSDK_LOCAL_PATH}/arm-none-eabi/cmake
+    ${CMSDK_LOCAL_PATH}/arm-none-eabi/cmake/targets
     )
 
   cmsdk_internal_get_git_hash()

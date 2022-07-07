@@ -1,5 +1,5 @@
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmake-sdk-variables.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmake-sdk-internal.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-variables.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-internal.cmake)
 
 cmsdk_internal_startup()
 
@@ -157,9 +157,9 @@ macro(cmsdk_include_target TARGET CONFIG_LIST)
 
 endmacro()
 
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmake-sdk-app.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmake-sdk-bsp.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmake-sdk-lib.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-app.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-bsp.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-lib.cmake)
 
 
 

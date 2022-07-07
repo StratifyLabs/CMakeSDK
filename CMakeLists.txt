@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.12)
 
-if(DEFINED ENV{CMSDK_PATH})
-	set(CMSDK_PATH $ENV{CMSDK_PATH})
+if(NOT DEFINED CMSDK_PATH)
+	message(FATAL_ERROR "CMSDK_PATH must be provided")
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)

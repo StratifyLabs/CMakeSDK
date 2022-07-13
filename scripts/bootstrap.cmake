@@ -7,6 +7,10 @@ endif()
 set(SOURCE_DIRECTORY ${CMSDK_SDK_PATH}/dependencies/CMakeSDK)
 set(LOCAL_PATH ${CMSDK_SDK_PATH}/local)
 set(BUILD_DIR cmake_link)
+set(BUILD_DIR_PATH ${SOURCE_DIRECTORY}/${BUILD_DIR})
+
+file(REMOVE_RECURSE ${BUILD_DIR_PATH})
+file(MAKE_DIRECTORY ${BUILD_DIR_PATH})
 
 message(STATUS "Running cmake in ${SOURCE_DIRECTORY} using local path: ${LOCAL_PATH}")
 

@@ -73,19 +73,19 @@ The environment variable `CMSDK_LOCAL_PATH` should point to the Stratify Labs SD
 
 Two functions are provided to manage creating libraries:
 
-- `sos_sdk_library_target()`
-- `sos_sdk_library_add_arch_targets()`
-- `sos_sdk_exclude_arch_from_all()`
+- `cmsdk_library_target()`
+- `cmsdk_library_add_arch_targets()`
+- `cmsdk_exclude_arch_from_all()`
 
 
 To create a library:
 
 ```
 # form a target name with the name, option, config, and arch
-# SOS_ARCH is prefined based on the build folder name
-sos_sdk_library_target(RELEASE ${PROJECT_NAME} option release ${SOS_ARCH})
+# CMSDK_ARCH is prefined based on the build folder name
+cmsdk_library_target(RELEASE ${PROJECT_NAME} option release ${CMSDK_ARCH})
 
-# RELEASE_TARGET and RELEASE_OPTIONS are created by sos_sdk_library_target()
+# RELEASE_TARGET and RELEASE_OPTIONS are created by cmsdk_library_target()
 
 add_library(${RELEASE_TARGET} STATIC)
 
@@ -96,9 +96,9 @@ target_sources(${RELEASE_TARGET}
 	)
 
 # Now to create DEBUG we make a copy of the above options
-sos_sdk_library_target(DEBUG ${PROJECT_NAME} option debug ${SOS_ARCH})
+cmsdk_library_target(DEBUG ${PROJECT_NAME} option debug ${CMSDK_ARCH})
 add_library(${DEBUG_TARGET} STATIC)
-sos_sdk_copy_target(${RELEASE_TARGET} ${DEBUG_TARGET})
+cmsdk_copy_target(${RELEASE_TARGET} ${DEBUG_TARGET})
 
 # at this point you can differntiate the builds
 target_compile_options(${RELEASE_TARGET}
@@ -119,27 +119,27 @@ set(LIBRARIES mbedtls jansson)
 
 # last thing is to create copies for each architecture: v7m, v7em, etc
 # this function will also add some final settings to make everything work
-sos_sdk_library_add_arch_targets("${DEBUG_OPTIONS}" ${SOS_ARCH} "${LIBRARIES}")
-sos_sdk_library_add_arch_targets("${RELEASE_OPTIONS}" ${SOS_ARCH} "${LIBRARIES}")
+cmsdk_library_add_arch_targets("${DEBUG_OPTIONS}" ${CMSDK_ARCH} "${LIBRARIES}")
+cmsdk_library_add_arch_targets("${RELEASE_OPTIONS}" ${CMSDK_ARCH} "${LIBRARIES}")
 
 # if the library should only target a single arch, you can use (only v7em_f5dh will build with all)
 set(SKIP_ARCHES v7m v7em v7em_f4sh v7em_f5sh)
-sos_sdk_exclude_arch_from_all(${PROJECT_NAME}_debug "${SKIP_ARCHES}")
-sos_sdk_exclude_arch_from_all(${PROJECT_NAME}_release "${SKIP_ARCHES}")
+cmsdk_exclude_arch_from_all(${PROJECT_NAME}_debug "${SKIP_ARCHES}")
+cmsdk_exclude_arch_from_all(${PROJECT_NAME}_release "${SKIP_ARCHES}")
 ```
 
 ### Applications (Desktop or Stratify OS)
 
 Applications follow the same basic template as libraries using these functions:
 
-- `sos_sdk_app_target()`
-- `sos_sdk_app_add_arch_targets()`
+- `cmsdk_app_target()`
+- `cmsdk_app_add_arch_targets()`
 
 
 ```
 set(RAM_SIZE 16384)
-# sos_sdk_app_target create RELEASE_TARGET and RELEASE_OPTIONS variables
-sos_sdk_app_target(RELEASE ${PROJECT_NAME} option release ${SOS_ARCH})
+# cmsdk_app_target create RELEASE_TARGET and RELEASE_OPTIONS variables
+cmsdk_app_target(RELEASE ${PROJECT_NAME} option release ${CMSDK_ARCH})
 
 add_executable(${RELEASE_TARGET})
 
@@ -155,7 +155,7 @@ set_property(TARGET ${RELEASE_TARGET} PROPERTY CXX_STANDARD 17)
 set(LIBRARIES FsAPI ThreadAPI)
 
 # finalize and copy to all targets
-sos_sdk_app_add_arch_targets("${RELEASE_OPTIONS}" "${LIBRARIES}" ${RAM_SIZE})
+cmsdk_app_add_arch_targets("${RELEASE_OPTIONS}" "${LIBRARIES}" ${RAM_SIZE})
 ```
 
 ### OS Packages
@@ -179,10 +179,10 @@ include(StratifyOS_stm32h750xx_debug_v7em_f5dh)
 include(StratifyOS_stm32h750xx_release_v7em_f5dh)
 
 # This is a shortcut for pulling in a source only subdirectory
-sos_sdk_add_subdirectory(KERNEL_SOURCELIST ${CMAKE_CURRENT_SOURCE_DIR}/src)
+cmsdk_add_subdirectory(KERNEL_SOURCELIST ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # creates BOOT_RELEASE_TARGET and BOOT_RELEASE_OPTIONS
-sos_sdk_bsp_target(BOOT_RELEASE ${SOS_NAME} boot release v7em_f5dh)
+cmsdk_bsp_target(BOOT_RELEASE ${SOS_NAME} boot release v7em_f5dh)
 
 add_executable(${BOOT_RELEASE_TARGET})
 target_sources(${BOOT_RELEASE_TARGET}
@@ -206,14 +206,14 @@ target_compile_definitions(${BOOT_RELEASE_TARGET}
 target_compile_options(${BOOT_RELEASE_TARGET} PUBLIC -Os)
 
 
-sos_sdk_bsp_target(RAM_DEBUG ${SOS_NAME} ram debug v7em_f5dh)
-sos_sdk_bsp_target(BOOT_DEBUG ${SOS_NAME} boot debug v7em_f5dh)
-sos_sdk_bsp_target(FLASH_DEBUG ${SOS_NAME} flash debug v7em_f5dh)
+cmsdk_bsp_target(RAM_DEBUG ${SOS_NAME} ram debug v7em_f5dh)
+cmsdk_bsp_target(BOOT_DEBUG ${SOS_NAME} boot debug v7em_f5dh)
+cmsdk_bsp_target(FLASH_DEBUG ${SOS_NAME} flash debug v7em_f5dh)
 
 add_executable(${RAM_DEBUG_TARGET})
 add_executable(${FLASH_DEBUG_TARGET})
-sos_sdk_copy_target(${BOOT_RELEASE_TARGET} ${RAM_DEBUG_TARGET})
-sos_sdk_copy_target(${BOOT_RELEASE_TARGET} ${FLASH_DEBUG_TARGET})
+cmsdk_copy_target(${BOOT_RELEASE_TARGET} ${RAM_DEBUG_TARGET})
+cmsdk_copy_target(${BOOT_RELEASE_TARGET} ${FLASH_DEBUG_TARGET})
 
 target_sources(${BOOT_RELEASE_TARGET}
 	PRIVATE
@@ -271,7 +271,7 @@ target_compile_definitions(${RAM_DEBUG_TARGET}
 
 set(LIBRARIES fatfs sgfx mbedtls_kernel lwip)
 
-sos_sdk_bsp("${BOOT_RELEASE_OPTIONS}" ${HARDWARE_ID} 0x08000000 StratifyOS_stm32h750xx "${LIBRARIES}")
-sos_sdk_bsp("${RAM_DEBUG_OPTIONS}" ${HARDWARE_ID} 0x24000000 StratifyOS_stm32h750xx "${LIBRARIES}")
-sos_sdk_bsp("${FLASH_DEBUG_OPTIONS}" ${HARDWARE_ID} 0x90000000 StratifyOS_stm32h750xx "${LIBRARIES}")
+cmsdk_bsp("${BOOT_RELEASE_OPTIONS}" ${HARDWARE_ID} 0x08000000 StratifyOS_stm32h750xx "${LIBRARIES}")
+cmsdk_bsp("${RAM_DEBUG_OPTIONS}" ${HARDWARE_ID} 0x24000000 StratifyOS_stm32h750xx "${LIBRARIES}")
+cmsdk_bsp("${FLASH_DEBUG_OPTIONS}" ${HARDWARE_ID} 0x90000000 StratifyOS_stm32h750xx "${LIBRARIES}")
 ```

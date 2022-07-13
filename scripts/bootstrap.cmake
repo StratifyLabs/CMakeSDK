@@ -8,6 +8,8 @@ set(SOURCE_DIRECTORY ${CMSDK_SDK_PATH}/dependencies/CMakeSDK)
 set(LOCAL_PATH ${CMSDK_SDK_PATH}/local)
 set(BUILD_DIR cmake_link)
 
+message(STATUS "Running cmake in ${SOURCE_DIRECTORY} using local path: ${LOCAL_PATH}")
+
 execute_process(
   COMMAND cmake .. -DCMSDK_LOCAL_PATH=${LOCAL_PATH}
   WORKING_DIRECTORY ${SOURCE_DIRECTORY}/${BUILD_DIR}
@@ -17,6 +19,8 @@ execute_process(
 if(${CMSDK_CMAKE_RESULT})
   message(FATAL_ERROR "Failed to run cmake for CMakeSDK project")
 endif()
+
+message(STATUS "Running build install in ${SOURCE_DIRECTORY}")
 
 execute_process(
   COMMAND cmake --build . --target install

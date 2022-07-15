@@ -33,7 +33,7 @@ function(cmsdk_app OPTION_LIST RAM_SIZE)
 			___${CMSDK_SDK_TMP_CONFIG}
 			__${CMSDK_SDK_TMP_OPTION}
 			__${ARCH}
-			MCU_CMSDK_GIT_HASH=${CMSDK_GIT_HASH}
+			CMSDK_BUILD_GIT_HASH=${CMSDK_GIT_HASH}
 			)
 
 		target_include_directories(${TARGET_NAME}
@@ -51,7 +51,7 @@ function(cmsdk_app OPTION_LIST RAM_SIZE)
 			__${CMSDK_SDK_TMP_CONFIG}
 			__${CMSDK_SDK_TMP_OPTION}
 			__${ARCH}
-			MCU_CMSDK_GIT_HASH=${CMSDK_GIT_HASH}
+			CMSDK_BUILD_GIT_HASH=${CMSDK_GIT_HASH}
 			)
 
 		target_include_directories(${TARGET_NAME}

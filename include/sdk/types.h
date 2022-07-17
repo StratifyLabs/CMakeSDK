@@ -308,7 +308,7 @@ typedef struct CMSDK_PACK {
 #define MCU_SET_MASK(x, y) CMSDK_SET_MASK(x, y)
 #define MCU_CLR_BIT(x, y) CMSDK_CLR_BIT(x, y)
 #define MCU_CLR_MASK(x, y) CMSDK_CLR_MASK(x, y)
-#define SOS_GIT_HASH CMSDK_GIT_HASH
+#define CMSDK_GIT_HASH CMSDK_GIT_HASH
 #define MCU_PACK CMSDK_PACK
 #define MCU_NAKED CMSDK_NAKED
 #define MCU_ALIGN(x) CMSDK_ALIGN(x)

@@ -1,5 +1,11 @@
 # v2.0.0
 
+## Bug Fixes
+
+- Fixed typo with `CMSDK_SDK_PULL_TARGET`
+
+# v2.0.0
+
 ## New Features
 
 - Refactored from `sos-sdk` to `cmsdk`

@@ -1,3 +1,9 @@
+# v2.0.0
+
+## New Features
+
+- Refactored from `sos-sdk` to `cmsdk`
+
 # v1.3.0
 
 ## New Features

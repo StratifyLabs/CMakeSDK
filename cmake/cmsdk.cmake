@@ -30,7 +30,7 @@ function(cmsdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
     DEPENDS cmsdk_pull_${NAME}
     )
   if(CMSDK_SDK_PULL_TARGET)
-    add_dependencies(${CMSDK_SDK_PULL_TARGET} cmsdk_checkout_${NAME})
+    add_dependencies(${CMSDK_PULL_TARGET} cmsdk_checkout_${NAME})
   endif()
 endfunction()
 

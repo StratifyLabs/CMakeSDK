@@ -1,5 +1,8 @@
-#ifndef SDK_API_H
-#define SDK_API_H
+//Copyright Stratify Labs, See LICENSE for details
+
+
+#ifndef CMSDK_SDK_API_H
+#define CMSDK_SDK_API_H
 
 #include <sdk/types.h>
 

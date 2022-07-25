@@ -1,4 +1,4 @@
-function(sos_sdk_internal_get_git_hash)
+function(cmsdk_internal_get_git_hash)
   execute_process(
     COMMAND git log -1 --format=%h
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -8,171 +8,171 @@ function(sos_sdk_internal_get_git_hash)
   )
 
   if(RESULT)
-    set(SOS_GIT_HASH "0000000" PARENT_SCOPE)
+    set(CMSDK_GIT_HASH "0000000" PARENT_SCOPE)
   else()
-    set(SOS_GIT_HASH ${GIT_HASH_OUTPUT_VARIABLE} PARENT_SCOPE)
+    set(CMSDK_GIT_HASH ${GIT_HASH_OUTPUT_VARIABLE} PARENT_SCOPE)
   endif()
 endfunction()
 
-macro(sos_sdk_internal_startup)
-  option(SOS_IS_TEST "Build Tests" OFF)
+macro(cmsdk_internal_startup)
+  option(CMSDK_IS_TEST "Build Tests" OFF)
   if(CMAKE_BINARY_DIR MATCHES ".*_link")
-    set(SOS_BUILD_CONFIG link CACHE INTERNAL "sos build config is link")
-    set(SOS_ARCH link)
-    set(SOS_IS_LINK TRUE CACHE INTERNAL "sos is link")
-    set(SOS_IS_ARM FALSE CACHE INTERNAL "sos is arm")
-    set(SOS_IS_RPI32 FALSE CACHE INTERNAL "sos is rpi32")
-    set(SOS_IS_RPI64 FALSE CACHE INTERNAL "sos is rpi64")
-    message(STATUS "SOS SDK ARCH is link")
+    set(CMSDK_BUILD_CONFIG link CACHE INTERNAL "sos build config is link")
+    set(CMSDK_ARCH link)
+    set(CMSDK_IS_LINK TRUE CACHE INTERNAL "sos is link")
+    set(CMSDK_IS_ARM FALSE CACHE INTERNAL "sos is arm")
+    set(CMSDK_IS_RPI32 FALSE CACHE INTERNAL "sos is rpi32")
+    set(CMSDK_IS_RPI64 FALSE CACHE INTERNAL "sos is rpi64")
+    message(STATUS "CMSDK ARCH is link")
   elseif(CMAKE_BINARY_DIR MATCHES ".*_rpi32")
-    set(SOS_BUILD_CONFIG rpi32 CACHE INTERNAL "sos build config is link")
-    set(SOS_ARCH link)
-    set(SOS_IS_LINK TRUE CACHE INTERNAL "sos is link")
-    set(SOS_IS_ARM FALSE CACHE INTERNAL "sos is arm")
-    set(SOS_IS_RPI32 TRUE CACHE INTERNAL "sos is rpi32")
-    set(SOS_IS_RPI64 FALSE CACHE INTERNAL "sos is rpi64")
-    set(SOS_IS_RPI TRUE CACHE INTERNAL "sos is rpi")
-    message(STATUS "SOS SDK ARCH is rpi32")
+    set(CMSDK_BUILD_CONFIG rpi32 CACHE INTERNAL "sos build config is link")
+    set(CMSDK_ARCH link)
+    set(CMSDK_IS_LINK TRUE CACHE INTERNAL "sos is link")
+    set(CMSDK_IS_ARM FALSE CACHE INTERNAL "sos is arm")
+    set(CMSDK_IS_RPI32 TRUE CACHE INTERNAL "sos is rpi32")
+    set(CMSDK_IS_RPI64 FALSE CACHE INTERNAL "sos is rpi64")
+    set(CMSDK_IS_RPI TRUE CACHE INTERNAL "sos is rpi")
+    message(STATUS "CMSDK ARCH is rpi32")
   elseif(CMAKE_BINARY_DIR MATCHES ".*_rpi64")
-    set(SOS_BUILD_CONFIG rpi64 CACHE INTERNAL "sos build config is rpi64")
-    set(SOS_ARCH link)
-    set(SOS_IS_LINK TRUE CACHE INTERNAL "sos is link")
-    set(SOS_IS_ARM FALSE CACHE INTERNAL "sos is arm")
-    set(SOS_IS_RPI32 FALSE CACHE INTERNAL "sos is rpi32")
-    set(SOS_IS_RPI64 TRUE CACHE INTERNAL "sos is rpi64")
-    set(SOS_IS_RPI TRUE CACHE INTERNAL "sos is rpi")
-    message(STATUS "SOS SDK ARCH is rpi32")
+    set(CMSDK_BUILD_CONFIG rpi64 CACHE INTERNAL "sos build config is rpi64")
+    set(CMSDK_ARCH link)
+    set(CMSDK_IS_LINK TRUE CACHE INTERNAL "sos is link")
+    set(CMSDK_IS_ARM FALSE CACHE INTERNAL "sos is arm")
+    set(CMSDK_IS_RPI32 FALSE CACHE INTERNAL "sos is rpi32")
+    set(CMSDK_IS_RPI64 TRUE CACHE INTERNAL "sos is rpi64")
+    set(CMSDK_IS_RPI TRUE CACHE INTERNAL "sos is rpi")
+    message(STATUS "CMSDK ARCH is rpi32")
   elseif(CMAKE_BINARY_DIR MATCHES ".*_arm")
-    set(SOS_BUILD_CONFIG arm CACHE INTERNAL "sos build config is arm")
-    set(SOS_IS_ARM TRUE CACHE INTERNAL "sos is arm")
-    set(SOS_IS_LINK FALSE CACHE INTERNAL "sos is link")
+    set(CMSDK_BUILD_CONFIG arm CACHE INTERNAL "sos build config is arm")
+    set(CMSDK_IS_ARM TRUE CACHE INTERNAL "sos is arm")
+    set(CMSDK_IS_LINK FALSE CACHE INTERNAL "sos is link")
 
-    if(NOT DEFINED SOS_ARCH)
-      set(SOS_ARCH v7m CACHE INTERNAL "Primary ARM Arch")
+    if(NOT DEFINED CMSDK_ARCH)
+      set(CMSDK_ARCH v7m CACHE INTERNAL "Primary ARM Arch")
     endif()
 
-    if(NOT DEFINED SOS_ARCH_LIST)
-      set(SOS_ARCH_LIST v7em v7em_f4sh v7em_f5sh v7em_f5dh CACHE INTERNAL "Additional ARM architectures")
+    if(NOT DEFINED CMSDK_ARCH_LIST)
+      set(CMSDK_ARCH_LIST v7em v7em_f4sh v7em_f5sh v7em_f5dh CACHE INTERNAL "Additional ARM architectures")
     endif()
 
-    message(STATUS "SOS SDK ARCH is arm")
+    message(STATUS "CMSDK ARCH is arm")
   else()
     message(FATAL_ERROR "No Configuration available build in *_link or *_arm directory")
   endif()
 
-  if(NOT SOS_SDK_PATH)
-    message(FATAL "Must define 'SOS_SDK_PATH' in environment or use '-DSOS_SDK_PATH=<path>'")
+  if(NOT CMSDK_LOCAL_PATH)
+    message(FATAL "Must use '-DCMSDK_LOCAL_PATH=<path>'")
   endif()
 
   if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
-    set(SOS_IS_MACOS TRUE CACHE INTERNAL "MAC OS")
+    set(CMSDK_IS_MACOS TRUE CACHE INTERNAL "MAC OS")
   endif()
   if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-    set(SOS_IS_WINDOWS TRUE CACHE INTERNAL "Windows OS")
+    set(CMSDK_IS_WINDOWS TRUE CACHE INTERNAL "Windows OS")
   endif()
   if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
-    set(SOS_IS_LINUS TRUE CACHE INTERNAL "Linux OS")
-    set(SOS_IS_LINUX TRUE CACHE INTERNAL "Linux OS")
+    set(CMSDK_IS_LINUS TRUE CACHE INTERNAL "Linux OS")
+    set(CMSDK_IS_LINUX TRUE CACHE INTERNAL "Linux OS")
   endif()
 
-  set(SOS_SDK_EXEC_SUFFIX "")
-  if(SOS_IS_WINDOWS)
-    set(SOS_SDK_EXEC_SUFFIX ".exe")
+  set(CMSDK_SDK_EXEC_SUFFIX "")
+  if(CMSDK_IS_WINDOWS)
+    set(CMSDK_SDK_EXEC_SUFFIX ".exe")
   endif()
-  set(SOS_SDK_GIT_EXEC git${SOS_SDK_EXEC_SUFFIX})
+  set(CMSDK_SDK_GIT_EXEC git${CMSDK_SDK_EXEC_SUFFIX})
 
-  if(SOS_VERBOSE)
+  if(CMSDK_VERBOSE)
     set(CMAKE_VERBOSE_MAKEFILE 1)
   endif()
 
   list(APPEND CMAKE_MODULE_PATH
-    ${SOS_SDK_PATH}/cmake/targets
-    ${SOS_SDK_PATH}/arm-none-eabi/cmake
-    ${SOS_SDK_PATH}/arm-none-eabi/cmake/targets
+    ${CMSDK_LOCAL_PATH}/cmake/targets
+    ${CMSDK_LOCAL_PATH}/arm-none-eabi/cmake
+    ${CMSDK_LOCAL_PATH}/arm-none-eabi/cmake/targets
     )
 
-  sos_sdk_internal_get_git_hash()
+  cmsdk_internal_get_git_hash()
 endmacro()
 
-macro(sos_sdk_internal_build_target_name BASE_NAME OPTION_NAME CONFIG_NAME ARCH_NAME)
-  set(SOS_SDK_TMP_TARGET ${BASE_NAME})
-  set(SOS_SDK_TMP_INSTALL ${BASE_NAME})
-  set(SOS_SDK_TMP_NO_CONFIG ${BASE_NAME})
-  set(SOS_SDK_TMP_NO_NAME "")
+macro(cmsdk_internal_build_target_name BASE_NAME OPTION_NAME CONFIG_NAME ARCH_NAME)
+  set(CMSDK_SDK_TMP_TARGET ${BASE_NAME})
+  set(CMSDK_SDK_TMP_INSTALL ${BASE_NAME})
+  set(CMSDK_SDK_TMP_NO_CONFIG ${BASE_NAME})
+  set(CMSDK_SDK_TMP_NO_NAME "")
 
   string(COMPARE EQUAL "${OPTION_NAME}" "" OPTION_MISSING)
 
   if(NOT OPTION_MISSING)
-    set(SOS_SDK_TMP_OPTION ${OPTION_NAME})
-    set(SOS_SDK_TMP_TARGET ${SOS_SDK_TMP_TARGET}_${SOS_SDK_TMP_OPTION})
-    set(SOS_SDK_TMP_NO_CONFIG ${SOS_SDK_TMP_NO_CONFIG}_${SOS_SDK_TMP_OPTION})
-    set(SOS_SDK_TMP_INSTALL ${SOS_SDK_TMP_INSTALL}_${SOS_SDK_TMP_OPTION})
-    set(SOS_SDK_TMP_NO_NAME ${OPTION_NAME}_)
+    set(CMSDK_SDK_TMP_OPTION ${OPTION_NAME})
+    set(CMSDK_SDK_TMP_TARGET ${CMSDK_SDK_TMP_TARGET}_${CMSDK_SDK_TMP_OPTION})
+    set(CMSDK_SDK_TMP_NO_CONFIG ${CMSDK_SDK_TMP_NO_CONFIG}_${CMSDK_SDK_TMP_OPTION})
+    set(CMSDK_SDK_TMP_INSTALL ${CMSDK_SDK_TMP_INSTALL}_${CMSDK_SDK_TMP_OPTION})
+    set(CMSDK_SDK_TMP_NO_NAME ${OPTION_NAME}_)
   else()
-    set(SOS_SDK_TMP_OPTION "SOS_SDK_OPTION_EMPTY")
+    set(CMSDK_SDK_TMP_OPTION "CMSDK_SDK_OPTION_EMPTY")
   endif()
 
   if(NOT CONFIG_NAME STREQUAL "__none__")
-    set(SOS_SDK_TMP_CONFIG ${CONFIG_NAME})
+    set(CMSDK_SDK_TMP_CONFIG ${CONFIG_NAME})
   else()
-    set(SOS_SDK_TMP_CONFIG "release")
+    set(CMSDK_SDK_TMP_CONFIG "release")
   endif()
 
-  set(SOS_SDK_TMP_INSTALL ${SOS_SDK_TMP_INSTALL}_${SOS_SDK_TMP_CONFIG})
+  set(CMSDK_SDK_TMP_INSTALL ${CMSDK_SDK_TMP_INSTALL}_${CMSDK_SDK_TMP_CONFIG})
 
-  set(SOS_SDK_TMP_TARGET ${SOS_SDK_TMP_TARGET}_${SOS_SDK_TMP_CONFIG})
-  set(SOS_SDK_TMP_NO_NAME ${SOS_SDK_TMP_NO_NAME}${SOS_SDK_TMP_CONFIG})
+  set(CMSDK_SDK_TMP_TARGET ${CMSDK_SDK_TMP_TARGET}_${CMSDK_SDK_TMP_CONFIG})
+  set(CMSDK_SDK_TMP_NO_NAME ${CMSDK_SDK_TMP_NO_NAME}${CMSDK_SDK_TMP_CONFIG})
 
   if(NOT ARCH_NAME STREQUAL "")
-    set(SOS_SDK_TMP_TARGET ${SOS_SDK_TMP_TARGET}_${ARCH_NAME})
+    set(CMSDK_SDK_TMP_TARGET ${CMSDK_SDK_TMP_TARGET}_${ARCH_NAME})
   else()
-    message(FATAL " SOS SDK ARCH cannot be empty")
+    message(FATAL " CMSDK ARCH cannot be empty")
   endif()
 
 endmacro()
 
-macro(sos_sdk_internal_arm_arch ARCH_NAME)
+macro(cmsdk_internal_arm_arch ARCH_NAME)
 
-  set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7M -march=armv7-m -DARM_MATH_CM3=1)
-  set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM -march=armv7e-m -DARM_MATH_CM4=1)
-  set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F4SS -march=armv7e-m -mfloat-abi=soft -mfpu=fpv4-sp-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM4=1)
-  set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F4SH -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM4=1)
-  set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5SS -march=armv7e-m -mfloat-abi=soft -mfpu=fpv4-sp-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM4=1)
-  set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5SH -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM4=1)
-  set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5DS -march=armv7e-m -mfloat-abi=soft -mfpu=fpv5-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM7=1)
-  set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5DH -march=armv7e-m -mfloat-abi=hard -mfpu=fpv5-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM7=1)
+  set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7M -march=armv7-m -DARM_MATH_CM3=1)
+  set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM -march=armv7e-m -DARM_MATH_CM4=1)
+  set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F4SS -march=armv7e-m -mfloat-abi=soft -mfpu=fpv4-sp-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM4=1)
+  set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F4SH -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM4=1)
+  set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5SS -march=armv7e-m -mfloat-abi=soft -mfpu=fpv4-sp-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM4=1)
+  set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5SH -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM4=1)
+  set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5DS -march=armv7e-m -mfloat-abi=soft -mfpu=fpv5-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM7=1)
+  set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5DH -march=armv7e-m -mfloat-abi=hard -mfpu=fpv5-d16 -U__SOFTFP__ -D__FPU_PRESENT=1 -DARM_MATH_CM7=1)
 
-  set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7M ".")
-  set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM ".")
+  set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7M ".")
+  set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM ".")
 
   string(COMPARE EQUAL "${CMAKE_C_COMPILER_VERSION}" 9.3.1 IS_GCC_9)
   string(COMPARE EQUAL "${CMAKE_C_COMPILER_VERSION}" 8.3.1 IS_GCC_8)
   string(COMPARE EQUAL "${CMAKE_CXX_COMPILER_VERSION}" 9.3.1 IS_GCC_9XX)
   string(COMPARE EQUAL "${CMAKE_CXX_COMPILER_VERSION}" 8.3.1 IS_GCC_8XX)
   if(IS_GCC_9 OR IS_GCC_8 OR IS_GCC_9XX OR IS_GCC_8XX)
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SS "softfp") #single precision soft ABI
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SH "hard")   #single precision hard ABI
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SS "softfp") #single precision soft ABI
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SH "hard")   #single precision hard ABI
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DS "softfp")    #double precision soft ABI
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DH "hard")      #double precision hard ABI
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7M "thumb/v7-m/nofp") #M3 no FP
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7EM "thumb/v7e-m/nofp") #M4 no FP
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7_FP "thumb/v7+fp") #M4 with FP
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_DP "thumb/v7e-m+dp") #M7
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_FP "thumb/v7e-m+fp") #m7
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SS "softfp") #single precision soft ABI
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SH "hard")   #single precision hard ABI
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SS "softfp") #single precision soft ABI
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SH "hard")   #single precision hard ABI
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DS "softfp")    #double precision soft ABI
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DH "hard")      #double precision hard ABI
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7M "thumb/v7-m/nofp") #M3 no FP
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7EM "thumb/v7e-m/nofp") #M4 no FP
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7_FP "thumb/v7+fp") #M4 with FP
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_DP "thumb/v7e-m+dp") #M7
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_FP "thumb/v7e-m+fp") #m7
   else()
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SS "fpv4-sp/softfp") #single precision soft ABI
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SH "fpv4-sp/hard")   #single precision hard ABI
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SS "fpv5-sp/softfp") #single precision soft ABI
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SH "fpv5-sp/hard")   #single precision hard ABI
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DS "fpv5/softfp")    #double precision soft ABI
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DH "fpv5/hard")      #double precision hard ABI
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7M "thumb/v7-m")         #thumb ARMV7M
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7EM "thumb/v7e-m")       #thumb ARMV7EM
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7_FP "thumb/v7e-m")
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_DP "thumb/v7e-m")       #thumb ARMV7EM
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_FP "thumb/v7e-m")       #thumb ARMV7EM
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SS "fpv4-sp/softfp") #single precision soft ABI
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SH "fpv4-sp/hard")   #single precision hard ABI
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SS "fpv5-sp/softfp") #single precision soft ABI
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SH "fpv5-sp/hard")   #single precision hard ABI
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DS "fpv5/softfp")    #double precision soft ABI
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DH "fpv5/hard")      #double precision hard ABI
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7M "thumb/v7-m")         #thumb ARMV7M
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7EM "thumb/v7e-m")       #thumb ARMV7EM
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7_FP "thumb/v7e-m")
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_DP "thumb/v7e-m")       #thumb ARMV7EM
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_FP "thumb/v7e-m")       #thumb ARMV7EM
   endif()
 
   string(COMPARE EQUAL "${ARCH_NAME}" v7m IS_V7M)
@@ -185,40 +185,40 @@ macro(sos_sdk_internal_arm_arch ARCH_NAME)
   string(COMPARE EQUAL "${ARCH_NAME}" v7em_f5dh IS_V7EM_F5DH)
 
   if(IS_V7M) #armv7m soft float
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR ${SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7M})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR ${SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7M})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS ${SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7M})
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR ${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7M})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR ${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7M})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7M})
   elseif(IS_V7EM) #armv7em soft float
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR ${SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7EM})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR ${SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS ${SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM})
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR ${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7EM})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR ${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM})
   elseif(IS_V7EM_F4SS) #armv7em fpu4 single precision soft abi
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR ${SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7_FP})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR ${SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SS})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS ${SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F4SS})
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR ${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7_FP})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR ${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SS})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F4SS})
   elseif(IS_V7EM_F4SH) #armv7em fpu4 single precision hard abi
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR ${SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7_FP})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR ${SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SH})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS ${SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F4SH})
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR ${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7_FP})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR ${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F4SH})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F4SH})
   elseif(IS_V7EM_F5SS) #armv7em fpu5 single precision soft abi
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR ${SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_FP})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR ${SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SS})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS ${SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5SS})
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR ${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_FP})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR ${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SS})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5SS})
   elseif(IS_V7EM_F5SH) #armv7em fpu5 single precision hard abi
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR ${SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_FP})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR ${SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SH})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS ${SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5SH})
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR ${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_FP})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR ${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5SH})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5SH})
   elseif(IS_V7EM_F5DS) #armv7em fpu5 double precision soft abi
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR ${SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_DP})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR ${SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DS})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS ${SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5DS})
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR ${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_DP})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR ${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DS})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5DS})
   elseif(IS_V7EM_F5DH) #armv7em fpu5 double precision hard abi
-    set(SOS_ARM_ARCH_BUILD_INSTALL_DIR ${SOS_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_DP})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_DIR ${SOS_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DH})
-    set(SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS ${SOS_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5DH})
+    set(CMSDK_ARM_ARCH_BUILD_INSTALL_DIR ${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR_V7EM_DP})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_DIR ${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR_V7EM_F5DH})
+    set(CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS_V7EM_F5DH})
   endif()
 
-  set(SOS_BUILD_SYSTEM_INCLUDES
+  set(CMSDK_BUILD_SYSTEM_INCLUDES
     ${CMAKE_INSTALL_PREFIX}/../lib/gcc/arm-none-eabi/${CMAKE_CXX_COMPILER_VERSION}/include
     ${CMAKE_INSTALL_PREFIX}/../lib/gcc/arm-none-eabi/${CMAKE_CXX_COMPILER_VERSION}/include-fixed
     ${CMAKE_INSTALL_PREFIX}/include
@@ -228,33 +228,33 @@ macro(sos_sdk_internal_arm_arch ARCH_NAME)
 
 endmacro()
 
-macro(sos_sdk_internal_is_arch_enabled ARCH)
+macro(cmsdk_internal_is_arch_enabled ARCH)
   SET(ARCH_ENABLED OFF)
-  sos_sdk_internal_arm_arch(${ARCH})
+  cmsdk_internal_arm_arch(${ARCH})
 
-  if(SOS_ARCH_ARM_ALL)
+  if(CMSDK_ARCH_ARM_ALL)
     set(ARCH_ENABLED ON)
   else()
-    if((IS_V7M) AND (SOS_ARCH_ARM_V7M))
+    if((IS_V7M) AND (CMSDK_ARCH_ARM_V7M))
       set(ARCH_ENABLED ON)
     endif()
-    if((IS_V7EM) AND (SOS_ARCH_ARM_V7EM))
+    if((IS_V7EM) AND (CMSDK_ARCH_ARM_V7EM))
       set(ARCH_ENABLED ON)
     endif()
-    if((IS_V7EM_F4SH) AND (SOS_ARCH_ARM_V7EM_F4SH))
+    if((IS_V7EM_F4SH) AND (CMSDK_ARCH_ARM_V7EM_F4SH))
       set(ARCH_ENABLED ON)
     endif()
-    if((IS_V7EM_F5SH) AND (SOS_ARCH_ARM_V7EM_F5SH))
+    if((IS_V7EM_F5SH) AND (CMSDK_ARCH_ARM_V7EM_F5SH))
       set(ARCH_ENABLED ON)
     endif()
-    if((IS_V7EM_F5DH) AND (SOS_ARCH_ARM_V7EM_F5DH))
+    if((IS_V7EM_F5DH) AND (CMSDK_ARCH_ARM_V7EM_F5DH))
       set(ARCH_ENABLED ON)
     endif()
   endif()
 endmacro()
 
-macro(sos_sdk_internal_shared_properties)
-  set(SOS_SHARED_PROPERTIES
+macro(cmsdk_internal_shared_properties)
+  set(CMSDK_SHARED_PROPERTIES
     ADDITIONAL_CLEAN_FILE
     ADDITIONAL_CLEAN_FILES
     ADDITIONAL_MAKE_CLEAN_FILES

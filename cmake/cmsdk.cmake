@@ -1,17 +1,17 @@
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/sos-sdk-variables.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/sos-sdk-internal.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-variables.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-internal.cmake)
 
-sos_sdk_internal_startup()
+cmsdk_internal_startup()
 
-function(sos_sdk_pull PROJECT_PATH)
-  execute_process(COMMAND ${SOS_SDK_GIT_EXEC} pull WORKING_DIRECTORY ${PROJECT_PATH} OUTPUT_VARIABLE OUTPUT RESULT_VARIABLE RESULT)
+function(cmsdk_pull PROJECT_PATH)
+  execute_process(COMMAND ${CMSDK_SDK_GIT_EXEC} pull WORKING_DIRECTORY ${PROJECT_PATH} OUTPUT_VARIABLE OUTPUT RESULT_VARIABLE RESULT)
   message(STATUS "git pull " ${PROJECT_PATH} "\n" ${OUTPUT})
   if(RESULT)
     message(WARNING " Failed to pull " ${PROJECT_PATH})
   endif()
 endfunction()
 
-function(sos_sdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
+function(cmsdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
   message(STATUS "Checking existence of ${BASE_DIRECTORY}/${NAME}")
   if(NOT EXISTS ${BASE_DIRECTORY}/${NAME})
     message(STATUS "Need to clone for the first call to cmake")
@@ -20,21 +20,21 @@ function(sos_sdk_git_clone_or_pull_branch BASE_DIRECTORY NAME REPOSITORY BRANCH)
       WORKING_DIRECTORY ${BASE_DIRECTORY}
     )
   endif()
-  add_custom_target(sos_sdk_pull_${NAME}
+  add_custom_target(cmsdk_pull_${NAME}
     COMMAND git pull
     WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
     )
-  add_custom_target(sos_sdk_checkout_${NAME}
+  add_custom_target(cmsdk_checkout_${NAME}
     COMMAND git checkout ${BRANCH}
     WORKING_DIRECTORY ${BASE_DIRECTORY}/${NAME}
-    DEPENDS sos_sdk_pull_${NAME}
+    DEPENDS cmsdk_pull_${NAME}
     )
-  if(SOS_SDK_PULL_TARGET)
-    add_dependencies(${SOS_SDK_PULL_TARGET} sos_sdk_checkout_${NAME})
+  if(CMSDK_SDK_PULL_TARGET)
+    add_dependencies(${CMSDK_SDK_PULL_TARGET} cmsdk_checkout_${NAME})
   endif()
 endfunction()
 
-function(sos_sdk_add_subdirectory INPUT_LIST DIRECTORY)
+function(cmsdk_add_subdirectory INPUT_LIST DIRECTORY)
   add_subdirectory(${DIRECTORY})
   set(INPUT_SOURCES ${${INPUT_LIST}})
   set(TEMP_SOURCES "")
@@ -45,7 +45,7 @@ function(sos_sdk_add_subdirectory INPUT_LIST DIRECTORY)
   set(${INPUT_LIST} ${TEMP_SOURCES} PARENT_SCOPE)
 endfunction()
 
-function(sos_sdk_add_out_of_source_directory INPUT_LIST DIRECTORY BINARY_DIRECTORY)
+function(cmsdk_add_out_of_source_directory INPUT_LIST DIRECTORY BINARY_DIRECTORY)
   add_subdirectory(${DIRECTORY} ${BINARY_DIRECTORY})
   set(INPUT_SOURCES ${${INPUT_LIST}})
   set(TEMP_SOURCES "")
@@ -56,42 +56,42 @@ function(sos_sdk_add_out_of_source_directory INPUT_LIST DIRECTORY BINARY_DIRECTO
   set(${INPUT_LIST} ${TEMP_SOURCES} PARENT_SCOPE)
 endfunction()
 
-function(sos_sdk_git_status PROJECT_PATH)
+function(cmsdk_git_status PROJECT_PATH)
   message(STATUS "GIT STATUS OF " ${PROJECT_PATH})
-  execute_process(COMMAND ${SOS_SDK_GIT_EXEC} status WORKING_DIRECTORY ${PROJECT_PATH} RESULT_VARIABLE RESULT)
+  execute_process(COMMAND ${CMSDK_SDK_GIT_EXEC} status WORKING_DIRECTORY ${PROJECT_PATH} RESULT_VARIABLE RESULT)
 endfunction()
 
-function(sos_sdk_clone REPO_URL WORKSPACE_PATH)
-  execute_process(COMMAND ${SOS_SDK_GIT_EXEC} clone ${REPO_URL} WORKING_DIRECTORY ${WORKSPACE_PATH} OUTPUT_VARIABLE OUTPUT RESULT_VARIABLE RESULT)
+function(cmsdk_clone REPO_URL WORKSPACE_PATH)
+  execute_process(COMMAND ${CMSDK_SDK_GIT_EXEC} clone ${REPO_URL} WORKING_DIRECTORY ${WORKSPACE_PATH} OUTPUT_VARIABLE OUTPUT RESULT_VARIABLE RESULT)
   message(STATUS "git clone " ${REPO_URL} to ${WORKSPACE_PATH} "\n" ${OUTPUT})
   if(RESULT)
     message(FATAL_ERROR " Failed to clone " ${PROJECT_PATH})
   endif()
 endfunction()
 
-function(sos_sdk_clone_or_pull PROJECT_PATH REPO_URL WORKSPACE_PATH)
+function(cmsdk_clone_or_pull PROJECT_PATH REPO_URL WORKSPACE_PATH)
   #if ${PROJECT_PATH} directory doesn't exist -- clone from the URL
   if(EXISTS ${PROJECT_PATH}/.git)
     message(STATUS ${PROJECT_PATH} " already exists: pulling")
-    sos_sdk_pull(${PROJECT_PATH})
+    cmsdk_pull(${PROJECT_PATH})
   else()
     file(REMOVE_RECURSE ${PROJECT_PATH})
     message(STATUS ${PROJECT_PATH} " does not exist: cloning")
-    sos_sdk_clone(${REPO_URL} ${WORKSPACE_PATH})
+    cmsdk_clone(${REPO_URL} ${WORKSPACE_PATH})
   endif()
 endfunction()
 
-function(sos_sdk_checkout PROJECT_PATH GIT_PATH)
-  execute_process(COMMAND ${SOS_SDK_GIT_EXEC} checkout ${GIT_PATH} WORKING_DIRECTORY ${PROJECT_PATH} OUTPUT_VARIABLE OUTPUT RESULT_VARIABLE RESULT)
+function(cmsdk_checkout PROJECT_PATH GIT_PATH)
+  execute_process(COMMAND ${CMSDK_SDK_GIT_EXEC} checkout ${GIT_PATH} WORKING_DIRECTORY ${PROJECT_PATH} OUTPUT_VARIABLE OUTPUT RESULT_VARIABLE RESULT)
   message(STATUS "git checkout " ${GIT_PATH} " in " ${PROJECT_PATH} "\n" ${OUTPUT})
   if(RESULT)
     message(FATAL_ERROR " Failed to checkout " ${PROJECT_PATH} ${GIT_PATH})
   endif()
 endfunction()
 
-function(sos_sdk_copy_target SOURCE_TARGET DEST_TARGET)
-  sos_sdk_internal_shared_properties()
-  foreach(PROPERTY ${SOS_SHARED_PROPERTIES})
+function(cmsdk_copy_target SOURCE_TARGET DEST_TARGET)
+  cmsdk_internal_shared_properties()
+  foreach(PROPERTY ${CMSDK_SHARED_PROPERTIES})
     string(REPLACE "<CONFIG>" "${CMAKE_BUILD_TYPE}" prop ${PROPERTY})
     get_property(PROPERTY_VALUE TARGET ${SOURCE_TARGET} PROPERTY ${PROPERTY} SET)
 
@@ -103,7 +103,7 @@ function(sos_sdk_copy_target SOURCE_TARGET DEST_TARGET)
   endforeach(PROPERTY)
 endfunction()
 
-function(sos_sdk_add_test NAME OPTION CONFIG)
+function(cmsdk_add_test NAME OPTION CONFIG)
 
   string(COMPARE EQUAL ${OPTION} "" OPTION_IS_EMPTY)
 
@@ -120,7 +120,7 @@ function(sos_sdk_add_test NAME OPTION CONFIG)
 
   get_target_property(TARGET_BINARY_DIR ${TARGET_NAME} RUNTIME_OUTPUT_DIRECTORY)
 
-  message(STATUS "SOS SDK - Add test ${TARGET_BINARY_DIR}/${TARGET_NAME}")
+  message(STATUS "CMSDK - Add test ${TARGET_BINARY_DIR}/${TARGET_NAME}")
 
   add_test(NAME ${NAME}_${CONFIG}
     COMMAND "${TARGET_BINARY_DIR}/${TARGET_NAME}" --api
@@ -134,7 +134,7 @@ function(sos_sdk_add_test NAME OPTION CONFIG)
 
 endfunction()
 
-function(sos_sdk_exclude_arch_from_all TARGET ARCH_LIST)
+function(cmsdk_exclude_arch_from_all TARGET ARCH_LIST)
   foreach(ARCH ${ARCH_LIST})
     set_target_properties(${TARGET}_${ARCH}
       PROPERTIES EXCLUDE_FROM_ALL ON
@@ -142,9 +142,9 @@ function(sos_sdk_exclude_arch_from_all TARGET ARCH_LIST)
   endforeach()
 endfunction()
 
-macro(sos_sdk_include_target TARGET CONFIG_LIST)
-  if(SOS_IS_ARM)
-    set(ARCH_LIST ${SOS_ARCH} ${SOS_ARCH_LIST})
+macro(cmsdk_include_target TARGET CONFIG_LIST)
+  if(CMSDK_IS_ARM)
+    set(ARCH_LIST ${CMSDK_ARCH} ${CMSDK_ARCH_LIST})
   else()
     set(ARCH_LIST link)
   endif()
@@ -157,9 +157,9 @@ macro(sos_sdk_include_target TARGET CONFIG_LIST)
 
 endmacro()
 
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/sos-sdk-app.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/sos-sdk-bsp.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/sos-sdk-lib.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-app.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-bsp.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-lib.cmake)
 
 
 

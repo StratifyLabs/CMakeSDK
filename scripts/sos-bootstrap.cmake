@@ -80,10 +80,10 @@ if(NOT EXISTS ${BINARY_PATH}/arm-none-eabi-gcc OR ${BOOTSTRAP_COMPILER})
 	set(COMPILER_LINK https://github.com/StratifyLabs/StratifyOS/releases/download/compilerv8/compiler.${COMPILER_ARCH}_sblob)
 
 	message(STATUS "Downloading and installing clean compiler to ${LOCAL_PATH}")
+
 	execute_process(
-		COMMAND ${LOCAL_PATH}/bin/sl cloud.install:compiler,url=${COMPILER_LINK},hash=${COMPILER_HASH}
-		WORKING_DIRECTORY ${LOCAL_PATH}
-		)
+		COMMAND ${LOCAL_PATH}/bin/sl cloud.install:compiler,url=${COMPILER_LINK},hash=${COMPILER_HASH},dest=${LOCAL_PATH}
+	)
 
 	set(DEPENDENCIES_DIRECTORY ${SDK_DIRECTORY}/dependencies)
 	set(CMSDK_DIRECTORY ${DEPENDENCIES_DIRECTORY}/CMakeSDK)

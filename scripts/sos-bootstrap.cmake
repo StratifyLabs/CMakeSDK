@@ -1,15 +1,23 @@
 cmake_minimum_required (VERSION 3.18)
 
-if(NOT CMSDK_LOCAL_PATH)
-	message(FATAL_ERROR "-DCMSDK_LOCAL_PATH=<path> must be supplied before -P")
+if(NOT DEFINED CMSDK_SDK_PATH)
+	message(FATAL_ERROR "CMSDK_SDK_PATH must be provided")
 endif()
+
+set(SOURCE_DIRECTORY ${CMSDK_SDK_PATH}/dependencies/CMakeSDK)
+set(LOCAL_PATH ${CMSDK_SDK_PATH}/local)
+set(BUILD_DIR cmake_link)
+set(BUILD_DIR_PATH ${SOURCE_DIRECTORY}/${BUILD_DIR})
+
+file(REMOVE_RECURSE ${BUILD_DIR_PATH})
+file(MAKE_DIRECTORY ${BUILD_DIR_PATH})
 
 option(INSTALL_SL "Download and install SL" OFF)
 option(BOOTSTRAP_COMPILER "Install the basic compiler" OFF)
 
 message(STATUS "SDK Directory is ${SDK_DIRECTORY}")
 
-set(BINARY_PATH ${CMSDK_LOCAL_PATH}/bin)
+set(BINARY_PATH ${LOCAL_PATH}/bin)
 
 if(NOT EXISTS ${BINARY_PATH}/sl OR ${INSTALL_SL})
 
@@ -71,28 +79,28 @@ if(NOT EXISTS ${BINARY_PATH}/arm-none-eabi-gcc OR ${BOOTSTRAP_COMPILER})
 
 	set(COMPILER_LINK https://github.com/StratifyLabs/StratifyOS/releases/download/compilerv8/compiler.${COMPILER_ARCH}_sblob)
 
-	message(STATUS "Downloading and installing clean compiler to ${CMSDK_LOCAL_PATH}")
+	message(STATUS "Downloading and installing clean compiler to ${LOCAL_PATH}")
 	execute_process(
-		COMMAND ${CMSDK_LOCAL_PATH}/bin/sl cloud.install:compiler,url=${COMPILER_LINK},hash=${COMPILER_HASH}
+		COMMAND ${LOCAL_PATH}/bin/sl cloud.install:compiler,url=${COMPILER_LINK},hash=${COMPILER_HASH}
 		)
 
 	set(DEPENDENCIES_DIRECTORY ${SDK_DIRECTORY}/dependencies)
-	set(CMAKESDK_DIRECTORY ${DEPENDENCIES_DIRECTORY}/CMakeSDK)
-	file(MAKE_DIRECTORY ${CMAKESDK_DIRECTORY}/cmake_arm)
+	set(CMSDK_DIRECTORY ${DEPENDENCIES_DIRECTORY}/CMakeSDK)
+	file(BUILD_DIRECTORY ${CMSDK_DIRECTORY}/cmake_arm)
 
 	execute_process(
-		COMMAND cmake ..
-		WORKING_DIRECTORY ${CMAKESDK_DIRECTORY}/cmake_arm
+		COMMAND cmake .. -DCMSDK_LOCAL_PATH=${LOCAL_PATH}
+		WORKING_DIRECTORY ${CMSDK_DIRECTORY}/cmake_arm
 		)
 
 	execute_process(
 		COMMAND cmake --build . --target install
-		WORKING_DIRECTORY ${CMAKESDK_DIRECTORY}/cmake_arm
+		WORKING_DIRECTORY ${CMSDK_DIRECTORY}/cmake_arm
 		)
 
-	file(COPY ${CMAKESDK_DIRECTORY}/scripts/profile.sh DESTINATION ${CMAKE_SOURCE_DIR})
+	file(COPY ${CMSDK_DIRECTORY}/scripts/profile.sh DESTINATION ${CMAKE_SOURCE_DIR})
 
-	file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake_arm)
+	file(BUILD_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake_arm)
 
 endif()
 

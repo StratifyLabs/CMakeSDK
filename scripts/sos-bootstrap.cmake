@@ -6,7 +6,7 @@ endif()
 
 set(SOURCE_DIRECTORY ${CMSDK_SDK_PATH}/dependencies/CMakeSDK)
 set(LOCAL_PATH ${CMSDK_SDK_PATH}/local)
-set(BUILD_DIR cmake_link)
+set(BUILD_DIR cmake_arm)
 set(BUILD_DIR_PATH ${SOURCE_DIRECTORY}/${BUILD_DIR})
 
 file(REMOVE_RECURSE ${BUILD_DIR_PATH})
@@ -82,6 +82,7 @@ if(NOT EXISTS ${BINARY_PATH}/arm-none-eabi-gcc OR ${BOOTSTRAP_COMPILER})
 	message(STATUS "Downloading and installing clean compiler to ${LOCAL_PATH}")
 	execute_process(
 		COMMAND ${LOCAL_PATH}/bin/sl cloud.install:compiler,url=${COMPILER_LINK},hash=${COMPILER_HASH}
+		WORKING_DIRECTORY ${LOCAL_PATH}
 		)
 
 	set(DEPENDENCIES_DIRECTORY ${SDK_DIRECTORY}/dependencies)

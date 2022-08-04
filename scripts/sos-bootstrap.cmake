@@ -19,6 +19,7 @@ option(BOOTSTRAP_COMPILER "Install the basic compiler" OFF)
 message(STATUS "SDK Directory is ${CMSDK_SDK_PATH}")
 
 set(BINARY_PATH ${LOCAL_PATH}/bin)
+set(ENV{SOS_SDK_PATH} ${LOCAL_PATH})
 
 if(NOT EXISTS ${BINARY_PATH}/sl OR ${INSTALL_SL})
 

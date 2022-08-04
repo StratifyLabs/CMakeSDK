@@ -4,7 +4,8 @@ if(NOT DEFINED CMSDK_SDK_PATH)
 	message(FATAL_ERROR "CMSDK_SDK_PATH must be provided")
 endif()
 
-set(SOURCE_DIRECTORY ${CMSDK_SDK_PATH}/dependencies/CMakeSDK)
+set(DEPENDENCIES_DIRECTORY ${CMSDK_SDK_PATH}/dependencies)
+set(SOURCE_DIRECTORY ${DEPENDENCIES_DIRECTORY}/CMakeSDK)
 set(LOCAL_PATH ${CMSDK_SDK_PATH}/local)
 set(BUILD_DIR cmake_arm)
 set(BUILD_DIR_PATH ${SOURCE_DIRECTORY}/${BUILD_DIR})
@@ -15,7 +16,7 @@ file(MAKE_DIRECTORY ${BUILD_DIR_PATH})
 option(INSTALL_SL "Download and install SL" OFF)
 option(BOOTSTRAP_COMPILER "Install the basic compiler" OFF)
 
-message(STATUS "SDK Directory is ${SDK_DIRECTORY}")
+message(STATUS "SDK Directory is ${CMSDK_SDK_PATH}")
 
 set(BINARY_PATH ${LOCAL_PATH}/bin)
 
@@ -82,26 +83,33 @@ if(NOT EXISTS ${BINARY_PATH}/arm-none-eabi-gcc OR ${BOOTSTRAP_COMPILER})
 	message(STATUS "Downloading and installing clean compiler to ${LOCAL_PATH}")
 
 	execute_process(
-		COMMAND ${LOCAL_PATH}/bin/sl cloud.install:compiler,url=${COMPILER_LINK},hash=${COMPILER_HASH},dest=${LOCAL_PATH}
+		COMMAND ${LOCAL_PATH}/bin/sl cloud.install:compiler,url=${COMPILER_LINK},hash=${COMPILER_HASH}
 	)
 
-	set(DEPENDENCIES_DIRECTORY ${SDK_DIRECTORY}/dependencies)
-	set(CMSDK_DIRECTORY ${DEPENDENCIES_DIRECTORY}/CMakeSDK)
-	file(MAKE_DIRECTORY ${CMSDK_DIRECTORY}/cmake_arm)
-
-	execute_process(
-		COMMAND cmake .. -DCMSDK_LOCAL_PATH=${LOCAL_PATH}
-		WORKING_DIRECTORY ${CMSDK_DIRECTORY}/cmake_arm
-		)
-
-	execute_process(
-		COMMAND cmake --build . --target install
-		WORKING_DIRECTORY ${CMSDK_DIRECTORY}/cmake_arm
-		)
-
-	file(COPY ${CMSDK_DIRECTORY}/scripts/profile.sh DESTINATION ${CMAKE_SOURCE_DIR})
-
-	file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake_arm)
+	if(EXISTS ${LOCAL_PATH}/../StratifyLabs-SDK/bin/arm-none-eabi-gcc)
+		file(COPY ${LOCAL_PATH}/bin/sl DESTINATION ${LOCAL_PATH}/../StratifyLabs-SDK/bin)
+		file(COPY ${LOCAL_PATH}/../StratifyLabs-SDK/ DESTINATION ${LOCAL_PATH}/)
+		file(REMOVE_RECURSE ${LOCAL_PATH}/../StratifyLabs-SDK)
+	endif()
 
 endif()
+
+
+file(REMOVE_RECURSE ${SOURCE_DIRECTORY}/cmake_arm)
+file(MAKE_DIRECTORY ${SOURCE_DIRECTORY}/cmake_arm)
+
+execute_process(
+	COMMAND cmake .. -DCMSDK_LOCAL_PATH=${LOCAL_PATH}
+	WORKING_DIRECTORY ${SOURCE_DIRECTORY}/cmake_arm
+)
+
+execute_process(
+	COMMAND cmake --build . --target install
+	WORKING_DIRECTORY ${SOURCE_DIRECTORY}/cmake_arm
+)
+
+
+file(COPY ${SOURCE_DIRECTORY}/scripts/profile.sh DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})
+file(REMOVE_RECURSE ${CMAKE_CURRENT_SOURCE_DIR}/${BUILD_DIR})
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${BUILD_DIR})
 

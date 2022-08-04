@@ -138,7 +138,7 @@ typedef enum {
   MCU_ERROR_I2C_ACK_ERROR /*! 6: I2C Ack Error */
 } mcu_error_t;
 
-typedef enum { CMSDK_CHANNEL_FLAG_IS_INPUT = 0x80 } mcu_channel_flag_t;
+typedef enum { MCU_CHANNEL_FLAG_IS_INPUT = 0x80 } mcu_channel_flag_t;
 
 typedef int (*mcu_callback_t)(void *, const mcu_event_t *);
 

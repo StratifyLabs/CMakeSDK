@@ -111,11 +111,7 @@ function(cmsdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 
 	if(CMSDK_IS_LINK)
 
-		cmsdk2_add_executable(BUILD ${BASE_NAME} "${OPTION}" "${CONFIG}"
-			TARGET ${BASE_NAME}
-			OPTION ${OPTION}
-			CONFIG ${CONFIG}
-			ARCH link)
+		cmsdk_app_target(BUILD ${BASE_NAME} "${OPTION}" "${CONFIG}" link)
 
 		cmsdk_app("${OPTION_LIST}" ${RAM_SIZE})
 

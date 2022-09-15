@@ -1,4 +1,4 @@
-function(cmsdk2_add_executable)
+function(cmsdk2_app_add_executable)
   set(OPTIONS "")
   set(PREFIX ARGS)
   set(ONE_VALUE_ARGS TARGET NAME OPTION CONFIG ARCH)
@@ -64,7 +64,7 @@ function(cmsdk2_app_add_targets_for_architectures)
 
   if(CMSDK_IS_LINK)
 
-    cmsdk2_update_target_for_architecture(
+    cmsdk2_app_update_target_for_architecture(
       TARGET ${ARGS_TARGET}
       RAM_SIZE 0
     )
@@ -79,7 +79,7 @@ function(cmsdk2_app_add_targets_for_architectures)
     endforeach()
 
     if(CMSDK_SDK_IS_LINUX)
-      target_link_libraries(${TARGET_NAME} PRIVATE pthread rt)
+      target_link_libraries(${ARGS_TARGET} PRIVATE pthread rt)
     endif()
 
   else()
@@ -134,7 +134,7 @@ function(cmsdk2_app_add_targets_for_architectures)
 
 endfunction()
 
-function(cmsdk2_update_target_for_architecture)
+function(cmsdk2_app_update_target_for_architecture)
   set(OPTIONS "")
   set(PREFIX ARGS)
   set(ONE_VALUE_ARGS TARGET RAM_SIZE)
@@ -191,7 +191,12 @@ function(cmsdk2_update_target_for_architecture)
   else()
 
     # load ARCH specific variables into current scope
-    cmsdk_internal_arm_arch(${ARCH})
+    cmsdk2_internal_get_arm_arch(
+      ARCHITECTURE ${ARCH}
+      FLOAT_OPTIONS BUILD_FLOAT_OPTIONS
+      FLOAT_DIRECTORY BUILD_FLOAT_DIRECTORY
+      INSTALL_DIRECTORY BUILD_INSTALL_DIRECTORY
+    )
 
     target_compile_definitions(${TARGET_NAME}
       PUBLIC
@@ -212,7 +217,7 @@ function(cmsdk2_update_target_for_architecture)
     target_compile_options(${TARGET_NAME}
       PUBLIC
       -mthumb -mlong-calls -ffunction-sections -fdata-sections
-      ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS}
+      ${BUILD_FLOAT_OPTIONS}
       )
 
     get_target_property(EXIST_LINK_FLAGS ${TARGET_NAME} LINK_FLAGS)
@@ -220,10 +225,19 @@ function(cmsdk2_update_target_for_architecture)
       unset(EXIST_LINK_FLAGS)
     endif()
 
+    cmsdk2_internal_build_target_name(
+      NAME ${NAME}
+      OPTION ${OPTION}
+      CONFIG ${CONFIG}
+      ARCH ${ARCH}
+      RESULT INSTALL_NAME
+      BUILD_FOLDER BUILD_FOLDER
+    )
+
     set(UPDATED_LINK_FLAGS
-      -L${CMSDK_LOCAL_PATH}/arm-none-eabi/lib/${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR}/${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR}
-      -L${CMSDK_LOCAL_PATH}/lib/gcc/arm-none-eabi/${CMAKE_CXX_COMPILER_VERSION}/${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR}/${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR}
-      -Wl,--print-memory-usage,-Map,${BINARY_OUTPUT_DIR}/${CMSDK_SDK_TMP_INSTALL}.map,--gc-sections,--defsym=_app_ram_size=${ARGS_RAM_SIZE}
+      -L${CMSDK_LOCAL_PATH}/arm-none-eabi/lib/${BUILD_INSTALL_DIRECTORY}/${BUILD_FLOAT_DIRECTORY}
+      -L${CMSDK_LOCAL_PATH}/lib/gcc/arm-none-eabi/${CMAKE_CXX_COMPILER_VERSION}/${BUILD_INSTALL_DIRECTORY}/${BUILD_FLOAT_DIRECTORY}
+      -Wl,--print-memory-usage,-Map,${BINARY_OUTPUT_DIR}/${INSTALL_NAME}.map,--gc-sections,--defsym=_app_ram_size=${ARGS_RAM_SIZE}
       -Tldscripts/app.ld
       -nostartfiles
       -nostdlib
@@ -240,7 +254,7 @@ function(cmsdk2_update_target_for_architecture)
       )
 
     add_custom_target(bin_${TARGET_NAME} DEPENDS ${TARGET_NAME} COMMAND ${CMAKE_OBJCOPY} -j .text -j .data -O binary ${BINARY_OUTPUT_DIR}/${TARGET_NAME} ${BINARY_OUTPUT_DIR}/${CMSDK_SDK_TMP_NO_CONFIG})
-    add_custom_target(asm_${TARGET_NAME} DEPENDS bin_${TARGET_NAME} COMMAND ${CMAKE_OBJDUMP} -S -j .text -j .priv_code -j .data -j .bss -d ${BINARY_OUTPUT_DIR}/${TARGET_NAME} > ${BINARY_OUTPUT_DIR}/${CMSDK_SDK_TMP_INSTALL}.lst)
+    add_custom_target(asm_${TARGET_NAME} DEPENDS bin_${TARGET_NAME} COMMAND ${CMAKE_OBJDUMP} -S -j .text -j .priv_code -j .data -j .bss -d ${BINARY_OUTPUT_DIR}/${TARGET_NAME} > ${BINARY_OUTPUT_DIR}/${INSTALL_NAME}.lst)
     add_custom_target(size_${TARGET_NAME} DEPENDS asm_${TARGET_NAME} COMMAND ${CMAKE_SIZE} ${BINARY_OUTPUT_DIR}/${TARGET_NAME})
     add_custom_target(all_${TARGET_NAME} ALL DEPENDS size_${TARGET_NAME})
 

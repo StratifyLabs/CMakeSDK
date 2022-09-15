@@ -64,10 +64,10 @@ function(cmsdk2_internal_build_target_name)
   set(MULTI_VALUE_ARGS "")
   cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
 
-  set(REQUIRED_ARGS NAME CONFIG ARCH RESULT BUILD_FOLDER)
+  set(REQUIRED_ARGS NAME CONFIG ARCH RESULT)
   foreach(VALUE ${REQUIRED_ARGS})
     if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_update_target_for_architecture requires ${VALUE}")
+      message(FATAL_ERROR "cmsdk2_internal_build_target_name requires ${VALUE}")
     endif()
   endforeach()
 
@@ -100,6 +100,38 @@ function(cmsdk2_internal_build_target_name)
   set(TMP_NO_NAME ${TMP_NO_NAME}${TMP_CONFIG})
 
   set(${ARGS_RESULT} ${TMP_TARGET}_${ARGS_ARCH} PARENT_SCOPE)
-  set(${ARGS_BUILD_FOLDER} build_${TMP_NO_NAME}_${ARGS_ARCH} PARENT_SCOPE)
+  if(ARGS_BUILD_FOLDER)
+    set(${ARGS_BUILD_FOLDER} build_${TMP_NO_NAME}_${ARGS_ARCH} PARENT_SCOPE)
+  endif()
+
+endfunction()
+
+function(cmsdk2_internal_get_arm_arch)
+  set(OPTIONS "")
+  set(PREFIX ARGS)
+  set(ONE_VALUE_ARGS ARCHITECTURE FLOAT_OPTIONS FLOAT_DIRECTORY INSTALL_DIRECTORY)
+  set(MULTI_VALUE_ARGS "")
+  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
+
+  set(REQUIRED_ARGS ARCHITECTURE)
+  foreach(VALUE ${REQUIRED_ARGS})
+    if(NOT ARGS_${VALUE})
+      message(FATAL_ERROR "cmsdk2_internal_get_arm_arch requires ${VALUE}")
+    endif()
+  endforeach()
+
+  cmsdk_internal_arm_arch(${ARGS_ARCHITECTURE})
+
+  if(ARGS_FLOAT_OPTIONS)
+    set(${ARGS_FLOAT_OPTIONS} ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS} PARENT_SCOPE)
+  endif()
+
+  if(ARGS_FLOAT_DIRECTORY)
+    set(${ARGS_FLOAT_DIRECTORY} ${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR} PARENT_SCOPE)
+  endif()
+
+  if(ARGS_INSTALL_DIRECTORY)
+    set(${ARGS_INSTALL_DIRECTORY} ${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR} PARENT_SCOPE)
+  endif()
 
 endfunction()

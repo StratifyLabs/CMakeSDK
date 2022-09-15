@@ -208,9 +208,10 @@ macro(cmsdk_include_target TARGET CONFIG_LIST)
 endmacro()
 
 include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-app.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk2-app.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-bsp.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk-lib.cmake)
+
+include(${CMAKE_CURRENT_LIST_DIR}/sdk/cmsdk2.cmake)
 
 
 

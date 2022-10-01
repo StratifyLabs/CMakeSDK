@@ -3,6 +3,7 @@
 ## Bug Fixes
 
 - Fixed typo with `CMSDK_SDK_PULL_TARGET`
+- Add updates to `cmsdk2_` family of functions (experimental)
 
 # v2.0.0
 

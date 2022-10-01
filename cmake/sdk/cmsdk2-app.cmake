@@ -60,17 +60,14 @@ function(cmsdk2_app_add_targets_for_architectures)
   get_target_property(CONFIG ${ARGS_TARGET} CMSDK_PROPERTY_CONFIG)
   get_target_property(OPTION ${ARGS_TARGET} CMSDK_PROPERTY_OPTION)
   get_target_property(ARCH ${ARGS_TARGET} CMSDK_PROPERTY_ARCH)
-  message(STATUS "Add architecure for NAME:${NAME} OPTION:${OPTION} CONFIG:${CONFIG} ARCH:${ARCH}")
 
   if(CMSDK_IS_LINK)
-
     cmsdk2_app_update_target_for_architecture(
       TARGET ${ARGS_TARGET}
       RAM_SIZE 0
     )
-
     foreach(DEPENDENCY ${DEPENDENCIES})
-      message(STATUS "CMSDK Adding dependency ${DEPENDENCY}_${CONFIG}_link to ${BUILD_TARGET}")
+      message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
 
       target_link_libraries(${ARGS_TARGET}
         PRIVATE
@@ -126,9 +123,9 @@ function(cmsdk2_app_add_targets_for_architectures)
     foreach(DEPENDENCY ${DEPENDENCIES})
       target_link_libraries(${ARGS_TARGET}
         PRIVATE
-        ${DEPENDENCY}_${CONFIG}_${CMSDK_ARCH}
+        ${DEPENDENCY}_${CONFIG}_${ARCH}
         )
-      message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${CMSDK_ARCH}")
+      message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
     endforeach()
   endif()
 
@@ -155,8 +152,6 @@ function(cmsdk2_app_update_target_for_architecture)
   get_target_property(ARCH ${TARGET_NAME} CMSDK_PROPERTY_ARCH)
   get_target_property(TARGET_BUILD_FOLDER ${TARGET_NAME} CMSDK_PROPERTY_BUILD_FOLDER)
 
-  message(STATUS "CMSDK Update ${TARGET_NAME} for architecure ${ARCH}")
-
   set(BINARY_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET_BUILD_FOLDER})
 
   set_target_properties(${TARGET_NAME}
@@ -169,7 +164,7 @@ function(cmsdk2_app_update_target_for_architecture)
       target_link_options(${TARGET_NAME} PRIVATE -static-libstdc++ -static-libgcc)
     endif()
 
-    if(NOT ${OPTION} STREQUAL "OPTION-NOTFOUND")
+    if(OPTION)
       target_compile_definitions(${TARGET_NAME}
         PUBLIC
         __${OPTION}

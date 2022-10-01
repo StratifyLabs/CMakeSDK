@@ -119,24 +119,6 @@ function(cmsdk_copy_target SOURCE_TARGET DEST_TARGET)
   endforeach(PROPERTY)
 endfunction()
 
-function(cmsdk2_copy_target)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS SOURCE)
-  set(MULTI_VALUE_ARGS DESTINATION)
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-  if(NOT ARGS_DESTINATION)
-    message(FATAL_ERROR "cmsdk2_copy_target requires DESTINATION")
-  endif()
-  if(NOT ARGS_SOURCE)
-    message(FATAL_ERROR "cmsdk2_copy_target requires SOURCE")
-  endif()
-
-  foreach(DEST ${ARGS_DESTINATION})
-    cmsdk_copy_target(${ARGS_SOURCE} ${DEST})
-  endforeach()
-endfunction()
-
 function(cmsdk_add_test NAME OPTION CONFIG)
 
   string(COMPARE EQUAL ${OPTION} "" OPTION_IS_EMPTY)
@@ -166,21 +148,6 @@ function(cmsdk_add_test NAME OPTION CONFIG)
     PASS_REGULAR_EXPRESSION "___finalResultPass___"
   )
 
-endfunction()
-
-function(cmsdk2_add_test)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS NAME OPTION CONFIG)
-  set(MULTI_VALUE_ARGS "")
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-  foreach(VALUE ${ONE_VALUE_ARGS})
-    if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_add_test requires ${VALUE}")
-    endif()
-  endforeach()
-
-  cmsdk_copy_target(${ARGS_NAME} ${ARGS_OPTION} ${ARGS_CONFIG})
 endfunction()
 
 

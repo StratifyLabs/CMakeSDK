@@ -104,7 +104,6 @@ endfunction()
 
 function(cmsdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 
-	message(STATUS "OPTION LIST ${OPTION_LIST}")
 	list(GET OPTION_LIST 0 BASE_NAME)
 	list(GET OPTION_LIST 1 OPTION)
 	list(GET OPTION_LIST 2 CONFIG)

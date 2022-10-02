@@ -56,15 +56,12 @@ function(cmsdk2_add_test)
       message(FATAL_ERROR "cmsdk2_add_test requires ${VALUE}")
     endif()
   endforeach()
-
   get_target_property(NAME ${ARGS_TARGET} CMSDK_PROPERTY_NAME)
   get_target_property(CONFIG ${ARGS_TARGET} CMSDK_PROPERTY_CONFIG)
   get_target_property(OPTION ${ARGS_TARGET} CMSDK_PROPERTY_OPTION)
   get_target_property(ARCH ${ARGS_TARGET} CMSDK_PROPERTY_ARCH)
   get_target_property(BUILD_FOLDER ${ARGS_TARGET} CMSDK_PROPERTY_BUILD_FOLDER)
-
   string(COMPARE EQUAL ${OPTION} "" OPTION_IS_EMPTY)
-
   if(OPTION)
     set(EXEC_NAME ${NAME}_${OPTION})
     set(DIR_NAME build_${OPTION})

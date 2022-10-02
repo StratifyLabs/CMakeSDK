@@ -1,7 +1,7 @@
 function(cmsdk2_add_library)
 	set(OPTIONS "")
 	set(PREFIX ARGS)
-	set(ONE_VALUE_ARGS TARGET NAME OPTION CONFIG ARCH)
+	set(ONE_VALUE_ARGS TARGET NAME OPTION CONFIG ARCH TYPE)
 	set(MULTI_VALUE_ARGS "")
 	cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
 	set(REQUIRED_ARGS TARGET NAME CONFIG ARCH)
@@ -10,6 +10,11 @@ function(cmsdk2_add_library)
 			message(FATAL_ERROR "cmsdk2_add_library requires ${VALUE}")
 		endif()
 	endforeach()
+	if(ARGS_TYPE)
+		set(LIBRARY_TYPE ${ARGS_TYPE})
+	else()
+		set(LIBRARY_TYPE STATIC)
+	endif()
 	cmsdk2_internal_build_target_name(
 		NAME ${ARGS_NAME}
 		OPTION ${ARGS_OPTION}
@@ -18,55 +23,44 @@ function(cmsdk2_add_library)
 		RESULT TARGET_NAME
 		BUILD_FOLDER TARGET_BUILD_FOLDER
 	)
-	add_library(${TARGET_NAME})
+	add_library(${TARGET_NAME} ${LIBRARY_TYPE})
 	if(ARGS_OPTION)
 		set_target_properties(${TARGET_NAME} PROPERTIES
-			CMSDK_PROPERTY_OPTION ${ARGS_OPTION}
-			)
+			CMSDK_PROPERTY_OPTION ${ARGS_OPTION})
 	endif()
 	set_target_properties(${TARGET_NAME} PROPERTIES
 		CMSDK_PROPERTY_NAME ${ARGS_NAME}
 		CMSDK_PROPERTY_CONFIG ${ARGS_CONFIG}
 		CMSDK_PROPERTY_ARCH ${ARGS_ARCH}
-		CMSDK_PROPERTY_BUILD_FOLDER ${TARGET_BUILD_FOLDER}
-		)
+		CMSDK_PROPERTY_BUILD_FOLDER ${TARGET_BUILD_FOLDER})
 	target_compile_definitions(${TARGET_NAME}
 		PRIVATE
 		__${ARGS_ARCH}
 		___${ARGS_CONFIG}
-		CMSDK_BUILD_GIT_HASH=${CMSDK_GIT_HASH}
-		)
+		CMSDK_BUILD_GIT_HASH=${CMSDK_GIT_HASH})
 	if(OPTION)
 		target_compile_definitions(${TARGET_NAME}
 			PRIVATE
-			__${OPTION}
-			)
+			__${OPTION})
 	endif()
 	if(${CMSDK_IS_ARM})
 		cmsdk2_internal_get_arm_arch(
 			ARCHITECTURE ${ARGS_ARCH}
-			FLOAT_OPTIONS ARCH_BUILD_FLOAT_OPTIONS
-		)
+			FLOAT_OPTIONS ARCH_BUILD_FLOAT_OPTIONS)
 		target_compile_definitions(${TARGET_NAME}
 			PUBLIC
-			__StratifyOS__
-			)
+			__StratifyOS__)
 		target_compile_options(${TARGET_NAME}
 			PRIVATE
 			-mthumb -ffunction-sections -fdata-sections
-			${ARCH_BUILD_FLOAT_OPTIONS}
-			)
+			${ARCH_BUILD_FLOAT_OPTIONS})
 		set_target_properties(${TARGET_NAME}
-			PROPERTIES NO_SYSTEM_FROM_IMPORTED TRUE
-			)
+			PROPERTIES NO_SYSTEM_FROM_IMPORTED TRUE)
 		target_include_directories(${TARGET_NAME}
 			PRIVATE
-			${CMSDK_LOCAL_PATH}/arm-none-eabi/include/StratifyOS
-			)
+			${CMSDK_LOCAL_PATH}/arm-none-eabi/include/StratifyOS)
 	endif()
-
 	get_target_property(TARGET_BINARY_DIR ${TARGET_NAME} BINARY_DIR)
-
 	install(
 		TARGETS ${TARGET_NAME}
 		EXPORT ${TARGET_NAME}
@@ -75,7 +69,6 @@ function(cmsdk2_add_library)
 	install(
 		EXPORT ${TARGET_NAME}
 		DESTINATION ${CMSDK_LOCAL_PATH}/cmake/targets)
-
 	set(${ARGS_TARGET} ${TARGET_NAME} PARENT_SCOPE)
 endfunction()
 

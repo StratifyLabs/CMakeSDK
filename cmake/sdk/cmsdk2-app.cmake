@@ -42,7 +42,7 @@ function(cmsdk2_add_executable)
   set(${ARGS_TARGET} ${TARGET_NAME} PARENT_SCOPE)
 endfunction()
 
-function(cmsdk2_app_add_targets_for_architectures)
+function(cmsdk2_app_add_dependencies)
   set(OPTIONS "")
   set(PREFIX ARGS)
   set(ONE_VALUE_ARGS TARGET RAM_SIZE)
@@ -68,7 +68,7 @@ function(cmsdk2_app_add_targets_for_architectures)
       TARGET ${ARGS_TARGET}
       RAM_SIZE 0
     )
-    foreach(DEPENDENCY ${DEPENDENCIES})
+    foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
       message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
 
       target_link_libraries(${ARGS_TARGET}

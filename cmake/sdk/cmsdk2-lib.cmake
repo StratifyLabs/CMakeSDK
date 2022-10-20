@@ -35,32 +35,14 @@ function(cmsdk2_add_library)
 		CMSDK_PROPERTY_CONFIG ${ARGS_CONFIG}
 		CMSDK_PROPERTY_ARCH ${ARGS_ARCH}
 		CMSDK_PROPERTY_BUILD_FOLDER ${TARGET_BUILD_FOLDER})
-	target_compile_definitions(${TARGET_NAME}
-		PRIVATE
-		__${ARGS_ARCH}
-		___${ARGS_CONFIG}
-		CMSDK_BUILD_GIT_HASH=${CMSDK_GIT_HASH})
-	if(OPTION)
+	if(OPTION AND NOT TYPE STREQUAL INTERFACE)
 		target_compile_definitions(${TARGET_NAME}
 			PRIVATE
 			__${OPTION})
 	endif()
 	if(${CMSDK_IS_ARM})
-		cmsdk2_internal_get_arm_arch(
-			ARCHITECTURE ${ARGS_ARCH}
-			FLOAT_OPTIONS ARCH_BUILD_FLOAT_OPTIONS)
-		target_compile_definitions(${TARGET_NAME}
-			PUBLIC
-			__StratifyOS__)
-		target_compile_options(${TARGET_NAME}
-			PRIVATE
-			-mthumb -ffunction-sections -fdata-sections
-			${ARCH_BUILD_FLOAT_OPTIONS})
 		set_target_properties(${TARGET_NAME}
 			PROPERTIES NO_SYSTEM_FROM_IMPORTED TRUE)
-		target_include_directories(${TARGET_NAME}
-			PRIVATE
-			${CMSDK_LOCAL_PATH}/arm-none-eabi/include/StratifyOS)
 	endif()
 	get_target_property(TARGET_BINARY_DIR ${TARGET_NAME} BINARY_DIR)
 	install(
@@ -101,8 +83,7 @@ function(cmsdk2_library_add_dependencies)
 		foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
 			target_link_libraries(${ARGS_TARGET}
 				PUBLIC
-				${DEPENDENCY}_${CONFIG}_${ARCH}
-				)
+				${DEPENDENCY}_${CONFIG}_${ARCH})
 			message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${CMSDK_ARCH}")
 		endforeach()
 
@@ -112,8 +93,8 @@ function(cmsdk2_library_add_dependencies)
 			set(${ARGS_TARGETS} ${ARGS_TARGET} PARENT_SCOPE)
 		endif()
 
-		foreach (ARCH ${ARGS_ARCHITECTURES})
-			cmsdk_internal_is_arch_enabled(${ARCH})
+		foreach(ARCH_FROM_LIST ${ARGS_ARCHITECTURES})
+			cmsdk_internal_is_arch_enabled(${ARCH_FROM_LIST})
 			if(ARCH_ENABLED)
 				set(TARGET_NAME ${BASE_NAME})
 				if(NOT OPTION STREQUAL "")
@@ -123,7 +104,7 @@ function(cmsdk2_library_add_dependencies)
 				cmsdk2_add_library(
 					TARGET TARGET_NAME
 					NAME ${NAME}
-					ARCH ${ARCH}
+					ARCH ${ARCH_FROM_LIST}
 					OPTION ${OPTION}
 					CONFIG ${CONFIG}
 				)
@@ -134,24 +115,21 @@ function(cmsdk2_library_add_dependencies)
 
 				cmsdk2_copy_target(
 					SOURCE ${ARGS_TARGET}
-					DESTINATION ${TARGET_NAME}
-				)
+					DESTINATION ${TARGET_NAME})
 
 				foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
-					target_link_libraries(${ARGS_TARGET}
+					target_link_libraries(${TARGET_NAME}
 						PUBLIC
-						${DEPENDENCY}_${CONFIG}_${ARCH}
-						)
-					message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
+						${DEPENDENCY}_${CONFIG}_${ARCH})
+					message(STATUS "${TARGET_NAME} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
 				endforeach()
 			endif()
-		endforeach(ARCH)
+		endforeach()
 
 		foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
 			target_link_libraries(${ARGS_TARGET}
 				PUBLIC
-				${DEPENDENCY}_${CONFIG}_${ARCH}
-				)
+				${DEPENDENCY}_${CONFIG}_${ARCH})
 			message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
 		endforeach()
 	endif()

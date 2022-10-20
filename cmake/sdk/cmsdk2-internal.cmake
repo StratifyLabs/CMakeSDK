@@ -4,6 +4,11 @@ macro(cmsdk2_internal_startup)
     FULL_DOCS "The base name for the build before the config/arch/etc is added to the target"
     )
 
+  define_property(TARGET PROPERTY CMSDK_PROPERTY_SUFFIX
+    BRIEF_DOCS "The suffix for the executable file"
+    FULL_DOCS "The suffix for the executable file"
+    )
+
   define_property(TARGET PROPERTY CMSDK_PROPERTY_OPTION
     BRIEF_DOCS "The build option name"
     FULL_DOCS "Each build can have an option that causes a -D<option> to get passed to the compiler"
@@ -60,7 +65,7 @@ endfunction()
 function(cmsdk2_internal_build_target_name)
   set(OPTIONS "")
   set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS NAME OPTION CONFIG ARCH RESULT BUILD_FOLDER BUILD_FOLDER_NO_ARCH)
+  set(ONE_VALUE_ARGS NAME OPTION CONFIG ARCH RESULT BUILD_FOLDER BUILD_FOLDER_NO_ARCH SUFFIX)
   set(MULTI_VALUE_ARGS "")
   cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
 
@@ -84,6 +89,9 @@ function(cmsdk2_internal_build_target_name)
   set(BUILD_OUTPUT_NAME_NO_ARCH ${BUILD_OUTPUT_NAME}_${ARGS_CONFIG})
   set(BUILD_OUTPUT_NAME ${BUILD_OUTPUT_NAME_NO_ARCH}_${ARGS_ARCH})
   set(TARGET_NAME ${TARGET_NAME}_${ARGS_CONFIG}_${ARGS_ARCH})
+  if(ARGS_SUFFIX)
+    set(TARGET_NAME ${TARGET_NAME}${ARGS_SUFFIX})
+  endif()
 
   set(${ARGS_RESULT} ${TARGET_NAME} PARENT_SCOPE)
   if(ARGS_BUILD_FOLDER_NO_ARCH)
@@ -95,40 +103,11 @@ function(cmsdk2_internal_build_target_name)
 
 endfunction()
 
-function(cmsdk2_internal_get_arm_arch)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS ARCHITECTURE FLOAT_OPTIONS FLOAT_DIRECTORY INSTALL_DIRECTORY)
-  set(MULTI_VALUE_ARGS "")
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-
-  set(REQUIRED_ARGS ARCHITECTURE)
-  foreach(VALUE ${REQUIRED_ARGS})
-    if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_internal_get_arm_arch requires ${VALUE}")
-    endif()
-  endforeach()
-
-  cmsdk_internal_arm_arch(${ARGS_ARCHITECTURE})
-
-  if(ARGS_FLOAT_OPTIONS)
-    set(${ARGS_FLOAT_OPTIONS} ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS} PARENT_SCOPE)
-  endif()
-
-  if(ARGS_FLOAT_DIRECTORY)
-    set(${ARGS_FLOAT_DIRECTORY} ${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR} PARENT_SCOPE)
-  endif()
-
-  if(ARGS_INSTALL_DIRECTORY)
-    set(${ARGS_INSTALL_DIRECTORY} ${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR} PARENT_SCOPE)
-  endif()
-
-endfunction()
-
 macro(cmsdk2_internal_get_target_components TARGET)
   get_target_property(NAME ${TARGET} CMSDK_PROPERTY_NAME)
   get_target_property(OPTION ${TARGET} CMSDK_PROPERTY_OPTION)
   get_target_property(CONFIG ${TARGET} CMSDK_PROPERTY_CONFIG)
   get_target_property(ARCH ${TARGET} CMSDK_PROPERTY_ARCH)
   get_target_property(TARGET_BUILD_FOLDER ${TARGET} CMSDK_PROPERTY_BUILD_FOLDER)
+  get_target_property(SUFFIX ${TARGET} CMSDK_PROPERTY_SUFFIX)
 endmacro()

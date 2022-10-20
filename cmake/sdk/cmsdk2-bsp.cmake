@@ -1,7 +1,7 @@
 function(cmsdk2_bsp_add_executable)
   set(OPTIONS "")
   set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS TARGET NAME OPTION CONFIG ARCH)
+  set(ONE_VALUE_ARGS TARGET NAME OPTION CONFIG ARCH SUFFIX)
   set(MULTI_VALUE_ARGS "")
   cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
 
@@ -18,6 +18,7 @@ function(cmsdk2_bsp_add_executable)
     OPTION ${ARGS_OPTION}
     CONFIG ${ARGS_CONFIG}
     ARCH ${ARGS_ARCH}
+    SUFFIX ${ARGS_SUFFIX}
     RESULT TARGET_NAME
     BUILD_FOLDER_NO_ARCH TARGET_BUILD_FOLDER)
   add_executable(${TARGET_NAME})
@@ -51,9 +52,9 @@ function(cmsdk2_bsp_add_dependencies)
   endforeach()
 
   cmsdk2_internal_get_target_components(${ARGS_TARGET})
-  message(STATUS "CMSDK2 Add BSP Dependencies ${NAME} option:${OPTION} config:${CONFIG} arch:${ARCH}")
+  message(STATUS "CMSDK2 Add BSP Dependencies ${ARGS_TARGET} -> ${NAME} option:${OPTION} config:${CONFIG} arch:${ARCH}")
 
-  cmsdk2_internal_get_arm_arch(
+  cmsdk2_get_arm_arch(
     ARCHITECTURE ${ARCH}
     FLOAT_OPTIONS BUILD_FLOAT_OPTIONS
     FLOAT_DIRECTORY BUILD_FLOAT_DIRECTORY

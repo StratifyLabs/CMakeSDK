@@ -56,11 +56,7 @@ function(cmsdk2_add_test)
       message(FATAL_ERROR "cmsdk2_add_test requires ${VALUE}")
     endif()
   endforeach()
-  get_target_property(NAME ${ARGS_TARGET} CMSDK_PROPERTY_NAME)
-  get_target_property(CONFIG ${ARGS_TARGET} CMSDK_PROPERTY_CONFIG)
-  get_target_property(OPTION ${ARGS_TARGET} CMSDK_PROPERTY_OPTION)
-  get_target_property(ARCH ${ARGS_TARGET} CMSDK_PROPERTY_ARCH)
-  get_target_property(BUILD_FOLDER ${ARGS_TARGET} CMSDK_PROPERTY_BUILD_FOLDER)
+  cmsdk2_internal_get_target_components(${ARGS_TARGET})
   string(COMPARE EQUAL ${OPTION} "" OPTION_IS_EMPTY)
   if(OPTION)
     set(EXEC_NAME ${NAME}_${OPTION})
@@ -79,6 +75,36 @@ function(cmsdk2_add_test)
     ${NAME}_${CONFIG}
     PROPERTIES
     PASS_REGULAR_EXPRESSION "___finalResultPass___")
+endfunction()
+
+function(cmsdk2_get_arm_arch)
+  set(OPTIONS "")
+  set(PREFIX ARGS)
+  set(ONE_VALUE_ARGS ARCHITECTURE FLOAT_OPTIONS FLOAT_DIRECTORY INSTALL_DIRECTORY)
+  set(MULTI_VALUE_ARGS "")
+  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
+
+  set(REQUIRED_ARGS ARCHITECTURE)
+  foreach(VALUE ${REQUIRED_ARGS})
+    if(NOT ARGS_${VALUE})
+      message(FATAL_ERROR "cmsdk2_get_arm_arch requires ${VALUE}")
+    endif()
+  endforeach()
+
+  cmsdk_internal_arm_arch(${ARGS_ARCHITECTURE})
+
+  if(ARGS_FLOAT_OPTIONS)
+    set(${ARGS_FLOAT_OPTIONS} ${CMSDK_ARM_ARCH_BUILD_FLOAT_OPTIONS} PARENT_SCOPE)
+  endif()
+
+  if(ARGS_FLOAT_DIRECTORY)
+    set(${ARGS_FLOAT_DIRECTORY} ${CMSDK_ARM_ARCH_BUILD_FLOAT_DIR} PARENT_SCOPE)
+  endif()
+
+  if(ARGS_INSTALL_DIRECTORY)
+    set(${ARGS_INSTALL_DIRECTORY} ${CMSDK_ARM_ARCH_BUILD_INSTALL_DIR} PARENT_SCOPE)
+  endif()
+
 endfunction()
 
 

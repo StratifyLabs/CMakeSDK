@@ -11,6 +11,8 @@ function(cmsdk2_add_executable)
     endif()
   endforeach()
 
+  message(STATUS "CMSDK2 APP ${ARGS_NAME} option:${ARGS_OPTION} config:${ARGS_CONFIG} arch:${ARGS_ARCH}")
+
   if(CMSDK_IS_ARM)
     set(IS_APPEND_ELF ON)
   endif()
@@ -138,10 +140,11 @@ function(cmsdk2_app_add_dependencies)
   set(OPTIONS "")
   set(PREFIX ARGS)
   set(ONE_VALUE_ARGS TARGET RAM_SIZE)
-  set(MULTI_VALUE_ARGS DEPENDENCIES)
+  set(MULTI_VALUE_ARGS DEPENDENCIES TARGETS ARCHITECTURES)
   cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
 
-  foreach(VALUE ${MULTI_VALUE_ARGS})
+  set(REQUIRED_ARGS TARGET)
+  foreach(VALUE ${REQUIRED_ARGS})
     if(NOT ARGS_${VALUE})
       message(FATAL_ERROR "cmsdk2_app_add_arch_targets requires ${VALUE}")
     endif()
@@ -155,15 +158,13 @@ function(cmsdk2_app_add_dependencies)
   if(CMSDK_IS_LINK)
     cmsdk2_app_update_target_for_architecture(
       TARGET ${ARGS_TARGET}
-      RAM_SIZE 0
-    )
+      RAM_SIZE 0)
     foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
       message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
 
       target_link_libraries(${ARGS_TARGET}
         PRIVATE
-        ${DEPENDENCY}_${CONFIG}_link
-        )
+        ${DEPENDENCY}_${CONFIG}_link)
     endforeach()
 
     if(CMSDK_SDK_IS_LINUX)
@@ -172,45 +173,43 @@ function(cmsdk2_app_add_dependencies)
 
   else()
 
-    foreach(ARCH ${CMSDK_ARCH_LIST})
+    foreach(THIS_ARCH ${ARGS_ARCHITECTURES})
       cmsdk2_internal_is_arch_enabled(
-        ARCH ${ARCH}
+        ARCH ${THIS_ARCH}
         RESULT ARCH_ENABLED)
       if(${ARCH_ENABLED})
         cmsdk2_add_executable(
           TARGET TARGET_NAME
           NAME ${NAME}
           OPTION ${OPTION}
-          CONFIG ${ARCH})
+          CONFIG ${CONFIG})
 
         cmsdk2_copy_target(
           SOURCE ${ARGS_TARGET}
-          DESTINATION ${TARGET_NAME}
-        )
+          DESTINATION ${TARGET_NAME})
 
         # this applies architecture specific options
         cmsdk2_app_update_target_for_architecture(
           TARGET ${TARGET_NAME}
-          RAM_SIZE ${ARGS_RAM_SIZE}
-        )
+          RAM_SIZE ${ARGS_RAM_SIZE})
 
         foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
           target_link_libraries(${TARGET_NAME}
             PRIVATE
-            ${DEPENDENCY}_${CONFIG}_${ARCH}
+            ${DEPENDENCY}_${CONFIG}_${THIS_ARCH}
             )
-          message(STATUS "${TARGET_NAME} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
+          message(STATUS "${TARGET_NAME} -> ${DEPENDENCY}_${CONFIG}_${THIS_ARCH}")
         endforeach()
 
       endif()
-    endforeach(ARCH)
+    endforeach()
 
     cmsdk2_app_update_target_for_architecture(
       TARGET ${ARGS_TARGET}
       RAM_SIZE ${ARGS_RAM_SIZE}
     )
 
-    foreach(DEPENDENCY ${DEPENDENCIES})
+    foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
       target_link_libraries(${ARGS_TARGET}
         PRIVATE
         ${DEPENDENCY}_${CONFIG}_${ARCH}

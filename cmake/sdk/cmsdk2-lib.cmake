@@ -23,6 +23,8 @@ function(cmsdk2_add_library)
 		RESULT TARGET_NAME
 		BUILD_FOLDER TARGET_BUILD_FOLDER
 	)
+	message(STATUS "CMSDK2 Add Library ${ARGS_NAME} option:${ARGS_OPTION} config:${ARGS_CONFIG} arch:${ARGS_ARCH}")
+
 	add_library(${TARGET_NAME} ${LIBRARY_TYPE})
 	if(ARGS_OPTION)
 		set_target_properties(${TARGET_NAME} PROPERTIES
@@ -82,17 +84,15 @@ function(cmsdk2_library_add_dependencies)
 	set(REQUIRED_ARGS TARGET)
 	foreach(VALUE ${REQUIRED_ARGS})
 		if(NOT ARGS_${VALUE})
-			message(FATAL_ERROR "cmsdk2_update_target_for_architecture requires ${VALUE}")
+			message(FATAL_ERROR "cmsdk2_library_add_dependencies requires ${VALUE}")
 		endif()
 	endforeach()
 
-	get_target_property(NAME ${ARGS_TARGET} CMSDK_PROPERTY_NAME)
-	get_target_property(OPTION ${ARGS_TARGET} CMSDK_PROPERTY_OPTION)
-	get_target_property(CONFIG ${ARGS_TARGET} CMSDK_PROPERTY_CONFIG)
-	get_target_property(ARCH ${ARGS_TARGET} CMSDK_PROPERTY_ARCH)
-	get_target_property(TARGET_BUILD_FOLDER ${ARGS_TARGET} CMSDK_PROPERTY_BUILD_FOLDER)
+	cmsdk2_internal_get_target_components(${ARGS_TARGET})
 
-	if(${CMSDK_IS_LINK})
+	message(STATUS "CMSDK2 Add Library Dependencies ${NAME} option:${OPTION} config:${CONFIG} arch:${ARCH}")
+
+	if(CMSDK_IS_LINK)
 
 		if(ARGS_TARGETS)
 			set(${ARGS_TARGETS} ${ARGS_TARGET} PARENT_SCOPE)
@@ -123,8 +123,9 @@ function(cmsdk2_library_add_dependencies)
 				cmsdk2_add_library(
 					TARGET TARGET_NAME
 					NAME ${NAME}
+					ARCH ${ARCH}
 					OPTION ${OPTION}
-					CONFIG ${ARCH}
+					CONFIG ${CONFIG}
 				)
 
 				if(ARGS_TARGETS)
@@ -136,22 +137,22 @@ function(cmsdk2_library_add_dependencies)
 					DESTINATION ${TARGET_NAME}
 				)
 
-				foreach(DEPENDENCY ${DEPENDENCIES})
+				foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
 					target_link_libraries(${ARGS_TARGET}
 						PUBLIC
 						${DEPENDENCY}_${CONFIG}_${ARCH}
 						)
-					message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${CMSDK_ARCH}")
+					message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
 				endforeach()
 			endif()
 		endforeach(ARCH)
 
-		foreach(DEPENDENCY ${DEPENDENCIES})
+		foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
 			target_link_libraries(${ARGS_TARGET}
 				PUBLIC
-				${DEPENDENCY}_${CONFIG}_${CMSDK_ARCH}
+				${DEPENDENCY}_${CONFIG}_${ARCH}
 				)
-			message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${CMSDK_ARCH}")
+			message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
 		endforeach()
 	endif()
 

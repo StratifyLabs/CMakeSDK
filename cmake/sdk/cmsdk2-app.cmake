@@ -58,10 +58,7 @@ function(cmsdk2_app_add_dependencies)
     set(ARGS_RAM_SIZE 0)
   endif()
 
-  get_target_property(NAME ${ARGS_TARGET} CMSDK_PROPERTY_NAME)
-  get_target_property(CONFIG ${ARGS_TARGET} CMSDK_PROPERTY_CONFIG)
-  get_target_property(OPTION ${ARGS_TARGET} CMSDK_PROPERTY_OPTION)
-  get_target_property(ARCH ${ARGS_TARGET} CMSDK_PROPERTY_ARCH)
+  cmsdk2_internal_get_components(${ARGS_TARGET})
 
   if(CMSDK_IS_LINK)
     cmsdk2_app_update_target_for_architecture(

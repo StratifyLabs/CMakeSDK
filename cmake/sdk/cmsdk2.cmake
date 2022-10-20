@@ -81,5 +81,7 @@ function(cmsdk2_add_test)
     PASS_REGULAR_EXPRESSION "___finalResultPass___")
 endfunction()
 
+
 include(${CMAKE_CURRENT_LIST_DIR}/cmsdk2-app.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/cmsdk2-lib.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/cmsdk2-bsp.cmake)

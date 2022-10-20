@@ -19,7 +19,8 @@ function(cmsdk2_bsp_add_executable)
     CONFIG ${ARGS_CONFIG}
     ARCH ${ARGS_ARCH}
     SUFFIX ${ARGS_SUFFIX}
-    RESULT TARGET_NAME
+    RESULT TARGET_NAME_DISCARD
+    RESULT_NO_ARCH TARGET_NAME
     BUILD_FOLDER_NO_ARCH TARGET_BUILD_FOLDER)
   add_executable(${TARGET_NAME})
   if(ARGS_OPTION)
@@ -69,11 +70,7 @@ function(cmsdk2_bsp_add_dependencies)
 
   target_compile_definitions(${ARGS_TARGET}
     PUBLIC
-    __StratifyOS__
-    ___${CONFIG}
-    __${ARCH}
-    __HARDWARE_ID=${ARGS_HARDWARE_ID}
-    CMSDK_BUILD_GIT_HASH=${CMSDK_GIT_HASH})
+    __HARDWARE_ID=${ARGS_HARDWARE_ID})
   if(OPTION)
     target_compile_definitions(${ARGS_TARGET}
       PUBLIC
@@ -83,11 +80,6 @@ function(cmsdk2_bsp_add_dependencies)
   target_include_directories(${ARGS_TARGET}
     PUBLIC
     ${CMSDK_BUILD_SYSTEM_INCLUDES})
-
-  target_compile_options(${ARGS_TARGET}
-    PUBLIC
-    -mthumb -ffunction-sections -fdata-sections
-    ${BUILD_FLOAT_OPTIONS})
 
   foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
     set(TARGET_LIBRARY ${DEPENDENCY}_${CONFIG}_${ARCH})

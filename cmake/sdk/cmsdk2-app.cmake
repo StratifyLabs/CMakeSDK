@@ -2,7 +2,7 @@ function(cmsdk2_add_executable)
   set(OPTIONS "")
   set(PREFIX ARGS)
   set(ONE_VALUE_ARGS TARGET NAME OPTION CONFIG ARCH SUFFIX)
-  set(MULTI_VALUE_ARGS "")
+  set(MULTI_VALUE_ARGS EXTRAS)
   cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
   set(REQUIRED_ARGS TARGET NAME CONFIG ARCH)
   foreach(VALUE ${REQUIRED_ARGS})
@@ -24,7 +24,7 @@ function(cmsdk2_add_executable)
     SUFFIX ${ARGS_SUFFIX}
     RESULT TARGET_NAME
     BUILD_FOLDER TARGET_BUILD_FOLDER)
-  add_executable(${TARGET_NAME})
+  add_executable(${TARGET_NAME} ${ARGS_EXTRAS})
   if(ARGS_OPTION)
     set_target_properties(${TARGET_NAME} PROPERTIES
       CMSDK_PROPERTY_OPTION ${ARGS_OPTION})

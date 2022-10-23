@@ -1,33 +1,22 @@
 macro(cmsdk2_internal_startup)
   define_property(TARGET PROPERTY CMSDK_PROPERTY_NAME
     BRIEF_DOCS "The base name for the build"
-    FULL_DOCS "The base name for the build before the config/arch/etc is added to the target"
-    )
-
+    FULL_DOCS "The base name for the build before the config/arch/etc is added to the target")
   define_property(TARGET PROPERTY CMSDK_PROPERTY_SUFFIX
     BRIEF_DOCS "The suffix for the executable file"
-    FULL_DOCS "The suffix for the executable file"
-    )
-
+    FULL_DOCS "The suffix for the executable file")
   define_property(TARGET PROPERTY CMSDK_PROPERTY_OPTION
     BRIEF_DOCS "The build option name"
-    FULL_DOCS "Each build can have an option that causes a -D<option> to get passed to the compiler"
-    )
-
+    FULL_DOCS "Each build can have an option that causes a -D<option> to get passed to the compiler")
   define_property(TARGET PROPERTY CMSDK_PROPERTY_ARCH
     BRIEF_DOCS "The build architecture"
-    FULL_DOCS "Each build can have an associated architecture value (like v7m for cortex-m3)"
-    )
-
+    FULL_DOCS "Each build can have an associated architecture value (like v7m for cortex-m3)")
   define_property(TARGET PROPERTY CMSDK_PROPERTY_CONFIG
     BRIEF_DOCS "The build configuration: release or debug"
-    FULL_DOCS "The build configuration is usually release or debug"
-    )
-
+    FULL_DOCS "The build configuration is usually release or debug")
   define_property(TARGET PROPERTY CMSDK_PROPERTY_BUILD_FOLDER
     BRIEF_DOCS "The name of the build folder used for the target"
-    FULL_DOCS "The name of the build folder used for the target"
-    )
+    FULL_DOCS "The name of the build folder used for the target")
 endmacro()
 
 function(cmsdk2_internal_is_arch_enabled)

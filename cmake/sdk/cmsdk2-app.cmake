@@ -1,8 +1,8 @@
 function(cmsdk2_add_executable)
-  set(OPTIONS "")
+  set(OPTIONS FLAT)
   set(PREFIX ARGS)
   set(ONE_VALUE_ARGS TARGET NAME OPTION CONFIG ARCH SUFFIX)
-  set(MULTI_VALUE_ARGS EXTRAS)
+  set(MULTI_VALUE_ARGS "")
   cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
   set(REQUIRED_ARGS TARGET NAME CONFIG ARCH)
   foreach(VALUE ${REQUIRED_ARGS})
@@ -12,7 +12,9 @@ function(cmsdk2_add_executable)
   endforeach()
 
   message(STATUS "CMSDK2 APP ${ARGS_NAME} option:${ARGS_OPTION} config:${ARGS_CONFIG} arch:${ARGS_ARCH}")
-
+  if(ARGS_EXTRAS)
+    message(STATUS "   extras:${ARGS_EXTRAS}")
+  endif()
   if(CMSDK_IS_ARM)
     set(IS_APPEND_ELF ON)
   endif()
@@ -24,22 +26,30 @@ function(cmsdk2_add_executable)
     SUFFIX ${ARGS_SUFFIX}
     RESULT TARGET_NAME
     BUILD_FOLDER TARGET_BUILD_FOLDER)
-  add_executable(${TARGET_NAME} ${ARGS_EXTRAS})
+  if(ARGS_FLAT)
+    set(TARGET_NAME ${ARGS_NAME})
+  endif()
+  message(STATUS "  target:${TARGET_NAME}")
+  add_executable(${TARGET_NAME})
+
   if(ARGS_OPTION)
     set_target_properties(${TARGET_NAME} PROPERTIES
       CMSDK_PROPERTY_OPTION ${ARGS_OPTION})
+  endif()
+  if(ARGS_SUFFIX)
+    set_target_properties(${TARGET_NAME} PROPERTIES
+      CMSDK_PROPERTY_OPTION ${ARGS_SUFFIX})
   endif()
   set_target_properties(${TARGET_NAME} PROPERTIES
     CMSDK_PROPERTY_NAME ${ARGS_NAME}
     CMSDK_PROPERTY_CONFIG ${ARGS_CONFIG}
     CMSDK_PROPERTY_ARCH ${ARGS_ARCH}
-    CMSDK_PROPERTY_BUILD_FOLDER ${TARGET_BUILD_FOLDER}
-    CMSDK_PROPERTY_SUFFIX ${ARGS_SUFFIX})
+    CMSDK_PROPERTY_BUILD_FOLDER ${TARGET_BUILD_FOLDER})
 
-  if(OPTION)
+  if(ARGS_OPTION)
     target_compile_definitions(${TARGET_NAME}
       PUBLIC
-      __${OPTION})
+      __${ARGS_OPTION})
   endif()
   set(${ARGS_TARGET} ${TARGET_NAME} PARENT_SCOPE)
 endfunction()
@@ -123,7 +133,7 @@ function(cmsdk2_app_update_target_for_architecture)
     message(STATUS "CMSDK2 App BIN target: ${BINARY_OUTPUT_DIR}/${TARGET_NAME}")
     add_custom_target(bin_${TARGET_NAME}
       DEPENDS ${TARGET_NAME}
-       COMMAND ${CMAKE_OBJCOPY} -j .text -j .data -O binary ${BINARY_OUTPUT_DIR}/${TARGET_NAME} ${BINARY_OUTPUT_DIR}/${TARGET_NAME_NO_SUFFIX})
+      COMMAND ${CMAKE_OBJCOPY} -j .text -j .data -O binary ${BINARY_OUTPUT_DIR}/${TARGET_NAME} ${BINARY_OUTPUT_DIR}/${TARGET_NAME_NO_SUFFIX})
     message(STATUS "CMSDK2 App ASM target: ${BINARY_OUTPUT_DIR}/${TARGET_NAME_NO_SUFFIX}.lst")
     add_custom_target(size_${TARGET_NAME}
       DEPENDS bin_${TARGET_NAME}
@@ -160,16 +170,11 @@ function(cmsdk2_app_add_dependencies)
       TARGET ${ARGS_TARGET}
       RAM_SIZE 0)
     foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
-      message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
-
+      message(STATUS "  ${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
       target_link_libraries(${ARGS_TARGET}
         PRIVATE
-        ${DEPENDENCY}_${CONFIG}_link)
+        ${DEPENDENCY}_${CONFIG}_${ARCH})
     endforeach()
-
-    if(CMSDK_SDK_IS_LINUX)
-      target_link_libraries(${ARGS_TARGET} PRIVATE pthread rt)
-    endif()
 
   else()
 
@@ -198,7 +203,7 @@ function(cmsdk2_app_add_dependencies)
             PRIVATE
             ${DEPENDENCY}_${CONFIG}_${THIS_ARCH}
             )
-          message(STATUS "${TARGET_NAME} -> ${DEPENDENCY}_${CONFIG}_${THIS_ARCH}")
+          message(STATUS "  ${TARGET_NAME} -> ${DEPENDENCY}_${CONFIG}_${THIS_ARCH}")
         endforeach()
 
       endif()
@@ -214,7 +219,7 @@ function(cmsdk2_app_add_dependencies)
         PRIVATE
         ${DEPENDENCY}_${CONFIG}_${ARCH}
         )
-      message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
+      message(STATUS "  ${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
     endforeach()
   endif()
 endfunction()

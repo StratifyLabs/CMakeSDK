@@ -75,24 +75,19 @@ function(cmsdk2_library_add_dependencies)
 	message(STATUS "CMSDK2 Add Library Dependencies ${NAME} option:${OPTION} config:${CONFIG} arch:${ARCH}")
 
 	if(CMSDK_IS_LINK)
-
 		if(ARGS_TARGETS)
 			set(${ARGS_TARGETS} ${ARGS_TARGET} PARENT_SCOPE)
 		endif()
-
 		foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
 			target_link_libraries(${ARGS_TARGET}
 				PUBLIC
 				${DEPENDENCY}_${CONFIG}_${ARCH})
-			message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${CMSDK_ARCH}")
+			message(STATUS "  ${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${CMSDK_ARCH}")
 		endforeach()
-
 	else()
-
 		if(ARGS_TARGETS)
 			set(${ARGS_TARGETS} ${ARGS_TARGET} PARENT_SCOPE)
 		endif()
-
 		foreach(ARCH_FROM_LIST ${ARGS_ARCHITECTURES})
 			cmsdk_internal_is_arch_enabled(${ARCH_FROM_LIST})
 			if(ARCH_ENABLED)
@@ -106,22 +101,18 @@ function(cmsdk2_library_add_dependencies)
 					NAME ${NAME}
 					ARCH ${ARCH_FROM_LIST}
 					OPTION ${OPTION}
-					CONFIG ${CONFIG}
-				)
-
+					CONFIG ${CONFIG})
 				if(ARGS_TARGETS)
 					list(APPEND ${ARGS_TARGETS} ${TARGET_NAME})
 				endif()
-
 				cmsdk2_copy_target(
 					SOURCE ${ARGS_TARGET}
 					DESTINATION ${TARGET_NAME})
-
 				foreach(DEPENDENCY ${ARGS_DEPENDENCIES})
 					target_link_libraries(${TARGET_NAME}
 						PUBLIC
 						${DEPENDENCY}_${CONFIG}_${ARCH})
-					message(STATUS "${TARGET_NAME} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
+					message(STATUS "  ${TARGET_NAME} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
 				endforeach()
 			endif()
 		endforeach()
@@ -130,7 +121,7 @@ function(cmsdk2_library_add_dependencies)
 			target_link_libraries(${ARGS_TARGET}
 				PUBLIC
 				${DEPENDENCY}_${CONFIG}_${ARCH})
-			message(STATUS "${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
+			message(STATUS "  ${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
 		endforeach()
 	endif()
 

@@ -38,7 +38,7 @@ function(cmsdk2_add_executable)
   endif()
   if(ARGS_SUFFIX)
     set_target_properties(${TARGET_NAME} PROPERTIES
-      CMSDK_PROPERTY_OPTION ${ARGS_SUFFIX})
+      CMSDK_PROPERTY_SUFFIX ${ARGS_SUFFIX})
   endif()
   set_target_properties(${TARGET_NAME} PROPERTIES
     CMSDK_PROPERTY_NAME ${ARGS_NAME}
@@ -131,6 +131,7 @@ function(cmsdk2_app_update_target_for_architecture)
       "${LINK_FLAGS}")
     string(REPLACE ${SUFFIX} "" TARGET_NAME_NO_SUFFIX ${TARGET_NAME})
     message(STATUS "CMSDK2 App BIN target: ${BINARY_OUTPUT_DIR}/${TARGET_NAME}")
+    message(STATUS "   No Suffix: ${TARGET_NAME_NO_SUFFIX} removed ${SUFFIX}")
     add_custom_target(bin_${TARGET_NAME}
       DEPENDS ${TARGET_NAME}
       COMMAND ${CMAKE_OBJCOPY} -j .text -j .data -O binary ${BINARY_OUTPUT_DIR}/${TARGET_NAME} ${BINARY_OUTPUT_DIR}/${TARGET_NAME_NO_SUFFIX})

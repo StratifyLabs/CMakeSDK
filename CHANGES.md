@@ -1,3 +1,9 @@
+# v2.1.0
+
+## New Features
+
+- Updated `cmsdk2` functions are now fully functional
+
 # v2.0.1
 
 ## Bug Fixes

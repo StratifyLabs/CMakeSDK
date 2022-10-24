@@ -1,3 +1,9 @@
+# v2.1.0
+
+## New Features
+
+- Updated `cmsdk2` functions with named arguments for BSP, LIB and APP
+
 # v2.0.0
 
 ## New Features

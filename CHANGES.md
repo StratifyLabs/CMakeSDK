@@ -1,3 +1,9 @@
+# v2.1.1
+
+## Bug Fixes
+
+- Fixed a bug with the suffix not being stripped when making embedded applications
+
 # v2.1.0
 
 ## New Features

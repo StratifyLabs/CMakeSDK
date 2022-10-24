@@ -1,3 +1,9 @@
+# v2.2.0 (unreleased)
+
+## New Features
+
+- None yet
+
 # v2.1.0
 
 ## New Features

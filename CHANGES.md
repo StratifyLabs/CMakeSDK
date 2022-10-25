@@ -4,6 +4,7 @@
 
 - Fixed a bug with the suffix not being stripped when making embedded applications
 - Remove architecture specs for macOS.
+- Add `wifi_api_t` to `sdk/api.h`
 
 # v2.1.0
 

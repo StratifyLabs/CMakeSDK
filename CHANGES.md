@@ -8,7 +8,14 @@
 
 ## New Features
 
-- Updated `cmsdk2` functions with named arguments for BSP, LIB and APP
+- Updated `cmsdk2` functions are now fully functional
+
+# v2.0.1
+
+## Bug Fixes
+
+- Fixed typo with `CMSDK_SDK_PULL_TARGET`
+- Add updates to `cmsdk2_` family of functions (experimental)
 
 # v2.0.0
 

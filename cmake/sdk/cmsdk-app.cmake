@@ -4,6 +4,7 @@ function(cmsdk_app_target OUTPUT BASE_NAME OPTION CONFIG ARCH)
 	set(${OUTPUT}_TARGET ${CMSDK_SDK_TMP_INSTALL}_${ARCH}.elf PARENT_SCOPE)
 endfunction()
 
+
 function(cmsdk_app OPTION_LIST RAM_SIZE)
 
 	list(GET OPTION_LIST 0 BASE_NAME)
@@ -100,6 +101,7 @@ function(cmsdk_app OPTION_LIST RAM_SIZE)
 
 endfunction()
 
+
 function(cmsdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 
 	list(GET OPTION_LIST 0 BASE_NAME)
@@ -173,3 +175,5 @@ function(cmsdk_app_add_arch_targets OPTION_LIST DEPENDENCIES RAM_SIZE)
 
 	endif()
 endfunction()
+
+

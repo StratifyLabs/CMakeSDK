@@ -92,6 +92,22 @@ macro(cmsdk_internal_startup)
     )
 
   cmsdk_internal_get_git_hash()
+
+  define_property(TARGET PROPERTY CMSDK_PROPERTY_OPTION
+    BRIEF_DOCS "The build option name"
+    FULL_DOCS "Each build can have an option that causes a -D<option> to get passed to the compiler"
+    )
+
+  define_property(TARGET PROPERTY CMSDK_PROPERTY_ARCH
+    BRIEF_DOCS "The build architecture"
+    FULL_DOCS "Each build can have an associated architecture value (like v7m for cortex-m3)"
+    )
+
+  define_property(TARGET PROPERTY CMSDK_PROPERTY_CONFIG
+    BRIEF_DOCS "The build configuration: release or debug"
+    FULL_DOCS "The build configuration is usually release or debug"
+    )
+
 endmacro()
 
 macro(cmsdk_internal_build_target_name BASE_NAME OPTION_NAME CONFIG_NAME ARCH_NAME)
@@ -130,6 +146,8 @@ macro(cmsdk_internal_build_target_name BASE_NAME OPTION_NAME CONFIG_NAME ARCH_NA
   endif()
 
 endmacro()
+
+
 
 macro(cmsdk_internal_arm_arch ARCH_NAME)
 

@@ -112,6 +112,47 @@ function(cmsdk2_get_arm_arch)
 
 endfunction()
 
+function(cmsdk2_check_version)
+  set(OPTIONS "")
+  set(PREFIX ARGS)
+  set(ONE_VALUE_ARGS NAME VERSION MINIMUM_VERSION MAXIMUM_VERSION)
+  set(MULTI_VALUE_ARGS "")
+  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
+  set(REQUIRED_ARGS NAME MINIMUM_VERSION)
+  foreach(VALUE ${REQUIRED_ARGS})
+    if(NOT ARGS_${VALUE})
+      message(FATAL_ERROR "cmsdk2_check_version requires ${VALUE}")
+    endif()
+  endforeach()
+
+  if(NOT ARGS_VERSION)
+    message(STATUS "Dependency ${ARGS_NAME} version variable is empty")
+    message(FATAL_ERROR "${ARGS_NAME} version must be at least ${ARGS_MINIMUM_VERSION}")
+  else()
+    if(ARGS_MAXIMUM_VERSION)
+      message(STATUS "  Check ${ARGS_NAME} Version ${ARGS_MINIMUM_VERSION} < ${ARGS_VERSION} < ${ARGS_MAXIMUM_VERSION}")
+      if(ARGS_MAXIMUM_VERSION)
+        if(${ARGS_VERSION} VERSION_GREATER ${ARGS_MAXIMUM_VERSION})
+          message(FATAL_ERROR "Dependency ${ARGS_NAME} version ${ARGS_VERSION} is greater than maximum version ${ARGS_MAXIMUM_VERSION}")
+        endif()
+      endif()
+    else()
+      message(STATUS "  Check ${ARGS_NAME} Version ${ARGS_MINIMUM_VERSION} < ${ARGS_VERSION}")
+      if(${ARGS_VERSION} VERSION_LESS ${ARGS_MINIMUM_VERSION})
+        message(FATAL_ERROR "Dependency ${ARGS_NAME} version ${ARGS_VERSION} is less than minimum version ${ARGS_MINIMUM_VERSION}")
+      endif()
+    endif()
+
+  endif()
+
+endfunction()
+
+function(cmsdk2_minimum_required MINIMUM_VERSION)
+  cmsdk2_check_version(
+    NAME CMSDK
+    VERSION ${CMSDK_VERSION}
+    MINIMUM_VERSION ${MINIMUM_VERSION})
+endfunction()
 
 include(${CMAKE_CURRENT_LIST_DIR}/cmsdk2-app.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/cmsdk2-lib.cmake)

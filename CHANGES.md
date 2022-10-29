@@ -4,7 +4,7 @@
 
 - Fixed the `CHANGES.md` file
 - Adding missing `cmsdk2_` function to compare semantic version values
-- Add fuction to check minimum required CMSDK version
+- Add function to check minimum required CMSDK version
 
 # v2.1.1 
 

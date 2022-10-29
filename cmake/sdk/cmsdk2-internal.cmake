@@ -17,6 +17,8 @@ macro(cmsdk2_internal_startup)
   define_property(TARGET PROPERTY CMSDK_PROPERTY_BUILD_FOLDER
     BRIEF_DOCS "The name of the build folder used for the target"
     FULL_DOCS "The name of the build folder used for the target")
+
+  set(CMSDK_VERSION 2.1.2 CACHE INTERNAL "Set CMSDK Version")
 endmacro()
 
 function(cmsdk2_internal_is_arch_enabled)
@@ -105,3 +107,4 @@ macro(cmsdk2_internal_get_target_components TARGET)
   get_target_property(TARGET_BUILD_FOLDER ${TARGET} CMSDK_PROPERTY_BUILD_FOLDER)
   get_target_property(SUFFIX ${TARGET} CMSDK_PROPERTY_SUFFIX)
 endmacro()
+

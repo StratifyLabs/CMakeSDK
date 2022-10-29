@@ -1,8 +1,16 @@
-# v2.2.0 (unreleased)
+# v2.1.2
 
-## New Features
+## Bug Fixes
 
-- None yet
+- Fixed the `CHANGES.md` file
+- Adding missing `cmsdk2_` function to compare semantic version values
+- Add fuction to check minimum required CMSDK version
+
+# v2.1.1 
+
+## Bug Fixes
+
+- Fixed issues with suffix when building `elf` files for MCUs
 
 # v2.1.0
 

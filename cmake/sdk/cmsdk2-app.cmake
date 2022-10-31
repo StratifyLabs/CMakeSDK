@@ -1,15 +1,10 @@
 function(cmsdk2_add_executable)
-  set(OPTIONS FLAT)
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS TARGET NAME OPTION CONFIG ARCH SUFFIX)
-  set(MULTI_VALUE_ARGS "")
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-  set(REQUIRED_ARGS TARGET NAME CONFIG ARCH)
-  foreach(VALUE ${REQUIRED_ARGS})
-    if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_app_target requires ${VALUE}")
-    endif()
-  endforeach()
+  cmsdk2_internal_parse_arguments(
+    INTERNAL_FUNCTION_NAME cmsdk2_add_executable
+    OPTIONS FLAT
+    ARGUMENTS ${ARGV}
+    REQUIRED TARGET NAME CONFIG ARCH
+    ONE_VALUE TARGET NAME OPTION CONFIG ARCH SUFFIX)
 
   message(STATUS "CMSDK2 APP ${ARGS_NAME} option:${ARGS_OPTION} config:${ARGS_CONFIG} arch:${ARGS_ARCH}")
   if(ARGS_EXTRAS)
@@ -55,17 +50,12 @@ function(cmsdk2_add_executable)
 endfunction()
 
 function(cmsdk2_app_update_target_for_architecture)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS TARGET RAM_SIZE)
-  set(MULTI_VALUE_ARGS "")
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-  set(REQUIRED_ARGS TARGET)
-  foreach(VALUE ${REQUIRED_ARGS})
-    if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_app_update_target_for_architecture requires ${VALUE}")
-    endif()
-  endforeach()
+  cmsdk2_internal_parse_arguments(
+    INTERNAL_FUNCTION_NAME cmsdk2_app_update_target_for_architecture
+    ARGUMENTS ${ARGV}
+    REQUIRED TARGET
+    ONE_VALUE TARGET RAM_SIZE)
+
   set(TARGET_NAME ${ARGS_TARGET})
   cmsdk2_internal_get_target_components(${TARGET_NAME})
 
@@ -148,18 +138,13 @@ function(cmsdk2_app_update_target_for_architecture)
 endfunction()
 
 function(cmsdk2_app_add_dependencies)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS TARGET RAM_SIZE)
-  set(MULTI_VALUE_ARGS DEPENDENCIES TARGETS ARCHITECTURES)
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
+  cmsdk2_internal_parse_arguments(
+    INTERNAL_FUNCTION_NAME cmsdk2_app_add_dependencies
+    ARGUMENTS ${ARGV}
+    MULTI_VALUE DEPENDENCIES TARGETS ARCHITECTURES
+    REQUIRED TARGET
+    ONE_VALUE TARGET RAM_SIZE)
 
-  set(REQUIRED_ARGS TARGET)
-  foreach(VALUE ${REQUIRED_ARGS})
-    if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_app_add_arch_targets requires ${VALUE}")
-    endif()
-  endforeach()
   if(NOT ARGS_RAM_SIZE)
     set(ARGS_RAM_SIZE 0)
   endif()

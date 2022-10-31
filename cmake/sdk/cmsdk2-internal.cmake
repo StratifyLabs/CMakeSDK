@@ -108,3 +108,41 @@ macro(cmsdk2_internal_get_target_components TARGET)
   get_target_property(SUFFIX ${TARGET} CMSDK_PROPERTY_SUFFIX)
 endmacro()
 
+macro(cmsdk2_internal_parse_arguments)
+  cmake_parse_arguments(
+    INPUT_ARGS
+    ""
+    INTERNAL_FUNCTION_NAME
+    "OPTIONS;REQUIRED;ONE_VALUE;MULTI_VALUE;ARGUMENTS"
+    ${ARGV})
+
+  if(NOT INPUT_ARGS_ARGUMENTS)
+    message(FATAL_ERROR "cmsdk2_internal_parse_arguments requires ARGUMENTS")
+  endif()
+    if(NOT INPUT_ARGS_REQUIRED)
+    message(FATAL_ERROR "cmsdk2_internal_parse_arguments requires REQUIRED")
+  endif()
+
+  if(INPUT_ARGS_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "cmsdk2_internal_parse_arguments has unparsed arguments ${INPUT_ARGS_UNPARSED_ARGUMENTS}")
+  endif()
+
+  cmake_parse_arguments(
+    ARGS
+    "${INPUT_ARGS_OPTIONS}"
+    "${INPUT_ARGS_ONE_VALUE}"
+    "${INPUT_ARGS_MULTI_VALUE}"
+    ${INPUT_ARGS_ARGUMENTS})
+
+  foreach(VALUE ${INPUT_ARGS_REQUIRED})
+    if(NOT ARGS_${VALUE})
+      message(FATAL_ERROR "${INPUT_ARGS_INTERNAL_FUNCTION_NAME} requires ${VALUE}")
+    endif()
+  endforeach()
+
+  if(ARGS_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "${INPUT_ARGS_INTERNAL_FUNCTION_NAME} has unparsed arguments ${ARGS_UNPARSED_ARGUMENTS}")
+  endif()
+endmacro()
+
+

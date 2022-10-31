@@ -1,15 +1,10 @@
 function(cmsdk2_add_sources)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS TARGET DIRECTORY BINARY_DIRECTORY VISIBILITY SOURCES_NAME)
-  set(MULTI_VALUE_ARGS "")
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-  set(REQUIRED_ARGS TARGET DIRECTORY)
-  foreach(VALUE ${REQUIRED_ARGS})
-    if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_add_sources requires ${VALUE}")
-    endif()
-  endforeach()
+  cmsdk2_internal_parse_arguments(
+    INTERNAL_FUNCTION_NAME cmsdk2_add_sources
+    ARGUMENTS ${ARGV}
+    REQUIRED TARGET DIRECTORY
+    ONE_VALUE TARGET DIRECTORY BINARY_DIRECTORY VISIBILITY SOURCES_NAME)
+
   if(ARGS_VISIBILITY)
     set(VISIBILITY ${ARGS_VISIBILITY})
   else()
@@ -34,33 +29,24 @@ function(cmsdk2_add_sources)
 endfunction()
 
 function(cmsdk2_copy_target)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS SOURCE)
-  set(MULTI_VALUE_ARGS DESTINATION)
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-  if(NOT ARGS_DESTINATION)
-    message(FATAL_ERROR "cmsdk2_copy_target requires DESTINATION")
-  endif()
-  if(NOT ARGS_SOURCE)
-    message(FATAL_ERROR "cmsdk2_copy_target requires SOURCE")
-  endif()
+  cmsdk2_internal_parse_arguments(
+    INTERNAL_FUNCTION_NAME cmsdk2_copy_target
+    ARGUMENTS ${ARGV}
+    REQUIRED SOURCE DESTINATION
+    ONE_VALUE SOURCE DESTINATION)
+
   foreach(DEST ${ARGS_DESTINATION})
     cmsdk_copy_target(${ARGS_SOURCE} ${DEST})
   endforeach()
 endfunction()
 
 function(cmsdk2_add_test)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS TARGET)
-  set(MULTI_VALUE_ARGS "")
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-  foreach(VALUE ${ONE_VALUE_ARGS})
-    if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_add_test requires ${VALUE}")
-    endif()
-  endforeach()
+  cmsdk2_internal_parse_arguments(
+    INTERNAL_FUNCTION_NAME cmsdk2_add_test
+    ARGUMENTS ${ARGV}
+    REQUIRED TARGET
+    ONE_VALUE TARGET)
+
   cmsdk2_internal_get_target_components(${ARGS_TARGET})
   string(COMPARE EQUAL ${OPTION} "" OPTION_IS_EMPTY)
   if(OPTION)
@@ -83,18 +69,11 @@ function(cmsdk2_add_test)
 endfunction()
 
 function(cmsdk2_get_arm_arch)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS ARCHITECTURE FLOAT_OPTIONS FLOAT_DIRECTORY INSTALL_DIRECTORY)
-  set(MULTI_VALUE_ARGS "")
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-
-  set(REQUIRED_ARGS ARCHITECTURE)
-  foreach(VALUE ${REQUIRED_ARGS})
-    if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_get_arm_arch requires ${VALUE}")
-    endif()
-  endforeach()
+  cmsdk2_internal_parse_arguments(
+    INTERNAL_FUNCTION_NAME cmsdk2_get_arm_arch
+    ARGUMENTS ${ARGV}
+    REQUIRED ARCHITECTURE
+    ONE_VALUE ARCHITECTURE FLOAT_OPTIONS FLOAT_DIRECTORY INSTALL_DIRECTORY)
 
   cmsdk_internal_arm_arch(${ARGS_ARCHITECTURE})
 
@@ -113,17 +92,11 @@ function(cmsdk2_get_arm_arch)
 endfunction()
 
 function(cmsdk2_check_version)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS NAME VERSION MINIMUM_VERSION MAXIMUM_VERSION)
-  set(MULTI_VALUE_ARGS "")
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-  set(REQUIRED_ARGS NAME MINIMUM_VERSION)
-  foreach(VALUE ${REQUIRED_ARGS})
-    if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_check_version requires ${VALUE}")
-    endif()
-  endforeach()
+  cmsdk2_internal_parse_arguments(
+    INTERNAL_FUNCTION_NAME cmsdk2_check_version
+    ARGUMENTS ${ARGV}
+    REQUIRED NAME MINIMUM_VERSION
+    ONE_VALUE NAME VERSION MINIMUM_VERSION MAXIMUM_VERSION)
 
   if(NOT ARGS_VERSION)
     message(STATUS "Dependency ${ARGS_NAME} version variable is empty")

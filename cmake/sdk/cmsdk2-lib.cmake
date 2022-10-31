@@ -1,15 +1,10 @@
 function(cmsdk2_add_library)
-	set(OPTIONS "")
-	set(PREFIX ARGS)
-	set(ONE_VALUE_ARGS TARGET NAME OPTION CONFIG ARCH TYPE)
-	set(MULTI_VALUE_ARGS "")
-	cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-	set(REQUIRED_ARGS TARGET NAME CONFIG ARCH)
-	foreach(VALUE ${REQUIRED_ARGS})
-		if(NOT ARGS_${VALUE})
-			message(FATAL_ERROR "cmsdk2_add_library requires ${VALUE}")
-		endif()
-	endforeach()
+	cmsdk2_internal_parse_arguments(
+		INTERNAL_FUNCTION_NAME cmsdk2_add_library
+		ARGUMENTS ${ARGV}
+		REQUIRED TARGET NAME CONFIG ARCH
+		ONE_VALUE TARGET NAME OPTION CONFIG ARCH TYPE)
+
 	if(ARGS_TYPE)
 		set(LIBRARY_TYPE ${ARGS_TYPE})
 	else()
@@ -57,18 +52,12 @@ function(cmsdk2_add_library)
 endfunction()
 
 function(cmsdk2_library_add_dependencies)
-	set(OPTIONS "")
-	set(PREFIX ARGS)
-	set(ONE_VALUE_ARGS TARGET)
-	set(MULTI_VALUE_ARGS DEPENDENCIES TARGETS ARCHITECTURES)
-	cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-
-	set(REQUIRED_ARGS TARGET)
-	foreach(VALUE ${REQUIRED_ARGS})
-		if(NOT ARGS_${VALUE})
-			message(FATAL_ERROR "cmsdk2_library_add_dependencies requires ${VALUE}")
-		endif()
-	endforeach()
+	cmsdk2_internal_parse_arguments(
+		INTERNAL_FUNCTION_NAME cmsdk2_library_add_dependencies
+		ARGUMENTS ${ARGV}
+		REQUIRED TARGET
+		ONE_VALUE TARGET
+		MULTI_VALUE DEPENDENCIES TARGETS ARCHITECTURES)
 
 	cmsdk2_internal_get_target_components(${ARGS_TARGET})
 

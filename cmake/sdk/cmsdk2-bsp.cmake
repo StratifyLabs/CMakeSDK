@@ -1,16 +1,9 @@
 function(cmsdk2_bsp_add_executable)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS TARGET NAME OPTION CONFIG ARCH SUFFIX)
-  set(MULTI_VALUE_ARGS "")
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-
-  set(REQUIRED_ARGS TARGET NAME CONFIG ARCH)
-  foreach(VALUE ${REQUIRED_ARGS})
-    if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_bsp_add_executable requires ${VALUE}")
-    endif()
-  endforeach()
+  cmsdk2_internal_parse_arguments(
+    INTERNAL_FUNCTION_NAME cmsdk2_bsp_add_executable
+    ARGUMENTS ${ARGV}
+    REQUIRED TARGET NAME CONFIG ARCH
+    ONE_VALUE TARGET TARGET NAME OPTION CONFIG ARCH SUFFIX)
 
   message(STATUS "CMSDK2 BSP ${ARGS_NAME} option:${ARGS_OPTION} config:${ARGS_CONFIG} arch:${ARGS_ARCH}")
   cmsdk2_internal_build_target_name(
@@ -40,17 +33,12 @@ function(cmsdk2_bsp_add_executable)
 endfunction()
 
 function(cmsdk2_bsp_add_dependencies)
-  set(OPTIONS "")
-  set(PREFIX ARGS)
-  set(ONE_VALUE_ARGS TARGET HARDWARE_ID START_ADDRESS)
-  set(MULTI_VALUE_ARGS DEPENDENCIES)
-  cmake_parse_arguments(PARSE_ARGV 0 ${PREFIX} "${OPTIONS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}")
-
-  foreach(VALUE ${ONE_VALUE_ARGS})
-    if(NOT ARGS_${VALUE})
-      message(FATAL_ERROR "cmsdk2_bsp_add_dependencies requires ${VALUE}")
-    endif()
-  endforeach()
+  cmsdk2_internal_parse_arguments(
+    INTERNAL_FUNCTION_NAME cmsdk2_bsp_add_dependencies
+    ARGUMENTS ${ARGV}
+    REQUIRED TARGET HARDWARE_ID START_ADDRESS
+    MULTI_VALUE DEPENDENCIES
+    ONE_VALUE TARGET HARDWARE_ID START_ADDRESS)
 
   cmsdk2_internal_get_target_components(${ARGS_TARGET})
   message(STATUS "CMSDK2 Add BSP Dependencies ${ARGS_TARGET} -> ${NAME} option:${OPTION} config:${CONFIG} arch:${ARCH}")
@@ -86,7 +74,7 @@ function(cmsdk2_bsp_add_dependencies)
     target_link_libraries(${ARGS_TARGET}
       PRIVATE
       ${TARGET_LIBRARY})
-    message(STATUS "${ARGS_TARGET} -> ${TARGET_LIBRARY}")
+    message(STATUS "  ${ARGS_TARGET} -> ${TARGET_LIBRARY}")
   endforeach()
 
   get_target_property(EXISTING_LINK_FLAGS ${ARGS_TARGET} LINK_FLAGS)

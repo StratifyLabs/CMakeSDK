@@ -1,3 +1,10 @@
+# v2.1.3
+
+## Bug Fixes
+
+- Improved internal error checking using `cmsdk2_internal_parse_arguments()`
+  - This checks for unparsed arguments on all `cmsdk2_` named argument calls
+  
 # v2.1.2
 
 ## Bug Fixes

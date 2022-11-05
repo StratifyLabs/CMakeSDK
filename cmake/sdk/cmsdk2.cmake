@@ -33,10 +33,22 @@ function(cmsdk2_copy_target)
     INTERNAL_FUNCTION_NAME cmsdk2_copy_target
     ARGUMENTS ${ARGV}
     REQUIRED SOURCE DESTINATION
-    ONE_VALUE SOURCE DESTINATION)
+    ONE_VALUE SOURCE
+    MULTI_VALUE DESTINATION)
 
   foreach(DEST ${ARGS_DESTINATION})
     cmsdk_copy_target(${ARGS_SOURCE} ${DEST})
+    get_target_property(TARGET_DEPENDENCIES ${DEST} CMSDK_PROPERTY_DEPENDENCIES)
+    get_target_property(CONFIG ${DEST} CMSDK_PROPERTY_CONFIG)
+    get_target_property(ARCH ${DEST} CMSDK_PROPERTY_ARCH)
+    if(TARGET_DEPENDENCIES)
+      foreach(DEPENDENCY ${TARGET_DEPENDENCIES})
+        message(STATUS "  ${DEST} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
+        target_link_libraries(${DEST}
+          PUBLIC
+          ${DEPENDENCY}_${CONFIG}_${ARCH})
+      endforeach()
+    endif()
   endforeach()
 endfunction()
 

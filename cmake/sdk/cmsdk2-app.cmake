@@ -151,6 +151,12 @@ function(cmsdk2_app_add_dependencies)
 
   cmsdk2_internal_get_target_components(${ARGS_TARGET})
 
+  if(ARGS_DEPENDENCIES)
+    message(STATUS "  ${ARGS_TARGET} -> Save dependencies ${ARGS_DEPENDENCIES}")
+    set_target_properties(${ARGS_TARGET} PROPERTIES
+      CMSDK_PROPERTY_DEPENDENCIES "${ARGS_DEPENDENCIES}")
+  endif()
+
   if(CMSDK_IS_LINK)
     cmsdk2_app_update_target_for_architecture(
       TARGET ${ARGS_TARGET}

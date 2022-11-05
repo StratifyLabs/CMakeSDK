@@ -590,7 +590,7 @@ macro(cmsdk_internal_shared_properties)
     WINDOWS_EXPORT_ALL_SYMBOLS
     WORKING_DIRECTORY
     WRAP_EXCLUDE
-    )
+    CMSDK_PROPERTY_DEPENDENCIES)
 endmacro()
 
 

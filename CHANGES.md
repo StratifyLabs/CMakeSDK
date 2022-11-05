@@ -3,6 +3,7 @@
 ## Bug Fixes
 
 - Handle copying `DEPENDENCIES` with appropriate `CONFIG` and `ARCH` settings
+- Copy `.clang-format` to project root (if it doesn't exist) during bootstrap
 
 # v2.1.3
 

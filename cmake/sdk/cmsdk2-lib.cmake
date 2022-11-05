@@ -63,6 +63,12 @@ function(cmsdk2_library_add_dependencies)
 
 	message(STATUS "CMSDK2 Add Library Dependencies ${NAME} option:${OPTION} config:${CONFIG} arch:${ARCH}")
 
+	if(ARGS_DEPENDENCIES)
+		message(STATUS "  ${ARGS_TARGET} -> Save dependencies ${ARGS_DEPENDENCIES}")
+		set_target_properties(${ARGS_TARGET} PROPERTIES
+			CMSDK_PROPERTY_DEPENDENCIES "${ARGS_DEPENDENCIES}")
+	endif()
+
 	if(CMSDK_IS_LINK)
 		if(ARGS_TARGETS)
 			set(${ARGS_TARGETS} ${ARGS_TARGET} PARENT_SCOPE)

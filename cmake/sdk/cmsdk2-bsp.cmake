@@ -55,6 +55,12 @@ function(cmsdk2_bsp_add_dependencies)
   cmsdk2_internal_get_target_components(${ARGS_TARGET})
   message(STATUS "CMSDK2 Add BSP Dependencies ${ARGS_TARGET} -> ${NAME} option:${OPTION} config:${CONFIG} arch:${ARCH}")
 
+  if(ARGS_DEPENDENCIES)
+    message(STATUS "  ${ARGS_TARGET} -> Save dependencies ${ARGS_DEPENDENCIES}")
+    set_target_properties(${ARGS_TARGET} PROPERTIES
+      CMSDK_PROPERTY_DEPENDENCIES "${ARGS_DEPENDENCIES}")
+  endif()
+
   cmsdk2_get_arm_arch(
     ARCHITECTURE ${ARCH}
     FLOAT_OPTIONS BUILD_FLOAT_OPTIONS

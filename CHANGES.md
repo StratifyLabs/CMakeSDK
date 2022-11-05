@@ -1,3 +1,9 @@
+# v2.1.4 (unreleased)
+
+## Bug Fixes
+
+- Handle copying `DEPENDENCIES` with appropriate `CONFIG` and `ARCH` settings
+
 # v2.1.3
 
 ## Bug Fixes

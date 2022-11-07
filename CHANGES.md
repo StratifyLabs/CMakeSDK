@@ -4,6 +4,7 @@
 
 - Handle copying `DEPENDENCIES` with appropriate `CONFIG` and `ARCH` settings
 - Copy `.clang-format` to project root (if it doesn't exist) during bootstrap
+- Add check for GCC 11.3.1
 
 # v2.1.3
 

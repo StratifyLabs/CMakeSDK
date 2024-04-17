@@ -66,7 +66,7 @@ function(cmsdk2_app_update_target_for_architecture)
   target_compile_definitions(${TARGET_NAME}
     PUBLIC
     ___${CONFIG}
-    __${ARCH}
+    __${ARCH}=__${ARCH}
     CMSDK_BUILD_GIT_HASH=${CMSDK_GIT_HASH})
 
   if(ARCH STREQUAL "link")

@@ -33,7 +33,7 @@ function(cmsdk_app OPTION_LIST RAM_SIZE)
 			PUBLIC
 			___${CMSDK_SDK_TMP_CONFIG}
 			__${CMSDK_SDK_TMP_OPTION}
-			__${ARCH}
+			__${ARCH}=__${ARCH}
 			CMSDK_BUILD_GIT_HASH=${CMSDK_GIT_HASH}
 			)
 
@@ -51,7 +51,7 @@ function(cmsdk_app OPTION_LIST RAM_SIZE)
 			__StratifyOS__
 			__${CMSDK_SDK_TMP_CONFIG}
 			__${CMSDK_SDK_TMP_OPTION}
-			__${ARCH}
+			__${ARCH}=__${ARCH}
 			CMSDK_BUILD_GIT_HASH=${CMSDK_GIT_HASH}
 			)
 

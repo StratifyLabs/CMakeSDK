@@ -110,7 +110,7 @@ function(cmsdk_library OPTION_LIST)
 	target_compile_definitions(${CMSDK_SDK_TMP_TARGET}
 		PUBLIC
 		PRIVATE
-		__${ARCH}
+		__${ARCH}=__${ARCH}
 		___${CMSDK_SDK_TMP_CONFIG}
 		__${CMSDK_SDK_TMP_OPTION}
 		CMSDK_BUILD_GIT_HASH=${CMSDK_GIT_HASH}

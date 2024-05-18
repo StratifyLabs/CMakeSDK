@@ -3,7 +3,7 @@
 #ifndef CMSDK_SDK_API_H
 #define CMSDK_SDK_API_H
 
-#include <sdk/types.h>
+#include "types.h"
 
 typedef struct {
   const char *name;

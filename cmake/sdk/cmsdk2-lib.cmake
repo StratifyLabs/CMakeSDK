@@ -118,6 +118,13 @@ function(cmsdk2_library_add_dependencies)
 				${DEPENDENCY}_${CONFIG}_${ARCH})
 			message(STATUS "  ${ARGS_TARGET} -> ${DEPENDENCY}_${CONFIG}_${ARCH}")
 		endforeach()
+		
+		target_compile_definitions(${ARGS_TARGET}
+			INTERFACE
+			___${CONFIG}
+			__${ARCH}=__${ARCH}
+			CMSDK_BUILD_GIT_HASH=${CMSDK_GIT_HASH})
+
 	endif()
 
 endfunction()

@@ -1,0 +1,93 @@
+[deps]
+
+[vscode.extensions]
+recommendations = ["llvm-vs-code-extensions.vscode-clangd", "ms-vscode.cmake-tools"]
+
+[vscode.settings]
+"cmake.buildDirectory" = "${workspaceFolder}/cmake_arm"
+"cmake.cmakePath" = "${workspaceFolder}/sysroot/bin/cmake"
+"cmake.generator" = "Ninja"
+"cmake.buildTask" = true
+"cmake.configureOnEdit" = false
+"cmake.loadCompileCommands" = true
+"cmake.useCMakePresets" = "never"
+"cmake.buildEnvironment" = { PATH = "${workspaceFolder}/sysroot/bin" }
+
+[assets.'spaces_assets/profile.sh']
+path = "sdk_profile.sh"
+type = "HardLink"
+
+[assets.'spaces_assets/clang-format']
+path = ".clang-format"
+type = "HardLink"
+
+[assets.'spaces_assets/clangd.json']
+path = ".clangd"
+type = "HardLink"
+
+[archives.stratifyos_arm_none_eabi]
+url = "https://github.com/StratifyLabs/SDK/releases/download/v11.3.1/stratifyos-arm-none-eabi-11.3.1.zip"
+sha256 = "d32b82768b4d6c1f106a32182b386164fccd72863c7d558b3fef129281780ac4"
+link = "Hard"
+add_prefix = "{SPACES_SYSROOT}"
+
+[platform_archives.cmake.macos_x86_64]
+url = "https://github.com/Kitware/CMake/releases/download/v3.29.5/cmake-3.29.5-macos-universal.tar.gz"
+sha256 = "2efa78e6cd84a4f0276cfce83c1ad5629c9884287a673290f9f52b1c575bd3ec"
+link = "Hard"
+strip_prefix = "cmake-3.29.5-macos-universal/CMake.app/Contents"
+add_prefix = "{SPACES_SYSROOT}"
+files = [
+    "/bin/**/*",
+    "/share/**/*"
+]
+
+[platform_archives.sl.macos_x86_64]
+url = "https://github.com/StratifyLabs/sl2/releases/download/v2.0/sl-macos-x86_64.zip"
+sha256 = "5c8f84c23655b6de4222bd4df72a399f3a53efc367bed5ed0db9e9320014ee92"
+add_prefix = "{SPACES_SYSROOT}/bin"
+link = "Hard"
+
+[platform_archives.sl.windows_x86_64]
+url = "https://github.com/StratifyLabs/sl2/releases/download/v2.0/sl-windows-x86_64.zip"
+sha256 = "5787d28ee13013cbf5d848b8cd3c115087735781375934e848fa917436031f2a"
+add_prefix = "{SPACES_SYSROOT}/bin"
+link = "Hard"
+
+[platform_archives.ninja.macos_x86_64]
+url = "https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-mac.zip"
+sha256 = "89a287444b5b3e98f88a945afa50ce937b8ffd1dcc59c555ad9b1baf855298c9"
+add_prefix = "{SPACES_SYSROOT}/bin"
+link = "Hard"
+
+[platform_archives.ninja.windows_x86_64]
+url = "https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-win.zip"
+sha256 = "f550fec705b6d6ff58f2db3c374c2277a37691678d6aba463adcbb129108467a"
+add_prefix = "{SPACES_SYSROOT}/bin"
+link = "Hard"
+
+[platform_archives.ninja.linux_x86_64]
+url = "https://github.com/ninja-build/ninja/releases/download/v1.12.1/ninja-linux.zip"
+sha256 = "6f98805688d19672bd699fbbfa2c2cf0fc054ac3df1f0e6a47664d963d530255"
+add_prefix = "{SPACES_SYSROOT}/bin"
+link = "Hard"
+
+[platform_archives.cmake.windows_x86_64]
+url = "https://github.com/Kitware/CMake/releases/download/v3.29.5/cmake-3.29.5-windows-x86_64.zip"
+sha256 = "1668ffdd122db37c079fa5abc9bd9431dada1426075792ef09c729faa6ebb19c"
+add_prefix = "{SPACES_SYSROOT}"
+link = "Hard"
+files = [
+    "/bin/**/*",
+    "/share/**/*"
+]
+
+[platform_archives.cmake.linux_x86_64]
+url = "https://github.com/Kitware/CMake/releases/download/v3.29.5/cmake-3.29.5-linux-x86_64.tar.gz"
+sha256 = "aee5ad0ebaff860ba64130546439b96c7efbe04116c5eb094c662530e1deb36c"
+add_prefix = "{SPACES_SYSROOT}/bin"
+link = "Hard"
+files = [
+    "/bin/**/*",
+    "/share/**/*"
+]

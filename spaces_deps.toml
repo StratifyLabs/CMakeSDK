@@ -74,13 +74,11 @@ link = "Hard"
 
 [platform_archives.cmake.windows_x86_64]
 url = "https://github.com/Kitware/CMake/releases/download/v3.29.5/cmake-3.29.5-windows-x86_64.zip"
-sha256 = "1668ffdd122db37c079fa5abc9bd9431dada1426075792ef09c729faa6ebb19c"
+sha256 = "f85db8361cb7eb11ceb6b2f1ee42bec7234bb8d9e487ea78c00de64771768d92"
 add_prefix = "{SPACES_SYSROOT}"
 link = "Hard"
-files = [
-    "/bin/**/*",
-    "/share/**/*"
-]
+strip_prefix = "cmake-3.29.5-windows-x86_64"
+
 
 [platform_archives.cmake.linux_x86_64]
 url = "https://github.com/Kitware/CMake/releases/download/v3.29.5/cmake-3.29.5-linux-x86_64.tar.gz"

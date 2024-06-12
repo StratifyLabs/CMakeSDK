@@ -1,0 +1,1 @@
+export PATH=$PWD/sysroot/bin:$HOME/.local/bin:/usr/bin:/bin

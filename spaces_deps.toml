@@ -15,7 +15,7 @@ recommendations = ["llvm-vs-code-extensions.vscode-clangd", "ms-vscode.cmake-too
 
 [assets.'spaces_assets/profile.sh']
 path = "sdk_profile.sh"
-type = "HardLink"
+type = "Template"
 
 [assets.'spaces_assets/clang-format']
 path = ".clang-format"

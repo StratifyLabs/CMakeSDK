@@ -1,1 +1,1 @@
-export PATH=$PWD/sysroot/bin:$HOME/.local/bin:/usr/bin:/bin
+export PATH=$PWD/sysroot/bin:{SPACES_PATH}:/usr/bin:/bin

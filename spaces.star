@@ -73,10 +73,12 @@ checkout.add_archive(
     },
 )
 
+sl_includes = ["sl"]
 macos_sl_universal = {
     "url": "https://github.com/StratifyLabs/sl2/releases/download/v2.0/sl-macos-x86_64.zip",
     "sha256": "5c8f84c23655b6de4222bd4df72a399f3a53efc367bed5ed0db9e9320014ee92",
     "add_prefix": "sysroot/bin",
+    "includes": sl_includes,
     "link": "Hard",
 }
 
@@ -89,15 +91,19 @@ checkout.add_platform_archive(
             "url": "https://github.com/StratifyLabs/sl2/releases/download/v2.0/sl-windows-x86_64.zip",
             "sha256": "5787d28ee13013cbf5d848b8cd3c115087735781375934e848fa917436031f2a",
             "add_prefix": "sysroot/bin",
+            "includes": sl_includes,
             "link": "Hard",
         },
     },
 )
 
+bin_excludes = ["**/bin/sl"]
+
 macos_arm_none_eabi_universal = {
     "url": "https://github.com/StratifyLabs/SDK/releases/download/v11.3.1/stratifyos-arm-none-eabi-11.3.1-macos-x86_64.zip",
     "sha256": "c58c383fdb95f538fda6bc0484f04500d2acce64d08db18f775e04b2ee3e1746",
     "add_prefix": "sysroot",
+    "excludes": bin_excludes,
     "link": "Hard",
 }
 
@@ -110,6 +116,7 @@ checkout.add_platform_archive(
             "url": "https://github.com/StratifyLabs/SDK/releases/download/v11.3.1/stratifyos-arm-none-eabi-11.3.1-windows-x86_64.zip",
             "sha256": "2b56314049456bec812405d168fd5ab62e414817bea167f10d12889ae1b2fbe5",
             "add_prefix": "sysroot",
+            "excludes": bin_excludes,
             "link": "Hard",
         },
     },

@@ -26,7 +26,7 @@ checkout.update_asset(
             "cmake.configureOnEdit": False,
             "cmake.loadCompileCommands": True,
             "cmake.useCMakePresets": "never",
-            "cmake.buildEnvironment": {PATH: "${workspaceFolder}/sysroot/bin"},
+            "cmake.buildEnvironment": {"PATH": "${workspaceFolder}/sysroot/bin"},
         },
     },
 )
@@ -82,7 +82,7 @@ macos_sl_universal = {
 
 checkout.add_platform_archive(
     rule = {"name": "sl"},
-    archive = {
+    platforms = {
         "macos_x86_64": macos_sl_universal,
         "macos_aarch64": macos_sl_universal,
         "windows_x86_64": {
@@ -103,7 +103,7 @@ macos_arm_none_eabi_universal = {
 
 checkout.add_platform_archive(
     rule = {"name": "stratifyos_arm_none_eabi_platform"},
-    archive = {
+    platforms = {
         "macos_x86_64": macos_sl_universal,
         "macos_aarch64": macos_sl_universal,
         "windows_x86_64": {

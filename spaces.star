@@ -37,7 +37,7 @@ checkout.add_asset(
     rule = {"name": "clang-format-config"},
     asset = {
         "destination": ".clang-format",
-        "content": fs.read("{}/spaces_assets/clang-format".format(local_path)),
+        "content": fs.read_file_to_string("{}/spaces_assets/clang-format".format(local_path)),
     },
 )
 
@@ -45,7 +45,7 @@ checkout.add_asset(
     rule = {"name": "clangd-config"},
     asset = {
         "destination": ".clangd",
-        "content": fs.read("{}/spaces_assets/clangd.json".format(local_path)),
+        "content": fs.read_file_to_string("{}/spaces_assets/clangd.json".format(local_path)),
     },
 )
 
@@ -108,7 +108,7 @@ macos_arm_none_eabi_universal = {
 }
 
 checkout.add_platform_archive(
-    rule = {"name": "stratifyos_arm_none_eabi_platform"},
+    rule = {"name": "stratifyos_arm_none_eabi_platform", "deps": ["stratifyos_arm_none_eabi"]},
     platforms = {
         "macos_x86_64": macos_arm_none_eabi_universal,
         "macos_aarch64": macos_arm_none_eabi_universal,

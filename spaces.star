@@ -2,8 +2,8 @@
 
 """
 
-load("spaces-starlark-sdk/packages/Kitware/CMake/v3.30.5.star", cmake3_platforms = "platforms")
-load("spaces-starlark-sdk/packages/ninja-build/ninja/v1.12.1.star", ninja1_platforms = "platforms")
+load("spaces-starlark-sdk/packages/github.com/Kitware/CMake/v3.30.5.star", cmake3_platforms = "platforms")
+load("spaces-starlark-sdk/packages/github.com/ninja-build/ninja/v1.12.1.star", ninja1_platforms = "platforms")
 
 load("spaces-starlark-sdk/star/cmake.star", "add_cmake")
 

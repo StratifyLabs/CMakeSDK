@@ -85,9 +85,9 @@ macos_sl_universal = {
 checkout.add_platform_archive(
     rule = {"name": "sl"},
     platforms = {
-        "macos_x86_64": macos_sl_universal,
-        "macos_aarch64": macos_sl_universal,
-        "windows_x86_64": {
+        "macos-x86_64": macos_sl_universal,
+        "macos-aarch64": macos_sl_universal,
+        "windows-x86_64": {
             "url": "https://github.com/StratifyLabs/sl2/releases/download/v2.0/sl-windows-x86_64.zip",
             "sha256": "5787d28ee13013cbf5d848b8cd3c115087735781375934e848fa917436031f2a",
             "add_prefix": "sysroot/bin",

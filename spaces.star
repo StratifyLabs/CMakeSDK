@@ -110,9 +110,9 @@ macos_arm_none_eabi_universal = {
 checkout.add_platform_archive(
     rule = {"name": "stratifyos_arm_none_eabi_platform", "deps": ["stratifyos_arm_none_eabi"]},
     platforms = {
-        "macos_x86_64": macos_arm_none_eabi_universal,
-        "macos_aarch64": macos_arm_none_eabi_universal,
-        "windows_x86_64": {
+        "macos-x86_64": macos_arm_none_eabi_universal,
+        "macos-aarch64": macos_arm_none_eabi_universal,
+        "windows-x86_64": {
             "url": "https://github.com/StratifyLabs/SDK/releases/download/v11.3.1/stratifyos-arm-none-eabi-11.3.1-windows-x86_64.zip",
             "sha256": "2b56314049456bec812405d168fd5ab62e414817bea167f10d12889ae1b2fbe5",
             "add_prefix": "sysroot",

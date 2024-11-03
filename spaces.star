@@ -7,7 +7,6 @@ load("spaces-starlark-sdk/packages/github.com/ninja-build/ninja/v1.12.1.star", n
 
 load("spaces-starlark-sdk/star/cmake.star", "add_cmake")
 
-
 add_cmake(
     rule_name = "cmake3",
     platforms = cmake3_platforms
@@ -64,20 +63,6 @@ checkout.add_asset(
         "destination": ".clangd",
         "content": fs.read_file_to_string("{}/spaces_assets/clangd.json".format(local_path)),
     },
-)
-
-checkout.add_repo(
-    rule = {"name": "tools/sysroot-cmake"},
-    repo = {
-        "url": "https://github.com/work-spaces/sysroot-cmake",
-        "rev": "v3",
-        "checkout": "Revision",
-    },
-)
-
-checkout.add_repo(
-    rule = {"name": "tools/sysroot-ninja"},
-    repo = {"url": "https://github.com/work-spaces/sysroot-ninja", "rev": "v1", "checkout": "Revision"},
 )
 
 checkout.add_archive(

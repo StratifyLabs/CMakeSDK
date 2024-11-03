@@ -2,6 +2,23 @@
 
 """
 
+load("spaces-starlark-sdk/packages/Kitware/CMake/v3.30.5.star", cmake3_platforms = "platforms")
+load("spaces-starlark-sdk/packages/ninja-build/ninja/v1.12.1.star", ninja1_platforms = "platforms")
+
+load("spaces-starlark-sdk/star/cmake.star", "add_cmake")
+
+
+add_cmake(
+    rule_name = "cmake3",
+    platforms = cmake3_platforms
+)
+
+checkout.add_platform_archive(
+    rule = {"name": "ninja1"},
+    platforms = ninja1_platforms
+)
+
+
 checkout.update_asset(
     rule = {"name": "update_vscode_extensions"},
     asset = {

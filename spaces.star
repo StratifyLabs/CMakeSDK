@@ -2,7 +2,7 @@
 
 """
 
-load("//@packages/github.com/ninja-build/ninja/v1.12.1.star", ninja1_platforms = "platforms")
+load("//@packages/star/github.com/ninja-build/ninja/v1.12.1.star", ninja1_platforms = "platforms")
 load("//@sdk/star/cmake.star", "cmake_add")
 
 cmake_add("cmake3", "v3.30.5")

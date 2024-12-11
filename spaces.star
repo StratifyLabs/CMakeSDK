@@ -2,15 +2,10 @@
 
 """
 
-load("//spaces-starlark-sdk/packages/github.com/Kitware/CMake/v3.30.5.star", cmake3_platforms = "platforms")
-load("//spaces-starlark-sdk/packages/github.com/ninja-build/ninja/v1.12.1.star", ninja1_platforms = "platforms")
+load("//@packages/github.com/ninja-build/ninja/v1.12.1.star", ninja1_platforms = "platforms")
+load("//@sdk/star/cmake.star", "cmake_add")
 
-load("//spaces-starlark-sdk/star/cmake.star", "add_cmake")
-
-add_cmake(
-    rule_name = "cmake3",
-    platforms = cmake3_platforms
-)
+cmake_add("cmake3", "v3.30.5")
 
 checkout.add_platform_archive(
     rule = {"name": "ninja1"},

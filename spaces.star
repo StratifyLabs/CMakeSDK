@@ -67,7 +67,6 @@ checkout.add_archive(
         "sha256": "d32b82768b4d6c1f106a32182b386164fccd72863c7d558b3fef129281780ac4",
         "link": "Hard",
         "add_prefix": "sysroot",
-        "allow_gh_for_download": False
     },
 )
 
@@ -78,7 +77,6 @@ macos_sl_universal = {
     "add_prefix": "sysroot/bin",
     "includes": sl_includes,
     "link": "Hard",
-    "allow_gh_for_download": False
 }
 
 checkout.add_platform_archive(
@@ -92,7 +90,6 @@ checkout.add_platform_archive(
             "add_prefix": "sysroot/bin",
             "includes": sl_includes,
             "link": "Hard",
-            "allow_gh_for_download": False
         },
     },
 )
@@ -105,7 +102,6 @@ macos_arm_none_eabi_universal = {
     "add_prefix": "sysroot",
     "excludes": bin_excludes,
     "link": "Hard",
-    "allow_gh_for_download": False
 }
 
 checkout.add_platform_archive(
@@ -119,7 +115,6 @@ checkout.add_platform_archive(
             "add_prefix": "sysroot",
             "excludes": bin_excludes,
             "link": "Hard",
-            "allow_gh_for_download": False
         },
     },
 )

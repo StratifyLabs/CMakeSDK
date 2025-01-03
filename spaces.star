@@ -2,77 +2,53 @@
 
 """
 
-load("//spaces-starlark-sdk/packages/github.com/Kitware/CMake/v3.30.5.star", cmake3_platforms = "platforms")
-load("//spaces-starlark-sdk/packages/github.com/ninja-build/ninja/v1.12.1.star", ninja1_platforms = "platforms")
-
-load("//spaces-starlark-sdk/star/cmake.star", "add_cmake")
-
-add_cmake(
-    rule_name = "cmake3",
-    platforms = cmake3_platforms
+load("//@star/packages/star/cmake.star", "cmake_add")
+load("//@star/packages/star/package.star", "package_add")
+load(
+    "//@star/sdk/star/checkout.star",
+    "checkout_add_archive",
+    "checkout_add_asset",
+    "checkout_update_asset",
 )
 
-checkout.add_platform_archive(
-    rule = {"name": "ninja1"},
-    platforms = ninja1_platforms
-)
+cmake_add("cmake3", "v3.30.5")
+package_add("github.com", "ninja-build", "ninja", "v1.12.1")
 
-
-checkout.update_asset(
-    rule = {"name": "update_vscode_extensions"},
-    asset = {
-        "destination": ".vscode/extensions.json",
-        "format": "json",
-        "value": {
-            "recommendations": ["llvm-vs-code-extensions.vscode-clangd", "ms-vscode.cmake-tools"],
-        },
-    },
-)
-
-checkout.update_asset(
-    rule = {"name": "update_vscode_settings"},
-    asset = {
-        "destination": ".vscode/settings.json",
-        "format": "json",
-        "value": {
-            "cmake.buildDirectory": "${workspaceFolder}/cmake_arm",
-            "cmake.cmakePath": "${workspaceFolder}/sysroot/bin/cmake",
-            "cmake.generator": "Ninja",
-            "cmake.buildTask": True,
-            "cmake.configureOnEdit": False,
-            "cmake.loadCompileCommands": True,
-            "cmake.useCMakePresets": "never",
-            "cmake.buildEnvironment": {"PATH": "${workspaceFolder}/sysroot/bin"},
-        },
+checkout_update_asset(
+    "update_vscode_settings",
+    destination = ".vscode/settings.json",
+    format = "json",
+    value = {
+        "cmake.buildDirectory": "${workspaceFolder}/cmake_arm",
+        "cmake.cmakePath": "${workspaceFolder}/sysroot/bin/cmake",
+        "cmake.generator": "Ninja",
+        "cmake.buildTask": True,
+        "cmake.configureOnEdit": False,
+        "cmake.loadCompileCommands": True,
+        "cmake.useCMakePresets": "never",
+        "cmake.buildEnvironment": {"PATH": "${workspaceFolder}/sysroot/bin"},
     },
 )
 
 local_path = info.current_workspace_path()
 
-checkout.add_asset(
-    rule = {"name": "clang-format-config"},
-    asset = {
-        "destination": ".clang-format",
-        "content": fs.read_file_to_string("{}/spaces_assets/clang-format".format(local_path)),
-    },
+checkout_add_asset(
+    "clang-format-config",
+    destination = ".clang-format",
+    content = fs.read_file_to_string("{}/spaces_assets/clang-format".format(local_path)),
 )
 
-checkout.add_asset(
-    rule = {"name": "clangd-config"},
-    asset = {
-        "destination": ".clangd",
-        "content": fs.read_file_to_string("{}/spaces_assets/clangd.json".format(local_path)),
-    },
+checkout_add_asset(
+    "clangd-config",
+    destination = ".clangd",
+    content = fs.read_file_to_string("{}/spaces_assets/clangd.json".format(local_path)),
 )
 
-checkout.add_archive(
-    rule = {"name": "stratifyos_arm_none_eabi"},
-    archive = {
-        "url": "https://github.com/StratifyLabs/SDK/releases/download/v11.3.1/stratifyos-arm-none-eabi-11.3.1.zip",
-        "sha256": "d32b82768b4d6c1f106a32182b386164fccd72863c7d558b3fef129281780ac4",
-        "link": "Hard",
-        "add_prefix": "sysroot",
-    },
+checkout_add_archive(
+    "stratifyos_arm_none_eabi",
+    url = "https://github.com/StratifyLabs/SDK/releases/download/v11.3.1/stratifyos-arm-none-eabi-11.3.1.zip",
+    sha256 = "d32b82768b4d6c1f106a32182b386164fccd72863c7d558b3fef129281780ac4",
+    add_prefix = "sysroot",
 )
 
 sl_includes = ["sl"]

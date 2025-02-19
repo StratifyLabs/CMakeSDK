@@ -9,7 +9,9 @@ load(
     "checkout_add_archive",
     "checkout_add_asset",
     "checkout_update_asset",
+    "checkout_add_platform_archive"
 )
+load("//@star/sdk/star/ws.star", "workspace_get_path_to_checkout")
 
 cmake_add("cmake3", "v3.30.5")
 package_add("github.com", "ninja-build", "ninja", "v1.12.1")
@@ -30,18 +32,18 @@ checkout_update_asset(
     },
 )
 
-local_path = info.current_workspace_path()
+LOCAL_PATH = workspace_get_path_to_checkout()
 
 checkout_add_asset(
     "clang-format-config",
     destination = ".clang-format",
-    content = fs.read_file_to_string("{}/spaces_assets/clang-format".format(local_path)),
+    content = fs.read_file_to_string("{}/spaces_assets/clang-format".format(LOCAL_PATH)),
 )
 
 checkout_add_asset(
     "clangd-config",
     destination = ".clangd",
-    content = fs.read_file_to_string("{}/spaces_assets/clangd.json".format(local_path)),
+    content = fs.read_file_to_string("{}/spaces_assets/clangd.json".format(LOCAL_PATH)),
 )
 
 checkout_add_archive(
@@ -60,8 +62,8 @@ macos_sl_universal = {
     "link": "Hard",
 }
 
-checkout.add_platform_archive(
-    rule = {"name": "sl"},
+checkout_add_platform_archive(
+    "sl",
     platforms = {
         "macos-x86_64": macos_sl_universal,
         "macos-aarch64": macos_sl_universal,
@@ -85,8 +87,9 @@ macos_arm_none_eabi_universal = {
     "link": "Hard",
 }
 
-checkout.add_platform_archive(
-    rule = {"name": "stratifyos_arm_none_eabi_platform", "deps": ["stratifyos_arm_none_eabi"]},
+checkout_add_platform_archive(
+    "stratifyos_arm_none_eabi_platform", 
+    deps = ["stratifyos_arm_none_eabi"],
     platforms = {
         "macos-x86_64": macos_arm_none_eabi_universal,
         "macos-aarch64": macos_arm_none_eabi_universal,
